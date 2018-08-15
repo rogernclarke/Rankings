@@ -1,0 +1,601 @@
+{
+	"auto_complete":
+	{
+		"selected_items":
+		[
+			[
+				"path",
+				"pathIndex"
+			],
+			[
+				"contr",
+				"controllerName"
+			],
+			[
+				"tr",
+				"true"
+			],
+			[
+				"th",
+				"this"
+			],
+			[
+				"getI",
+				"getItem"
+			],
+			[
+				"ret",
+				"return"
+			],
+			[
+				"course",
+				"courseModel"
+			],
+			[
+				"var_",
+				"var_dump"
+			],
+			[
+				"J",
+				"JHtml"
+			],
+			[
+				"v",
+				"viewHelper"
+			],
+			[
+				"Ra",
+				"RaceHelpersView"
+			],
+			[
+				"co",
+				"controller"
+			],
+			[
+				"o",
+				"output"
+			]
+		]
+	},
+	"buffers":
+	[
+		{
+			"file": "rankings.xml",
+			"settings":
+			{
+				"buffer_size": 2120,
+				"line_ending": "Windows"
+			}
+		},
+		{
+			"file": "site/rankings.php",
+			"settings":
+			{
+				"buffer_size": 2044,
+				"encoding": "UTF-8",
+				"line_ending": "Windows"
+			}
+		},
+		{
+			"file": "site/models/rankings.php",
+			"settings":
+			{
+				"buffer_size": 2527,
+				"line_ending": "Windows"
+			}
+		},
+		{
+			"file": "site/views/rankings/tmpl/list.php",
+			"settings":
+			{
+				"buffer_size": 3845,
+				"encoding": "UTF-8",
+				"line_ending": "Windows"
+			}
+		},
+		{
+			"file": "media/js/rankings-script.js",
+			"settings":
+			{
+				"buffer_size": 704,
+				"encoding": "UTF-8",
+				"line_ending": "Windows"
+			}
+		}
+	],
+	"build_system": "",
+	"build_system_choices":
+	[
+	],
+	"build_varint": "",
+	"command_palette":
+	{
+		"height": 392.0,
+		"last_filter": "",
+		"selected_items":
+		[
+			[
+				"insta",
+				"Package Control: Install Package"
+			],
+			[
+				"Package Control: ",
+				"Package Control: Install Package"
+			]
+		],
+		"width": 432.0
+	},
+	"console":
+	{
+		"height": 174.0,
+		"history":
+		[
+			"import urllib.request,os,hashlib; h = 'df21e130d211cfc94d9b0905775a7c0f' + '1e3d39e33b79698005270310898eea76'; pf = 'Package Control.sublime-package'; ipp = sublime.installed_packages_path(); urllib.request.install_opener( urllib.request.build_opener( urllib.request.ProxyHandler()) ); by = urllib.request.urlopen( 'http://packagecontrol.io/' + pf.replace(' ', '%20')).read(); dh = hashlib.sha256(by).hexdigest(); print('Error validating download (got %s instead of %s), please try manual install' % (dh, h)) if dh != h else open(os.path.join( ipp, pf), 'wb' ).write(by) "
+		]
+	},
+	"distraction_free":
+	{
+		"menu_visible": true,
+		"show_minimap": false,
+		"show_open_files": false,
+		"show_tabs": false,
+		"side_bar_visible": false,
+		"status_bar_visible": false
+	},
+	"expanded_folders":
+	[
+		"/C/Users/Roger/Box Sync/GitHub/Rankings",
+		"/C/Users/Roger/Box Sync/GitHub/Rankings/media",
+		"/C/Users/Roger/Box Sync/GitHub/Rankings/media/css",
+		"/C/Users/Roger/Box Sync/GitHub/Rankings/media/js",
+		"/C/Users/Roger/Box Sync/GitHub/Rankings/site",
+		"/C/Users/Roger/Box Sync/GitHub/Rankings/site/models",
+		"/C/Users/Roger/Box Sync/GitHub/Rankings/site/views",
+		"/C/Users/Roger/Box Sync/GitHub/Rankings/site/views/rankings",
+		"/C/Users/Roger/Box Sync/GitHub/Rankings/site/views/rankings/tmpl"
+	],
+	"file_history":
+	[
+		"/C/Users/Roger/Box Sync/GitHub/Rankings/media/js/sftp-config.json",
+		"/C/Users/Roger/Box Sync/GitHub/Rankings/media/css/sftp-config.json",
+		"/C/Users/Roger/Box Sync/GitHub/Rankings/site/sftp-config.json",
+		"/C/Users/Roger/AppData/Roaming/Sublime Text 3/Packages/User/SFTP.errors.log",
+		"/C/Users/Roger/AppData/Roaming/Sublime Text 3/Packages/User/sftp_servers/spindata.config",
+		"/C/Users/Roger/Box Sync/GitHub/Rankings/Rankings.sublime-project",
+		"/C/Users/Roger/Box Sync/GitHub/Rankings/site/controllers/default.php",
+		"/C/Users/Roger/Box Sync/GitHub/Rankings/site/rankings.php",
+		"/C/Users/Roger/Box Sync/GitHub/Rankings/rankings.xml",
+		"/C/Users/Roger/Box Sync/Re-living IT/Spindata/Rankings.sublime-project",
+		"/C/Users/Roger/Box Sync/GitHub/Race/site/helpers/view.php",
+		"/C/Users/Roger/Box Sync/GitHub/Race/admin/models/course.php",
+		"/C/Users/Roger/Box Sync/GitHub/Race/admin/models/default.php",
+		"/C/Users/Roger/Box Sync/GitHub/Race/site/views/course/tmpl/list.php",
+		"/C/Users/Roger/Box Sync/GitHub/Race/site/views/course/tmpl/default.xml",
+		"/C/Users/Roger/Box Sync/GitHub/Race/site/views/course/tmpl/_entry.php",
+		"/C/Users/Roger/Box Sync/GitHub/Race/site/views/course/phtml.php",
+		"/C/Users/Roger/Box Sync/GitHub/Race/site/views/course/html.php",
+		"/C/Users/Roger/Box Sync/GitHub/Race/site/controllers/default.php",
+		"/C/Users/Roger/Box Sync/GitHub/Race/race.xml",
+		"/C/Users/Roger/Box Sync/GitHub/Race/site/race.php",
+		"/C/Users/Roger/Box Sync/GitHub/Race/site/language/en-GB/en-GB.com_race.ini",
+		"/C/Users/Roger/Box Sync/GitHub/lendr/com_lendr/site/models/review.php",
+		"/C/Users/Roger/Box Sync/GitHub/lendr/com_lendr/site/models/book.php",
+		"/C/Users/Roger/Box Sync/GitHub/lendr/com_lendr/site/models/library.php",
+		"/C/Users/Roger/Box Sync/GitHub/lendr/com_lendr/site/models/default.php",
+		"/C/Users/Roger/Box Sync/GitHub/lendr/com_lendr/site/views/book/tmpl/_entry.php",
+		"/C/Users/Roger/Box Sync/GitHub/lendr/com_lendr/site/views/book/html.php",
+		"/C/Users/Roger/Box Sync/GitHub/lendr/com_lendr/site/views/book/tmpl/book.php",
+		"/C/Users/Roger/Box Sync/GitHub/lendr/com_lendr/site/views/library/tmpl/_library.php",
+		"/C/Users/Roger/Box Sync/GitHub/lendr/com_lendr/site/views/library/html.php",
+		"/C/Users/Roger/Box Sync/GitHub/lendr/com_lendr/site/lendr.php",
+		"/C/Users/Roger/Box Sync/GitHub/lendr/com_lendr/site/controllers/default.php",
+		"/C/Users/Roger/Box Sync/GitHub/Rankings/media/js/rankings-script.js",
+		"/C/Users/Roger/Box Sync/GitHub/Rankings/site/language/en-GB/en-GB.com_rankings.ini",
+		"/C/Users/Roger/Box Sync/GitHub/Rankings/site/views/event/tmpl/display.php",
+		"/C/Users/Roger/Box Sync/GitHub/Rankings/site/views/rider/tmpl/display.php",
+		"/C/Users/Roger/Box Sync/GitHub/Rankings/site/views/event/tmpl/list.php",
+		"/C/Users/Roger/Box Sync/GitHub/Rankings/site/views/rider/tmpl/list.php",
+		"/C/Users/Roger/Box Sync/GitHub/Rankings/site/views/rankings/tmpl/list.php",
+		"/C/Users/Roger/Box Sync/GitHub/Rankings/site/views/ride/html.php",
+		"/C/Users/Roger/Box Sync/GitHub/Rankings/site/views/event/html.php",
+		"/C/Users/Roger/Box Sync/GitHub/Rankings/site/views/rider/html.php",
+		"/C/Users/Roger/Box Sync/GitHub/Rankings/site/views/rankings/html.php",
+		"/C/Users/Roger/Box Sync/GitHub/Rankings/site/helpers/view.php",
+		"/C/Users/Roger/Box Sync/GitHub/Rankings/site/views/ride/tmpl/default.xml",
+		"/C/Users/Roger/Box Sync/GitHub/Rankings/site/views/rider/tmpl/default.xml",
+		"/C/Users/Roger/Box Sync/GitHub/Rankings/site/views/event/tmpl/default.xml",
+		"/C/Users/Roger/Box Sync/GitHub/Rankings/site/views/rankings/tmpl/default.xml",
+		"/C/Users/Roger/Box Sync/GitHub/Rankings/site/models/event.php",
+		"/C/Users/Roger/Box Sync/GitHub/Rankings/site/models/ride.php",
+		"/C/Users/Roger/Box Sync/GitHub/Rankings/site/models/rider.php",
+		"/C/Users/Roger/Box Sync/GitHub/Rankings/site/models/rankings.php",
+		"/C/Users/Roger/Box Sync/GitHub/Rankings/site/models/default.php",
+		"/C/Users/Roger/Box Sync/GitHub/Rankings/site/controllers/list.php",
+		"/C/Users/Roger/Box Sync/GitHub/Rankings/site/controllers/display.php",
+		"/C/users/roger/appdata/local/temp/sublime-sftp-browse-1534017170/spindata.config/home/spindata/public_html/components/com_rankings/rankings.php",
+		"/C/Users/Roger/Documents/Private Keys/spindata_ppk.txt",
+		"/C/Users/Roger/Downloads/activity_new.tcx",
+		"/C/Users/Roger/Downloads/activity_CYH.tcx",
+		"/C/Users/Roger/Downloads/activity_3.tcx",
+		"/C/Users/Roger/Downloads/20180809094502.tcx",
+		"/C/Users/Roger/Downloads/activity.tcx",
+		"/C/Users/Roger/Downloads/activity_2923749680.tcx",
+		"/C/Users/Roger/Box Sync/GitHub/Rankings/site/js/rankings-script.js",
+		"/C/Users/Roger/Box Sync/GitHub/Rankings/site/css/rankings.css",
+		"/C/Users/Roger/Box Sync/GitHub/Rankings/site/javascript/rankings-script.js",
+		"/C/Users/Roger/Box Sync/GitHub/lendr/com_lendr/site/views/review/tmpl/_entry.php",
+		"/C/Users/Roger/Box Sync/GitHub/lendr/com_lendr/site/views/book/tmpl/_return.php",
+		"/C/Users/Roger/Box Sync/GitHub/lendr/com_lendr/site/views/review/html.php",
+		"/C/Users/Roger/Box Sync/GitHub/lendr/com_lendr/site/views/review/tmpl/list.php",
+		"/C/Users/Roger/Box Sync/GitHub/lendr/com_lendr/site/views/review/phtml.php",
+		"/C/Users/Roger/Box Sync/GitHub/lendr/com_lendr/site/views/book/tmpl/list.php",
+		"/C/Users/Roger/Box Sync/GitHub/lendr/com_lendr/site/tables/book.php",
+		"/C/Users/Roger/Box Sync/GitHub/lendr/com_lendr/site/router.php",
+		"/C/Users/Roger/Box Sync/GitHub/Rankings/mod_tt_latest_events/helper.php",
+		"/C/Users/Roger/Box Sync/GitHub/Rankings/mod_tt_latest_events/mod_tt_latest_events.php",
+		"/C/Users/Roger/Box Sync/GitHub/Rankings/admin/rankings.php",
+		"/C/Users/Roger/Box Sync/GitHub/Rankings/site/views/rankings/view.html.php",
+		"/C/Users/Roger/Box Sync/GitHub/Rankings/site/views/rankings/tmpl/default.php",
+		"/C/Users/Roger/Box Sync/GitHub/Race/site/views/course/tmpl/display.php",
+		"/C/Users/Roger/Box Sync/GitHub/Rankings/site/models/fields/rankings.php",
+		"/C/Users/Roger/Box Sync/GitHub/Rankings/site/models/forms/rankings.xml",
+		"/C/Users/Roger/Box Sync/GitHub/Race/admin/tables/course.php",
+		"/C/Users/Roger/Box Sync/GitHub/Race/site/controllers/display.php",
+		"/C/Users/Roger/Box Sync/GitHub/Rankings/site/controller.php",
+		"/C/Users/Roger/Documents/Dropbox/Tyneside Vagabonds Club Time Trials/Result_master_18_RN - Copy.csv",
+		"/C/Users/Roger/Box Sync/GitHub/Rankings/site/tt_rankings.php",
+		"/C/Users/Roger/Documents/GitHub/Race/site/race.php",
+		"/C/Users/Roger/Documents/GitHub/Race/site/controllers/default.php",
+		"/C/Users/Roger/AppData/Local/Temp/7zO453D2475/jeventsinstaller.php",
+		"/C/Users/Roger/AppData/Local/Temp/7zO42E76502/install.php",
+		"/C/Users/Roger/Documents/GitHub/mod_tt_latest_events/mod_tt_latest_events.php",
+		"/C/Users/Roger/Documents/GitHub/Race/site/helpers/view.php",
+		"/C/Users/Roger/Documents/GitHub/Race/admin/models/default.php",
+		"/C/Users/Roger/Documents/GitHub/Race/site/views/course/html.php",
+		"/C/Users/Roger/Documents/GitHub/Race/site/views/course/tmpl/list.php",
+		"/C/Users/Roger/Documents/GitHub/Race/site/index.html",
+		"/C/Users/Roger/Documents/GitHub/TTLatestEventsModule/tmpl/default.php",
+		"/C/Users/Roger/Documents/GitHub/TTLatestEventsModule/helper.php",
+		"/C/Users/Roger/Documents/GitHub/TTLatestEventsModule/mod_tt_latest_events.php",
+		"/C/Users/Roger/Box Sync/Re-living IT/Spindata/Joomla/mod_tt_latest_events/helper.php",
+		"/C/Users/Roger/Documents/GitHub/Race/site/views/course/tmpl/display.php",
+		"/C/Users/Roger/Documents/GitHub/Race/site/views/course/phtml.php",
+		"/C/Users/Roger/Documents/GitHub/Race/site/controllers/display.php",
+		"/C/Users/Roger/Documents/21st Century Clubs/Website/Joomla/Race/Helloworld Tutorial/Version 0.0.10/site/views/races/tmpl/default.php",
+		"/C/Users/Roger/Documents/21st Century Clubs/Website/Joomla/Race/Helloworld Tutorial/Version 0.0.10/admin/race.php",
+		"/C/Users/Roger/Documents/21st Century Clubs/Website/Joomla/Race/Helloworld Tutorial/Version 0.0.10/site/models/races.php",
+		"/C/Users/Roger/Documents/21st Century Clubs/Website/Joomla/Race/Helloworld Tutorial/Version 0.0.10/site/controller.php",
+		"/C/Users/Roger/Documents/21st Century Clubs/Website/Joomla/Race/Helloworld Tutorial/Version 0.0.10/site/race.php",
+		"/C/Users/Roger/Box Sync/Re-living IT/Spindata/Joomla/mod_tt_latest_events/tmpl/default.php",
+		"/C/Users/Roger/Box Sync/Re-living IT/Spindata/Joomla/mod_tt_latest_events/mod_tt_latest_events.php",
+		"/C/Users/Roger/Box Sync/Re-living IT/Spindata/Joomla/mod_ttlatestevents/mod_tt_latest_events.php",
+		"/C/Users/Roger/Box Sync/Re-living IT/Spindata/Joomla/mod_tt_latest_events/mod_tt_latest_events.xml",
+		"/C/Users/Roger/Box Sync/Re-living IT/Spindata/Joomla/mod_ttlatestevents/helper.php",
+		"/C/Users/Roger/Box Sync/Re-living IT/Spindata/Joomla/mod_ttlatestevents/mod_tt_latest_events.xml",
+		"/C/Users/Roger/Box Sync/Re-living IT/Spindata/Joomla/mod_ttlatestevents/default.php",
+		"/C/Users/Roger/Box Sync/Re-living IT/Spindata/Joomla/mod_ttlatestevents/index.html",
+		"/C/Users/Roger/Box Sync/Re-living IT/Time Trial Project/TimeTrial/riders.csv",
+		"/C/Users/Roger/Box Sync/Re-living IT/Time Trial Project/Riders.csv",
+		"/C/Users/Roger/Downloads/tynevags.org.uk-ssl_log",
+		"/C/Users/Roger/Downloads/tynevags.org.uk-May-2018",
+		"/C/Users/Roger/Downloads/jos_content.sql",
+		"/C/Users/Roger/Downloads/jos_content(1).sql",
+		"/C/Users/Roger/Downloads/google.com!tynevags.org.uk!1515024000!1515110399.xml",
+		"/C/Users/Roger/Downloads/tvcc/plupload.html",
+		"/C/Windows/System32/drivers/etc/hosts",
+		"/C/Users/Roger/Downloads/activity_2455546400.gpx"
+	],
+	"find":
+	{
+		"height": 32.0
+	},
+	"find_in_files":
+	{
+		"height": 0.0,
+		"where_history":
+		[
+		]
+	},
+	"find_state":
+	{
+		"case_sensitive": false,
+		"find_history":
+		[
+		],
+		"highlight": true,
+		"in_selection": false,
+		"preserve_case": false,
+		"regex": false,
+		"replace_history":
+		[
+		],
+		"reverse": false,
+		"show_context": true,
+		"use_buffer2": true,
+		"whole_word": false,
+		"wrap": true
+	},
+	"groups":
+	[
+		{
+			"selected": 1,
+			"sheets":
+			[
+				{
+					"buffer": 0,
+					"file": "rankings.xml",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 2120,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								0,
+								0
+							]
+						],
+						"settings":
+						{
+							"incomplete_sync": null,
+							"remote_loading": false,
+							"synced": false,
+							"syntax": "Packages/XML/XML.sublime-syntax",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 1,
+					"type": "text"
+				},
+				{
+					"buffer": 1,
+					"file": "site/rankings.php",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 2044,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								49,
+								49
+							]
+						],
+						"settings":
+						{
+							"incomplete_sync": null,
+							"remote_loading": false,
+							"synced": true,
+							"syntax": "Packages/PHP/PHP.sublime-syntax",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 0,
+					"type": "text"
+				},
+				{
+					"buffer": 2,
+					"file": "site/models/rankings.php",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 2527,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								0,
+								0
+							]
+						],
+						"settings":
+						{
+							"incomplete_sync": null,
+							"remote_loading": false,
+							"synced": true,
+							"syntax": "Packages/PHP/PHP.sublime-syntax",
+							"tab_size": 4,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 414.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 4,
+					"type": "text"
+				},
+				{
+					"buffer": 3,
+					"file": "site/views/rankings/tmpl/list.php",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 3845,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								1533,
+								1533
+							]
+						],
+						"settings":
+						{
+							"incomplete_sync": null,
+							"remote_loading": false,
+							"synced": true,
+							"syntax": "Packages/PHP/PHP.sublime-syntax"
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 2,
+					"type": "text"
+				}
+			]
+		},
+		{
+			"selected": 0,
+			"sheets":
+			[
+				{
+					"buffer": 4,
+					"file": "media/js/rankings-script.js",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 704,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								703,
+								704
+							]
+						],
+						"settings":
+						{
+							"incomplete_sync": null,
+							"remote_loading": false,
+							"synced": true,
+							"syntax": "Packages/JavaScript/JavaScript.sublime-syntax"
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 3,
+					"type": "text"
+				}
+			]
+		}
+	],
+	"incremental_find":
+	{
+		"height": 32.0
+	},
+	"input":
+	{
+		"height": 44.0
+	},
+	"layout":
+	{
+		"cells":
+		[
+			[
+				0,
+				0,
+				1,
+				1
+			],
+			[
+				1,
+				0,
+				2,
+				1
+			]
+		],
+		"cols":
+		[
+			0.0,
+			0.5,
+			1.0
+		],
+		"rows":
+		[
+			0.0,
+			1.0
+		]
+	},
+	"menu_visible": true,
+	"output.find_results":
+	{
+		"height": 0.0
+	},
+	"output.sftp":
+	{
+		"height": 156.0
+	},
+	"pinned_build_system": "",
+	"project": "Rankings.sublime-project",
+	"replace":
+	{
+		"height": 60.0
+	},
+	"save_all_on_build": true,
+	"select_file":
+	{
+		"height": 0.0,
+		"last_filter": "",
+		"selected_items":
+		[
+		],
+		"width": 0.0
+	},
+	"select_project":
+	{
+		"height": 0.0,
+		"last_filter": "",
+		"selected_items":
+		[
+		],
+		"width": 0.0
+	},
+	"select_symbol":
+	{
+		"height": 0.0,
+		"last_filter": "",
+		"selected_items":
+		[
+		],
+		"width": 0.0
+	},
+	"selected_group": 0,
+	"settings":
+	{
+		"last_automatic_layout":
+		[
+			[
+				0,
+				0,
+				1,
+				1
+			],
+			[
+				1,
+				0,
+				2,
+				1
+			]
+		]
+	},
+	"show_minimap": true,
+	"show_open_files": true,
+	"show_tabs": true,
+	"side_bar_visible": true,
+	"side_bar_width": 202.0,
+	"status_bar_visible": true,
+	"template_settings":
+	{
+		"max_columns": 2
+	}
+}
