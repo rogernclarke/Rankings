@@ -48,7 +48,7 @@ class RankingsModelsDefault extends JModelBase
     // Defined here
     protected $_app = null;         // JApplicationCms object
     protected $_db = null;          // JDatabaseDriver object
-    protected $_context = null;     // Component name  view name
+    protected $_context = null;     // Component name . view name
     protected $_id = null;          // ID of item
     protected $_filter_fields = array(); // Valid filter fields or ordering
     protected $_limitstart = 0;     // Start limit for listing items
@@ -57,7 +57,7 @@ class RankingsModelsDefault extends JModelBase
     protected $_pagination = null;  // JPagination object
     protected $_query = array();    // JDatabaseQuery object - internal cache for the last query used
     protected $_total = null;       // Total of items in list
-    protected $_view = null;        // Name of model
+    protected $_view = null;        // Name of model / view
 
     /**
      * Constructor
@@ -80,6 +80,9 @@ class RankingsModelsDefault extends JModelBase
         
         // Set the view name
         $this->_view = $jinput->getWord('view');
+
+        // Set the context
+        $this->_context = $this->_option . '.' . $this->_view;
 
         // Set the model state
         if (isset($state))
@@ -112,18 +115,47 @@ class RankingsModelsDefault extends JModelBase
      **/
     protected function populateState($ordering = null, $direction = null)
     {
-        // Load the filter state.
-        //$search = $this->_app->getUserStateFromRequest($this->_option . '.' . $this->_view . '.filter.search', 'filter_search');
-        $search = $this->_app->getUserStateFromRequest('filter.search', 'filter_search');
+        $jinput = $this->_app->input;
+        $post = $jinput->post->getArray();
+        $get = $jinput->getArray();
+        
+        $data = $get['jform'];
 
-        $registry = new JRegistry;
-        $registry->set('filter.search', $search);
-        $this->setState($registry);
+        // Receive & set filters - set to id if id specified
+        for($i=0, $n = count($this->_filter_fields); $i<$n; $i++) 
+        {
+            $filter_name = $this->_view . '_' . $this->_filter_fields[$i] . '_filter';
+            $filter_key = $this->_context . '.' . $this->_filter_fields[$i] . '.filter';
+            
+            /*if ($filter_text = isset($this->_id) ? 'id:' . $this->_id : $this->_app->getUserStateFromRequest($filter_key, 'jform[$filter_name]'))
+            {
+                $this->state->set($filter_key, $filter_text);
+                JFactory::getApplication()->enqueueMessage(JText::_('1:' . $filter_key . ':' . $filter_text), 'debug');
+            }
+            else
+            {
+                $filter_text = $data[$filter_name];
+                $this->state->set($filter_key, $filter_text);
+                $this->_app->setUserState($filter_key, $filter_text);
+                JFactory::getApplication()->enqueueMessage(JText::_('2:' . $filter_key . ':' . $filter_text), 'debug');
+            }*/
+            if (array_key_exists($filter_name, $data))
+            {
+                $filter_text = isset($this->_id) ? 'id:' . $this->_id : $data[$filter_name];
+                $this->state->set($filter_key, $filter_text);
+                // Having to setUserState as getUserStateFromRequest isn't setting the registry for some unknown reason!!
+                $this->_app->setUserState($filter_key, $filter_text);
+            }
+            else
+            {
+                $filter_text = $this->_app->getUserStateFromRequest($filter_key, $filter_name);
+                $this->state->set($filter_key, $filter_text);
+            }
+        }        
 
-        // Load the parameters.
+        // Load the parameters
         $params = JComponentHelper::getParams('com_rankings');
         //$this->setState(new JRegistry('params', $params));
-        //$this->setState('params', $params);
 
         // List state information.
         //parent::populateState('rr.name', 'asc');
@@ -148,14 +180,7 @@ class RankingsModelsDefault extends JModelBase
      * @return  form object
      **/
     public function getForm()
-    {
-        // Get the application
-        $app = JFactory::getApplication();
-
-        // Get the view
-        $viewName = $app->input->getWord('view', 'cpanel');
-        $viewName = JFile::makeSafe($viewName);
-        
+    {     
         // Get the form
         JForm::addFormPath(JPATH_COMPONENT . '/models/forms');
         JForm::addFieldPath(JPATH_COMPONENT . '/models/fields');
@@ -164,17 +189,18 @@ class RankingsModelsDefault extends JModelBase
         // Create the form
         try
         {
-            $form = JForm::getInstance('jform', $viewName, array('control' => 'jform'));
+            $form = JForm::getInstance('jform', $this->_view, array('control' => 'jform'));
         }
 
         catch (Exception $e)
         {
-            $app->enqueueMessage($e->getMessage(), 'error');
+            $this->_app->enqueueMessage($e->getMessage(), 'error');
             return false;
         }
 
+
         // Get the data for an existing item
-        if (isset($this->_id))
+        /*if (isset($this->_id))
         {
             $data = (array) $this->getItem();
             // Bind the form data if present
@@ -182,7 +208,7 @@ class RankingsModelsDefault extends JModelBase
             {
                 $form->bind($data);
             }
-        }
+        }*/
         return $form;
     }
 
@@ -315,9 +341,24 @@ class RankingsModelsDefault extends JModelBase
      **/
     protected function _getList($query, $limitstart = 0, $limit = 0)
     {
+        
         $this->_db->setQuery($query, $limitstart, $limit);
 
-        return $this->_db->loadObjectList();
+        $list = $this->_db->loadObjectList();
+JFactory::getApplication()->enqueueMessage(JText::_('start: ' . $limitstart), 'debug');
+JFactory::getApplication()->enqueueMessage(JText::_('limit: ' . $limit), 'debug');
+JFactory::getApplication()->enqueueMessage(JText::_('count: ' . count($list)), 'debug');
+        /*if (count($list) == 0 & $limitstart > 0)
+        {
+            $limitstart = $limitstart - $limit;
+
+            $this->_db->setQuery($query, $limitstart, $limit);
+
+            $list = $this->_db->loadObjectList();
+        }*/
+
+        // return $this->_db->loadObjectList();
+        return $list;
     }
      
     /**
@@ -368,7 +409,7 @@ class RankingsModelsDefault extends JModelBase
             $query = $this->_buildWhere($query);
             $this->total = $this->_getListCount($query);
         }
-        
+
         return $this->total;
     }
      

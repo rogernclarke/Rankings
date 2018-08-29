@@ -46,7 +46,7 @@ defined('_JEXEC') or die('Restricted access');
                     <?php echo JText::_('COM_RANKINGS_CLUB_NAME'); ?>
                 </th>
                 <th width="20%" align="left">
-                    <?php echo JText::_('COM_RANKINGS_RIDER_AGE_CATEGORY'); ?>
+                    <?php echo JText::_('COM_RANKINGS_RIDER_CATEGORY'); ?>
                 </th>
                 <th width="10%" align="left">
                     <?php echo JText::_('COM_RANKINGS_RIDE_TIME'); ?>
@@ -56,13 +56,6 @@ defined('_JEXEC') or die('Restricted access');
                 </th>
             </tr>
         </thead>
-        <tfoot>
-            <tr>
-                <td colspan="6">
-                    <?php //echo $this->pagination->getListFooter(); ?>
-                </td>
-            </tr>
-        </tfoot>
         <tbody>
             <?php for($i=0, $n = count($this->event->rides); $i<$n; $i++) 
             {

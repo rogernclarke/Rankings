@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<form>
+    <fieldset
+		name="event_list_toolbar"
+		label="COM_RANKINGS_DETAILS"
+		addfieldpath="/components/com_rankings/models/fields"
+		>
+		<field
+            name="event_district_code_filter"
+            type="districtlist"
+            id="event_district_code_filter"
+            extension="com_rankings"
+            label="COM_RANKINGS_DISTRICT"
+            onchange="this.form.submit();"
+            >
+            <option value="All">All</option>
+        </field>
+        <field
+            name="event_distance_filter"
+            type="distancelist"
+            id="event_distance_filter"
+            extension="com_rankings"
+            label="COM_RANKINGS_EVENT_DISTANCE"
+            onchange="this.form.submit();"
+            >
+            <option value="All">All</option>
+        </field>
+        <field
+            name="event_year_filter"
+            type="yearlist"
+            id="event_year_filter"
+            extension="com_rankings"
+            label="COM_RANKINGS_EVENT_YEAR"
+            onchange="this.form.submit();"
+            >
+            <option value="All">All</option>
+        </field>
+        <field
+        	name="event_event_name_filter"
+        	type="text"
+        	id="event_event_name_filter"
+        	extension="com_rankings"
+        	label="COM_RANKINGS_SEARCH_IN_EVENT_NAME"
+        	labelclass="element-invisible"
+        	hint="COM_RANKINGS_SEARCH_IN_EVENT_NAME"
+        	onchange="this.form.submit();"
+        	/>
+    </fieldset>
+</form>

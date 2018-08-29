@@ -51,10 +51,16 @@ class RankingsViewsEventHtml extends JViewHtml
                 // Handle pagination
                 $this->pagination = $this->model->getPagination();
 
+                // Get the list state
+                $this->state = $this->model->getState();
+                
                 //$this->_rankingsListView = $viewHelper->load('Rankings','_entry','phtml');
 
                 // Get the total number of events
                 $this->totalEvents = $this->model->getTotal();
+
+                // Get the form
+                $this->form = $this->model->getForm();
             break;
         }
         	

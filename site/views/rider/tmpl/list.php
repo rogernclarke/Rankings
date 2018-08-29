@@ -18,9 +18,18 @@ defined('_JEXEC') or die('Restricted access');
 <form action="<?php echo JRoute::_('index.php?option=com_rankings'); ?>" method="post" name="AdminForm" id="AdminForm">
 	<div id="filter-bar" class="btn-toolbar">
 		<div class="filter-search btn-group pull-left">
-			<label for="filter.search" class="element-invisible"><?php echo JText::_('COM_RANKINGS_SEARCH_IN_NAME');?>
+			<label for="rider_name_filter_search" class="element-invisible"><?php echo JText::_('COM_RANKINGS_SEARCH_IN_NAME');?>
 			</label>
-			<input type="text" name="filter.search" id="filter_search" placeholder="<?php echo JText::_('JSEARCH_FILTER'); ?>" value="<?php echo $this->escape($this->state->get('filter.search')); ?>" class="hasTooltip" title="<?php echo JHtml::tooltipText('COM_RANKINGS_SEARCH_IN_NAME'); ?>" />
+			<input type="text" name="rider_name_filter" id="rider_name_filter" placeholder="<?php echo JText::_('COM_RANKINGS_SEARCH_IN_NAME'); ?>" value="<?php echo $this->escape($this->state->get('com_rankings.rider.name.filter')); ?>" class="hasTooltip" title="<?php echo JHtml::tooltipText('COM_RANKINGS_SEARCH_IN_NAME'); ?>" onchange="this.form.submit();" />
+		</div>
+		<div class="filter-search btn-group pull-left">
+			<label for="rider_club_name_filter_search" class="element-invisible"><?php echo JText::_('COM_RANKINGS_SEARCH_IN_CLUB_NAME');?>
+			</label>
+			<input type="text" name="rider_club_name_filter" id="rider_club_name_filter" placeholder="<?php echo JText::_('COM_RANKINGS_SEARCH_IN_CLUB_NAME'); ?>" value="<?php echo $this->escape($this->state->get('com_rankings.rider.club_name.filter')); ?>" class="hasTooltip" title="<?php echo JHtml::tooltipText('COM_RANKINGS_SEARCH_IN_CLUB_NAME'); ?>" onchange="this.form.submit();" />
+		</div>
+		<div class="btn-group pull-left">
+			<button type="submit" class="btn hasTooltip" title="<?php echo JHtml::tooltipText('JSEARCH_FILTER_SUBMIT'); ?>"><i class="icon-search"></i></button>
+			<button type="button" class="btn hasTooltip" title="<?php echo JHtml::tooltipText('JSEARCH_FILTER_CLEAR'); ?>" onclick="document.getElementById('rider_name_filter').value='';document.getElementById('rider_club_name_filter').value='';this.form.submit();"><i class="icon-remove"></i></button>
 		</div>
 		<div class="btn-group pull-right hidden-phone">
 			<label for="com_rankings.riders.limit" ><?php echo JText::_('JFIELD_PLG_SEARCH_SEARCHLIMIT_DESC');?></label>
@@ -29,6 +38,9 @@ defined('_JEXEC') or die('Restricted access');
 	</div>
 	<div id="tt-rider-pages-counter" class="tt-pages-counter">
 		<?php echo $this->pagination->getPagesCounter(); ?>
+	</div>
+	<div id="tt-rider-results-counter" class="tt-results-counter">
+		<?php echo $this->pagination->getResultsCounter(); ?>
 	</div>
     <table class="table table-tt-riders"" cellpadding="0" cellspacing="0" width="100%">
 		<thead>
@@ -39,18 +51,11 @@ defined('_JEXEC') or die('Restricted access');
     	    	<th>
 	                <?php echo JText::_('COM_RANKINGS_CLUB_NAME'); ?>
     	    	</th>
-    	    	<th>
-	                <?php echo JText::_('COM_RANKINGS_RIDER_AGE_CATEGORY'); ?>
+    	    	<th class="hidden-phone">
+	                <?php echo JText::_('COM_RANKINGS_RIDER_CATEGORY'); ?>
     	    	</th>
         	</tr>
 		</thead>
-		<tfoot>
-			<tr>
-				<td colspan="6">
-					<?php //echo $this->pagination->getListFooter(); ?>
-				</td>
-			</tr>
-		</tfoot>
 		<tbody>
 			<?php for($i=0, $n = count($this->riders); $i<$n; $i++) 
     		{
@@ -63,8 +68,8 @@ defined('_JEXEC') or die('Restricted access');
 					<td>
 						<?php echo $this->_ridersListView->rider->club_name; ?>
 					</td>
-					<td>
-						<?php echo $this->_ridersListView->rider->age_category; ?>
+					<td class="hidden-phone">
+						<?php echo $this->_ridersListView->rider->category; ?>
 					</td>
 					<td>
 					</td>

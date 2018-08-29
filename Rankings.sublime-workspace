@@ -64,6 +64,7 @@
 			"settings":
 			{
 				"buffer_size": 2120,
+				"encoding": "UTF-8",
 				"line_ending": "Windows"
 			}
 		},
@@ -77,10 +78,63 @@
 			}
 		},
 		{
+			"file": "site/controllers/default.php",
+			"settings":
+			{
+				"buffer_size": 3373,
+				"line_ending": "Windows"
+			}
+		},
+		{
+			"file": "site/helpers/view.php",
+			"settings":
+			{
+				"buffer_size": 1699,
+				"line_ending": "Windows"
+			}
+		},
+		{
+			"file": "site/models/default.php",
+			"settings":
+			{
+				"buffer_size": 11627,
+				"encoding": "UTF-8",
+				"line_ending": "Windows"
+			}
+		},
+		{
 			"file": "site/models/rankings.php",
 			"settings":
 			{
-				"buffer_size": 2527,
+				"buffer_size": 2582,
+				"encoding": "UTF-8",
+				"line_ending": "Windows"
+			}
+		},
+		{
+			"file": "site/models/ride.php",
+			"settings":
+			{
+				"buffer_size": 2976,
+				"encoding": "UTF-8",
+				"line_ending": "Windows"
+			}
+		},
+		{
+			"file": "site/models/rider.php",
+			"settings":
+			{
+				"buffer_size": 3448,
+				"encoding": "UTF-8",
+				"line_ending": "Windows"
+			}
+		},
+		{
+			"file": "site/models/event.php",
+			"settings":
+			{
+				"buffer_size": 2615,
+				"encoding": "UTF-8",
 				"line_ending": "Windows"
 			}
 		},
@@ -88,7 +142,79 @@
 			"file": "site/views/rankings/tmpl/list.php",
 			"settings":
 			{
-				"buffer_size": 3845,
+				"buffer_size": 4442,
+				"encoding": "UTF-8",
+				"line_ending": "Windows"
+			}
+		},
+		{
+			"file": "site/views/rider/tmpl/list.php",
+			"settings":
+			{
+				"buffer_size": 4053,
+				"encoding": "UTF-8",
+				"line_ending": "Windows"
+			}
+		},
+		{
+			"file": "site/views/event/tmpl/list.php",
+			"settings":
+			{
+				"buffer_size": 4445,
+				"encoding": "UTF-8",
+				"line_ending": "Windows"
+			}
+		},
+		{
+			"file": "site/views/rankings/html.php",
+			"settings":
+			{
+				"buffer_size": 1605,
+				"encoding": "UTF-8",
+				"line_ending": "Windows"
+			}
+		},
+		{
+			"file": "site/views/rider/html.php",
+			"settings":
+			{
+				"buffer_size": 1681,
+				"encoding": "UTF-8",
+				"line_ending": "Windows"
+			}
+		},
+		{
+			"file": "site/views/event/html.php",
+			"settings":
+			{
+				"buffer_size": 1859,
+				"encoding": "UTF-8",
+				"line_ending": "Windows"
+			}
+		},
+		{
+			"file": "site/views/rider/tmpl/display.php",
+			"settings":
+			{
+				"buffer_size": 3532,
+				"encoding": "UTF-8",
+				"line_ending": "Windows"
+			}
+		},
+		{
+			"file": "site/views/event/tmpl/display.php",
+			"settings":
+			{
+				"buffer_size": 3504,
+				"encoding": "UTF-8",
+				"line_ending": "Windows"
+			}
+		},
+		{
+			"file": "media/css/rankings.css",
+			"settings":
+			{
+				"buffer_size": 327,
 				"encoding": "UTF-8",
 				"line_ending": "Windows"
 			}
@@ -98,6 +224,42 @@
 			"settings":
 			{
 				"buffer_size": 704,
+				"encoding": "UTF-8",
+				"line_ending": "Windows"
+			}
+		},
+		{
+			"file": "site/language/en-GB/en-GB.com_rankings.ini",
+			"settings":
+			{
+				"buffer_size": 1012,
+				"encoding": "UTF-8",
+				"line_ending": "Windows"
+			}
+		},
+		{
+			"file": "admin/language/en-GB/en-GB.com_rankings.sys.ini",
+			"settings":
+			{
+				"buffer_size": 618,
+				"encoding": "UTF-8",
+				"line_ending": "Windows"
+			}
+		},
+		{
+			"file": "site/models/forms/event.xml",
+			"settings":
+			{
+				"buffer_size": 605,
+				"encoding": "UTF-8",
+				"line_ending": "Windows"
+			}
+		},
+		{
+			"file": "site/models/fields/districtlist.php",
+			"settings":
+			{
+				"buffer_size": 2326,
 				"encoding": "UTF-8",
 				"line_ending": "Windows"
 			}
@@ -145,50 +307,77 @@
 	"expanded_folders":
 	[
 		"/C/Users/Roger/Box Sync/GitHub/Rankings",
+		"/C/Users/Roger/Box Sync/GitHub/Rankings/admin",
 		"/C/Users/Roger/Box Sync/GitHub/Rankings/media",
 		"/C/Users/Roger/Box Sync/GitHub/Rankings/media/css",
 		"/C/Users/Roger/Box Sync/GitHub/Rankings/media/js",
 		"/C/Users/Roger/Box Sync/GitHub/Rankings/site",
+		"/C/Users/Roger/Box Sync/GitHub/Rankings/site/controllers",
+		"/C/Users/Roger/Box Sync/GitHub/Rankings/site/helpers",
+		"/C/Users/Roger/Box Sync/GitHub/Rankings/site/language",
+		"/C/Users/Roger/Box Sync/GitHub/Rankings/site/language/en-GB",
 		"/C/Users/Roger/Box Sync/GitHub/Rankings/site/models",
 		"/C/Users/Roger/Box Sync/GitHub/Rankings/site/views",
-		"/C/Users/Roger/Box Sync/GitHub/Rankings/site/views/rankings",
-		"/C/Users/Roger/Box Sync/GitHub/Rankings/site/views/rankings/tmpl"
+		"/C/Users/Roger/Box Sync/GitHub/Rankings/site/views/rider",
+		"/C/Users/Roger/Box Sync/GitHub/Rankings/site/views/rider/tmpl"
 	],
 	"file_history":
 	[
+		"/C/Users/Roger/Box Sync/GitHub/Race/site/race.php",
+		"/C/Users/Roger/Box Sync/GitHub/Race/admin/views/course/html.php",
+		"/C/Users/Roger/Box Sync/GitHub/Race/site/helpers/view.php",
+		"/C/Users/Roger/Box Sync/GitHub/Race/site/controllers/default.php",
+		"/C/Users/Roger/Box Sync/GitHub/Race/admin/models/forms/course.xml",
+		"/C/Users/Roger/Box Sync/GitHub/Race/admin/models/default.php",
+		"/C/Users/Roger/Box Sync/GitHub/Race/admin/models/course.php",
+		"/C/Users/Roger/Box Sync/GitHub/Rankings/site/models/forms/events-list.xml",
+		"/C/Users/Roger/Box Sync/GitHub/lendr/com_lendr/site/views/book/html.php",
+		"/C/Users/Roger/Box Sync/GitHub/lendr/com_lendr/site/views/waitlist/tmpl/_waitlist.php",
+		"/C/Users/Roger/Box Sync/GitHub/lendr/com_lendr/site/helpers/view.php",
+		"/C/Users/Roger/Box Sync/GitHub/lendr/com_lendr/site/views/library/tmpl/_library.php",
+		"/C/Users/Roger/Box Sync/GitHub/lendr/com_lendr/site/views/library/html.php",
+		"/C/Users/Roger/Box Sync/GitHub/Rankings/site/models/forms/events.xml",
+		"/C/Users/Roger/Box Sync/GitHub/Race/admin/views/course/tmpl/add.php",
+		"/C/Users/Roger/Box Sync/GitHub/Race/admin/views/course/tmpl/list.php",
+		"/C/Users/Roger/Box Sync/GitHub/Race/admin/models/fields/course.php",
+		"/C/Users/Roger/Box Sync/GitHub/Rankings/site/models/fields/externalsql.php",
+		"/C/Users/Roger/Box Sync/GitHub/Rankings/library/rankings.xml",
+		"/C/Users/Roger/Box Sync/GitHub/Rankings/library/rankings.php",
+		"/C/Users/Roger/Box Sync/GitHub/Rankings/library/externalsql.php",
+		"/C/Users/Roger/Box Sync/GitHub/Rankings/site/views/event/tmpl/default.xml",
+		"/C/Users/Roger/AppData/Roaming/Sublime Text 3/Packages/User/SFTP.errors.log",
+		"/C/Users/Roger/Box Sync/GitHub/Rankings/site/library/externalsql.php",
+		"/C/Users/Roger/Box Sync/GitHub/Rankings/site/form/fields/externalsql.php",
+		"/C/Users/Roger/Box Sync/GitHub/lendr/com_lendr/site/models/default.php",
+		"/C/Users/Roger/Box Sync/GitHub/Rankings/admin/language/en-GB/en-GB.com_rankings.ini",
+		"/C/Users/Roger/Box Sync/GitHub/Rankings/site/views/rider/tmpl/default.xml",
+		"/C/Users/Roger/Box Sync/GitHub/lendr/com_lendr/site/views/book/tmpl/list.php",
+		"/C/Users/Roger/Box Sync/GitHub/Race/site/views/course/tmpl/list.php",
+		"/C/Users/Roger/Box Sync/GitHub/lendr/com_lendr/site/views/library/phtml.php",
+		"/C/Users/Roger/Box Sync/GitHub/lendr/com_lendr/site/models/book.php",
+		"/C/Users/Roger/Box Sync/GitHub/lendr/com_lendr/site/models/library.php",
+		"/C/Users/Roger/Box Sync/GitHub/lendr/com_lendr/site/controllers/default.php",
+		"/C/Users/Roger/Box Sync/GitHub/lendr/com_lendr/site/views/book/tmpl/book.php",
+		"/C/Users/Roger/Box Sync/GitHub/Rankings/site/models/ride.php",
+		"/C/Users/Roger/Box Sync/GitHub/Rankings/site/models/rider.php",
 		"/C/Users/Roger/Box Sync/GitHub/Rankings/media/js/sftp-config.json",
 		"/C/Users/Roger/Box Sync/GitHub/Rankings/media/css/sftp-config.json",
 		"/C/Users/Roger/Box Sync/GitHub/Rankings/site/sftp-config.json",
-		"/C/Users/Roger/AppData/Roaming/Sublime Text 3/Packages/User/SFTP.errors.log",
 		"/C/Users/Roger/AppData/Roaming/Sublime Text 3/Packages/User/sftp_servers/spindata.config",
 		"/C/Users/Roger/Box Sync/GitHub/Rankings/Rankings.sublime-project",
 		"/C/Users/Roger/Box Sync/GitHub/Rankings/site/controllers/default.php",
 		"/C/Users/Roger/Box Sync/GitHub/Rankings/site/rankings.php",
 		"/C/Users/Roger/Box Sync/GitHub/Rankings/rankings.xml",
 		"/C/Users/Roger/Box Sync/Re-living IT/Spindata/Rankings.sublime-project",
-		"/C/Users/Roger/Box Sync/GitHub/Race/site/helpers/view.php",
-		"/C/Users/Roger/Box Sync/GitHub/Race/admin/models/course.php",
-		"/C/Users/Roger/Box Sync/GitHub/Race/admin/models/default.php",
-		"/C/Users/Roger/Box Sync/GitHub/Race/site/views/course/tmpl/list.php",
 		"/C/Users/Roger/Box Sync/GitHub/Race/site/views/course/tmpl/default.xml",
 		"/C/Users/Roger/Box Sync/GitHub/Race/site/views/course/tmpl/_entry.php",
 		"/C/Users/Roger/Box Sync/GitHub/Race/site/views/course/phtml.php",
 		"/C/Users/Roger/Box Sync/GitHub/Race/site/views/course/html.php",
-		"/C/Users/Roger/Box Sync/GitHub/Race/site/controllers/default.php",
 		"/C/Users/Roger/Box Sync/GitHub/Race/race.xml",
-		"/C/Users/Roger/Box Sync/GitHub/Race/site/race.php",
 		"/C/Users/Roger/Box Sync/GitHub/Race/site/language/en-GB/en-GB.com_race.ini",
 		"/C/Users/Roger/Box Sync/GitHub/lendr/com_lendr/site/models/review.php",
-		"/C/Users/Roger/Box Sync/GitHub/lendr/com_lendr/site/models/book.php",
-		"/C/Users/Roger/Box Sync/GitHub/lendr/com_lendr/site/models/library.php",
-		"/C/Users/Roger/Box Sync/GitHub/lendr/com_lendr/site/models/default.php",
 		"/C/Users/Roger/Box Sync/GitHub/lendr/com_lendr/site/views/book/tmpl/_entry.php",
-		"/C/Users/Roger/Box Sync/GitHub/lendr/com_lendr/site/views/book/html.php",
-		"/C/Users/Roger/Box Sync/GitHub/lendr/com_lendr/site/views/book/tmpl/book.php",
-		"/C/Users/Roger/Box Sync/GitHub/lendr/com_lendr/site/views/library/tmpl/_library.php",
-		"/C/Users/Roger/Box Sync/GitHub/lendr/com_lendr/site/views/library/html.php",
 		"/C/Users/Roger/Box Sync/GitHub/lendr/com_lendr/site/lendr.php",
-		"/C/Users/Roger/Box Sync/GitHub/lendr/com_lendr/site/controllers/default.php",
 		"/C/Users/Roger/Box Sync/GitHub/Rankings/media/js/rankings-script.js",
 		"/C/Users/Roger/Box Sync/GitHub/Rankings/site/language/en-GB/en-GB.com_rankings.ini",
 		"/C/Users/Roger/Box Sync/GitHub/Rankings/site/views/event/tmpl/display.php",
@@ -202,12 +391,8 @@
 		"/C/Users/Roger/Box Sync/GitHub/Rankings/site/views/rankings/html.php",
 		"/C/Users/Roger/Box Sync/GitHub/Rankings/site/helpers/view.php",
 		"/C/Users/Roger/Box Sync/GitHub/Rankings/site/views/ride/tmpl/default.xml",
-		"/C/Users/Roger/Box Sync/GitHub/Rankings/site/views/rider/tmpl/default.xml",
-		"/C/Users/Roger/Box Sync/GitHub/Rankings/site/views/event/tmpl/default.xml",
 		"/C/Users/Roger/Box Sync/GitHub/Rankings/site/views/rankings/tmpl/default.xml",
 		"/C/Users/Roger/Box Sync/GitHub/Rankings/site/models/event.php",
-		"/C/Users/Roger/Box Sync/GitHub/Rankings/site/models/ride.php",
-		"/C/Users/Roger/Box Sync/GitHub/Rankings/site/models/rider.php",
 		"/C/Users/Roger/Box Sync/GitHub/Rankings/site/models/rankings.php",
 		"/C/Users/Roger/Box Sync/GitHub/Rankings/site/models/default.php",
 		"/C/Users/Roger/Box Sync/GitHub/Rankings/site/controllers/list.php",
@@ -228,7 +413,6 @@
 		"/C/Users/Roger/Box Sync/GitHub/lendr/com_lendr/site/views/review/html.php",
 		"/C/Users/Roger/Box Sync/GitHub/lendr/com_lendr/site/views/review/tmpl/list.php",
 		"/C/Users/Roger/Box Sync/GitHub/lendr/com_lendr/site/views/review/phtml.php",
-		"/C/Users/Roger/Box Sync/GitHub/lendr/com_lendr/site/views/book/tmpl/list.php",
 		"/C/Users/Roger/Box Sync/GitHub/lendr/com_lendr/site/tables/book.php",
 		"/C/Users/Roger/Box Sync/GitHub/lendr/com_lendr/site/router.php",
 		"/C/Users/Roger/Box Sync/GitHub/Rankings/mod_tt_latest_events/helper.php",
@@ -266,28 +450,11 @@
 		"/C/Users/Roger/Documents/21st Century Clubs/Website/Joomla/Race/Helloworld Tutorial/Version 0.0.10/site/models/races.php",
 		"/C/Users/Roger/Documents/21st Century Clubs/Website/Joomla/Race/Helloworld Tutorial/Version 0.0.10/site/controller.php",
 		"/C/Users/Roger/Documents/21st Century Clubs/Website/Joomla/Race/Helloworld Tutorial/Version 0.0.10/site/race.php",
-		"/C/Users/Roger/Box Sync/Re-living IT/Spindata/Joomla/mod_tt_latest_events/tmpl/default.php",
-		"/C/Users/Roger/Box Sync/Re-living IT/Spindata/Joomla/mod_tt_latest_events/mod_tt_latest_events.php",
-		"/C/Users/Roger/Box Sync/Re-living IT/Spindata/Joomla/mod_ttlatestevents/mod_tt_latest_events.php",
-		"/C/Users/Roger/Box Sync/Re-living IT/Spindata/Joomla/mod_tt_latest_events/mod_tt_latest_events.xml",
-		"/C/Users/Roger/Box Sync/Re-living IT/Spindata/Joomla/mod_ttlatestevents/helper.php",
-		"/C/Users/Roger/Box Sync/Re-living IT/Spindata/Joomla/mod_ttlatestevents/mod_tt_latest_events.xml",
-		"/C/Users/Roger/Box Sync/Re-living IT/Spindata/Joomla/mod_ttlatestevents/default.php",
-		"/C/Users/Roger/Box Sync/Re-living IT/Spindata/Joomla/mod_ttlatestevents/index.html",
-		"/C/Users/Roger/Box Sync/Re-living IT/Time Trial Project/TimeTrial/riders.csv",
-		"/C/Users/Roger/Box Sync/Re-living IT/Time Trial Project/Riders.csv",
-		"/C/Users/Roger/Downloads/tynevags.org.uk-ssl_log",
-		"/C/Users/Roger/Downloads/tynevags.org.uk-May-2018",
-		"/C/Users/Roger/Downloads/jos_content.sql",
-		"/C/Users/Roger/Downloads/jos_content(1).sql",
-		"/C/Users/Roger/Downloads/google.com!tynevags.org.uk!1515024000!1515110399.xml",
-		"/C/Users/Roger/Downloads/tvcc/plupload.html",
-		"/C/Windows/System32/drivers/etc/hosts",
-		"/C/Users/Roger/Downloads/activity_2455546400.gpx"
+		"/C/Users/Roger/Box Sync/Re-living IT/Spindata/Joomla/mod_tt_latest_events/tmpl/default.php"
 	],
 	"find":
 	{
-		"height": 32.0
+		"height": 44.0
 	},
 	"find_in_files":
 	{
@@ -301,6 +468,29 @@
 		"case_sensitive": false,
 		"find_history":
 		[
+			"getform",
+			"form",
+			"loaddb",
+			"_event_id",
+			"setstate",
+			"isset",
+			"setstate",
+			"getstate",
+			"getUserStateFromRequest",
+			"popula",
+			"getstate",
+			"populate",
+			"getUserState",
+			"getUserStateFromRequest",
+			"$data",
+			"_data",
+			"setuserstate",
+			"set",
+			"pagination",
+			"populate",
+			"_pagination",
+			"pagi",
+			"limitstart"
 		],
 		"highlight": true,
 		"in_selection": false,
@@ -318,7 +508,7 @@
 	"groups":
 	[
 		{
-			"selected": 1,
+			"selected": 21,
 			"sheets":
 			[
 				{
@@ -334,8 +524,8 @@
 						"selection":
 						[
 							[
-								0,
-								0
+								842,
+								909
 							]
 						],
 						"settings":
@@ -350,7 +540,7 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 1,
+					"stack_index": 12,
 					"type": "text"
 				},
 				{
@@ -366,8 +556,8 @@
 						"selection":
 						[
 							[
-								49,
-								49
+								462,
+								462
 							]
 						],
 						"settings":
@@ -379,19 +569,118 @@
 							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 0.0,
+						"translation.y": 966.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 0,
+					"stack_index": 11,
 					"type": "text"
 				},
 				{
 					"buffer": 2,
+					"file": "site/controllers/default.php",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 3373,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								1465,
+								1465
+							]
+						],
+						"settings":
+						{
+							"incomplete_sync": null,
+							"remote_loading": false,
+							"synced": true,
+							"syntax": "Packages/PHP/PHP.sublime-syntax",
+							"tab_size": 4,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 10,
+					"type": "text"
+				},
+				{
+					"buffer": 3,
+					"file": "site/helpers/view.php",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 1699,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								291,
+								291
+							]
+						],
+						"settings":
+						{
+							"incomplete_sync": null,
+							"remote_loading": false,
+							"synced": true,
+							"syntax": "Packages/PHP/PHP.sublime-syntax",
+							"tab_size": 4,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 621.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 9,
+					"type": "text"
+				},
+				{
+					"buffer": 4,
+					"file": "site/models/default.php",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 11627,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								5824,
+								5824
+							]
+						],
+						"settings":
+						{
+							"incomplete_sync": null,
+							"remote_loading": false,
+							"synced": true,
+							"syntax": "Packages/PHP/PHP.sublime-syntax",
+							"tab_size": 4,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 3841.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 4,
+					"type": "text"
+				},
+				{
+					"buffer": 5,
 					"file": "site/models/rankings.php",
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 2527,
+						"buffer_size": 2582,
 						"regions":
 						{
 						},
@@ -412,27 +701,126 @@
 							"translate_tabs_to_spaces": true
 						},
 						"translation.x": 0.0,
-						"translation.y": 414.0,
+						"translation.y": 138.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 4,
+					"stack_index": 18,
 					"type": "text"
 				},
 				{
-					"buffer": 3,
-					"file": "site/views/rankings/tmpl/list.php",
+					"buffer": 6,
+					"file": "site/models/ride.php",
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 3845,
+						"buffer_size": 2976,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								1533,
-								1533
+								904,
+								904
+							]
+						],
+						"settings":
+						{
+							"incomplete_sync": null,
+							"remote_loading": false,
+							"synced": true,
+							"syntax": "Packages/PHP/PHP.sublime-syntax",
+							"tab_size": 4,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 1058.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 6,
+					"type": "text"
+				},
+				{
+					"buffer": 7,
+					"file": "site/models/rider.php",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 3448,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								2589,
+								3119
+							]
+						],
+						"settings":
+						{
+							"incomplete_sync": null,
+							"remote_loading": false,
+							"synced": true,
+							"syntax": "Packages/PHP/PHP.sublime-syntax",
+							"tab_size": 4,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 851.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 7,
+					"type": "text"
+				},
+				{
+					"buffer": 8,
+					"file": "site/models/event.php",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 2615,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								1510,
+								1510
+							]
+						],
+						"settings":
+						{
+							"incomplete_sync": null,
+							"remote_loading": false,
+							"synced": true,
+							"syntax": "Packages/PHP/PHP.sublime-syntax",
+							"tab_size": 4,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 2,
+					"type": "text"
+				},
+				{
+					"buffer": 9,
+					"file": "site/views/rankings/tmpl/list.php",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 4442,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								4200,
+								4200
 							]
 						],
 						"settings":
@@ -446,17 +834,269 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 2,
+					"stack_index": 13,
 					"type": "text"
-				}
-			]
-		},
-		{
-			"selected": 0,
-			"sheets":
-			[
+				},
 				{
-					"buffer": 4,
+					"buffer": 10,
+					"file": "site/views/rider/tmpl/list.php",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 4053,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								2080,
+								2080
+							]
+						],
+						"settings":
+						{
+							"incomplete_sync": null,
+							"remote_loading": false,
+							"synced": true,
+							"syntax": "Packages/PHP/PHP.sublime-syntax"
+						},
+						"translation.x": 0.0,
+						"translation.y": 761.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 14,
+					"type": "text"
+				},
+				{
+					"buffer": 11,
+					"file": "site/views/event/tmpl/list.php",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 4445,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								645,
+								645
+							]
+						],
+						"settings":
+						{
+							"incomplete_sync": null,
+							"remote_loading": false,
+							"synced": true,
+							"syntax": "Packages/PHP/PHP.sublime-syntax"
+						},
+						"translation.x": 0.0,
+						"translation.y": 345.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 1,
+					"type": "text"
+				},
+				{
+					"buffer": 12,
+					"file": "site/views/rankings/html.php",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 1605,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								1312,
+								1312
+							]
+						],
+						"settings":
+						{
+							"incomplete_sync": null,
+							"remote_loading": false,
+							"synced": true,
+							"syntax": "Packages/PHP/PHP.sublime-syntax",
+							"tab_size": 4,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 483.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 21,
+					"type": "text"
+				},
+				{
+					"buffer": 13,
+					"file": "site/views/rider/html.php",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 1681,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								1293,
+								1371
+							]
+						],
+						"settings":
+						{
+							"incomplete_sync": null,
+							"remote_loading": false,
+							"synced": true,
+							"syntax": "Packages/PHP/PHP.sublime-syntax",
+							"tab_size": 4,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 714.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 17,
+					"type": "text"
+				},
+				{
+					"buffer": 14,
+					"file": "site/views/event/html.php",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 1859,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								1776,
+								1776
+							]
+						],
+						"settings":
+						{
+							"incomplete_sync": null,
+							"remote_loading": false,
+							"synced": true,
+							"syntax": "Packages/PHP/PHP.sublime-syntax",
+							"tab_size": 4,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 69.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 5,
+					"type": "text"
+				},
+				{
+					"buffer": 15,
+					"file": "site/views/rider/tmpl/display.php",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 3532,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								2125,
+								2125
+							]
+						],
+						"settings":
+						{
+							"incomplete_sync": null,
+							"remote_loading": false,
+							"synced": true,
+							"syntax": "Packages/PHP/PHP.sublime-syntax",
+							"tab_size": 4,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 760.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 16,
+					"type": "text"
+				},
+				{
+					"buffer": 16,
+					"file": "site/views/event/tmpl/display.php",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 3504,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								2128,
+								2128
+							]
+						],
+						"settings":
+						{
+							"incomplete_sync": null,
+							"remote_loading": false,
+							"synced": true,
+							"syntax": "Packages/PHP/PHP.sublime-syntax",
+							"tab_size": 4,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 46.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 19,
+					"type": "text"
+				},
+				{
+					"buffer": 17,
+					"file": "media/css/rankings.css",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 327,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								287,
+								287
+							]
+						],
+						"settings":
+						{
+							"incomplete_sync": null,
+							"remote_loading": false,
+							"synced": true,
+							"syntax": "Packages/CSS/CSS.sublime-syntax"
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 20,
+					"type": "text"
+				},
+				{
+					"buffer": 18,
 					"file": "media/js/rankings-script.js",
 					"semi_transient": false,
 					"settings":
@@ -469,7 +1109,7 @@
 						[
 							[
 								703,
-								704
+								703
 							]
 						],
 						"settings":
@@ -483,9 +1123,139 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
+					"stack_index": 22,
+					"type": "text"
+				},
+				{
+					"buffer": 19,
+					"file": "site/language/en-GB/en-GB.com_rankings.ini",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 1012,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								634,
+								634
+							]
+						],
+						"settings":
+						{
+							"incomplete_sync": null,
+							"remote_loading": false,
+							"synced": true,
+							"syntax": "Packages/Text/Plain text.tmLanguage"
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 15,
+					"type": "text"
+				},
+				{
+					"buffer": 20,
+					"file": "admin/language/en-GB/en-GB.com_rankings.sys.ini",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 618,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								618,
+								618
+							]
+						],
+						"settings":
+						{
+							"incomplete_sync": null,
+							"remote_loading": false,
+							"synced": false,
+							"syntax": "Packages/Text/Plain text.tmLanguage"
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 8,
+					"type": "text"
+				},
+				{
+					"buffer": 21,
+					"file": "site/models/forms/event.xml",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 605,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								581,
+								581
+							]
+						],
+						"settings":
+						{
+							"incomplete_sync": null,
+							"remote_loading": false,
+							"synced": true,
+							"syntax": "Packages/XML/XML.sublime-syntax"
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 0,
+					"type": "text"
+				},
+				{
+					"buffer": 22,
+					"file": "site/models/fields/districtlist.php",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 2326,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								1115,
+								1115
+							]
+						],
+						"settings":
+						{
+							"incomplete_sync": null,
+							"remote_loading": false,
+							"synced": true,
+							"syntax": "Packages/PHP/PHP.sublime-syntax",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 759.0,
+						"zoom_level": 1.0
+					},
 					"stack_index": 3,
 					"type": "text"
 				}
+			]
+		},
+		{
+			"sheets":
+			[
 			]
 		}
 	],
@@ -592,7 +1362,7 @@
 	"show_open_files": true,
 	"show_tabs": true,
 	"side_bar_visible": true,
-	"side_bar_width": 202.0,
+	"side_bar_width": 180.0,
 	"status_bar_visible": true,
 	"template_settings":
 	{

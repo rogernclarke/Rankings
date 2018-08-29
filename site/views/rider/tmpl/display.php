@@ -21,55 +21,64 @@ defined('_JEXEC') or die('Restricted access');
 </div>
 <div id="tt-rider-club"><?php echo $this->rider->club_name; ?>
 </div>
-<div id="tt-rider-age-category"><?php echo $this->rider->age_category . ' ' . $this->rider->gender; ?>
+<div id="tt-rider-category"><?php echo $this->rider->category; ?>
 </div>
 <h2><?php echo JText::_('COM_RANKINGS_RIDER_RESULTS'); ?></h2>
 <table class="tt-table" id="tt-rider-ride-list" cellpadding="0" cellspacing="0" width="100%">
         <thead>
             <tr>
-                <th width="15%" align="left">
+                <th>
                     <?php echo JText::_('COM_RANKINGS_EVENT_DATE'); ?>
                 </th>
-                <th width="40%" align="left">
+                <th>
                     <?php echo JText::_('COM_RANKINGS_EVENT_NAME'); ?>
                 </th>
-                <th width="10%" align="left">
+                <th>
+                    <?php echo JText::_('COM_RANKINGS_EVENT_DISTANCE'); ?>
+                </th>
+                <th class="hidden-phone">
                     <?php echo JText::_('COM_RANKINGS_EVENT_POSITION'); ?>
                 </th>
-                <th width="15%" align="left">
+                <th>
                     <?php echo JText::_('COM_RANKINGS_RIDE_TIME'); ?>
                 </th>
-                <th width="20%" align="left">
+                <th class="hidden-phone">
                     <?php echo JText::_('COM_RANKINGS_RIDE_RANKING_POINTS'); ?>
                 </th>
             </tr>
         </thead>
-        <tfoot>
-            <tr>
-                <td colspan="5">
-                    <?php //echo $this->pagination->getListFooter(); ?>
-                </td>
-            </tr>
-        </tfoot>
         <tbody>
             <?php for($i=0, $n = count($this->rider->rides); $i<$n; $i++) 
             {
-                $this->_ridesListView->ride = $this->rider->rides[$i]; ?>
+                $this->_ridesListView->ride = $this->rider->rides[$i];
+
+                If (($i==0) or ($i>0 && date('Y', strtotime($this->rider->rides[$i]->event_date)) != date('Y', strtotime($this->rider->rides[$i-1]->event_date))))
+                { ?>
+                    <tr class="tt-table-year-row">
+                        <th colspan="6">
+                            <?php echo date('Y', strtotime($this->_ridesListView->ride->event_date)); ?>
+                        </th>
+                    </tr>
+                <?php 
+                } ?>
                 <tr class="row<?php echo $i % 2; ?>">
                     <td>
-                        <?php echo $this->_ridesListView->ride->event_date; ?>
+                        <?php echo date('jS F', strtotime($this->_ridesListView->ride->event_date)); ?>
                     </td>
                     <td>
                         <a href="<?php echo JRoute::_('index.php?option=com_rankings&task=event.display&cid=' . $this->_ridesListView->ride->event_id); ?>"><?php echo $this->_ridesListView->ride->event_name; ?>
                         </a>
                     </td>
                     <td>
+                        <?php echo $this->_ridesListView->ride->distance; ?>
+                    </td>
+                    <td class="hidden-phone">
                         <?php echo $this->_ridesListView->ride->position; ?>
                     </td>
                     <td>
                         <?php echo ltrim(ltrim(date('G:i:s', strtotime($this->_ridesListView->ride->time)), '0'), ':'); ?>
                     </td>
-                    <td>
+                    <td class="hidden-phone">
                         <?php echo $this->_ridesListView->ride->ranking_points; ?>
                     </td>
                 </tr>
