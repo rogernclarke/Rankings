@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<extension type="module" version="1.0" client="site" method="upgrade">
+    <name>Rankings Top Riders</name>
+    <author>Roger Clarke</author>
+    <version>1.0</version>
+    <description>A module to display the top ranked riders.</description>
+    <files>
+        <filename>mod_rankings_top_riders.xml</filename>
+        <filename module="mod_rankings_top_riders">mod_rankings_top_riders.php</filename>
+        <filename>index.html</filename>
+        <filename>helper.php</filename>
+        <filename>tmpl/default.php</filename>
+        <filename>tmpl/index.html</filename>
+    </files>
+    <languages folder="language">
+        <language tag="en-GB">en-GB/en-GB.mod_rankings_top_riders.ini</language>
+    </languages>
+    <config>
+        <fields name="params">
+            <fieldset name="basic">
+                <field
+                    name="count_riders"
+                    type="integer"
+                    id="riders_count"
+                    extension="com_rankings"
+                    label="COM_RANKINGS_RIDERS_COUNT"
+                    first="1"
+                    last="10"
+                    step="1"
+                />
+                <field
+                    name="gender"
+                    type="list"
+                    id="gender"
+                    extension="com_rankings"
+                    label="COM_RANKINGS_GENDER"
+                    >
+                    <option value="Female">Female</option>
+                    <option value="Male">Male</option>
+                </field>
+                <field
+                    name="age_category"
+                    type="list"
+                    id="age_category"
+                    extension="com_rankings"
+                    label="COM_RANKINGS_AGE_CATEGORY"
+                    >
+                    <option value="All">All</option>
+                    <option value="Espoir">Espoir</option>
+                    <option value="Junior">Junior</option>
+                    <option value="Juvenile">Juvenile</option>
+                    <option value="Senior">Senior</option>
+                    <option value="Veteran">Veteran</option>
+                </field>
+            </fieldset>
+        </fields>
+    </config>
+</extension>

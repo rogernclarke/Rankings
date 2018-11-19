@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<extension type="module" version="1.0" client="site" method="upgrade">
+    <name>Rankings Top Teams</name>
+    <author>Roger Clarke</author>
+    <version>1.0</version>
+    <description>A module to display the top ranked teams.</description>
+    <files>
+        <filename>mod_rankings_top_teams.xml</filename>
+        <filename module="mod_rankings_top_teams">mod_rankings_top_teams.php</filename>
+        <filename>index.html</filename>
+        <filename>helper.php</filename>
+        <filename>tmpl/default.php</filename>
+        <filename>tmpl/index.html</filename>
+    </files>
+    <languages folder="language">
+        <language tag="en-GB">en-GB/en-GB.mod_rankings_top_teams.ini</language>
+    </languages>
+    <config>
+        <fields name="params">
+            <fieldset name="basic">
+                <field
+                    name="count_teams"
+                    type="integer"
+                    id="teams_count"
+                    extension="com_rankings"
+                    label="COM_RANKINGS_TEAMS_COUNT"
+                    first="1"
+                    last="10"
+                    step="1"
+                />
+                <field
+                    name="gender"
+                    type="list"
+                    id="gender"
+                    extension="com_rankings"
+                    label="COM_RANKINGS_GENDER"
+                    >
+                    <option value="Female">Female</option>
+                    <option value="Male">Male</option>
+                </field>
+            </fieldset>
+        </fields>
+    </config>
+</extension>
