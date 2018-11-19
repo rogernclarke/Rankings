@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<extension type="module" version="1.0" client="site" method="upgrade">
+    <name>Rankings Last Updated</name>
+    <author>Roger Clarke</author>
+    <version>1.0</version>
+    <description>A module to display the latest ranking calculation date.</description>
+    <files>
+        <filename>mod_rankings_last_updated.xml</filename>
+        <filename module="mod_rankings_last_updated">mod_rankings_last_updated.php</filename>
+        <filename>index.html</filename>
+        <filename>helper.php</filename>
+        <filename>tmpl/default.php</filename>
+        <filename>tmpl/index.html</filename>
+    </files>
+        <languages folder="language">
+        <language tag="en-GB">en-GB/en-GB.mod_rankings_last_updated.ini</language>
+    </languages>
+    <config>
+    </config>
+</extension>
