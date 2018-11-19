@@ -1,0 +1,450 @@
+/**
+ * Rankings Component for Joomla 3.x
+ * 
+ * @version    1.0
+ * @package    Rankings
+ * @subpackage Component
+ * @copyright  Copyright (C) Spindata. All rights reserved.
+ * @license    GNU General Public License version 2 or later; see LICENSE.txt
+ */
+
+/* Pagination */
+.tt-pagination {
+	text-align: center;
+}
+
+/* Tables - generic */
+table.tt-table {
+  border: 1px solid #1C6EA4;
+  background-color: #FFF;
+  table-layout: fixed;
+  white-space: nowrap;
+  width: 100%;
+  text-align: left;
+  border-collapse: collapse;
+}
+.tt-table td {
+  border: 1px solid #D0E4F5;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.tt-rider-heading, .tt-rider-details {
+	display: flex;
+	justify-content: space-between;
+}
+.tt-rider-heading {
+	border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+}
+.tt-rider-details {
+	padding: 0 0 1rem 0;
+}
+
+.tt-rider-name, .tt-rider-category, .tt-rider, .tt-rider-rank {
+	display: inline-block;
+}
+
+.tt-rider-category {
+	display: inline-block;
+	font-size: 2.2rem;
+	min-width: 84px;
+	padding: 1.25rem 0 0 0;
+}
+.tt-rider-status {
+	display: flex;
+	justify-content: flex-end;
+	padding: 4px 0 0 0;
+}
+.tt-rider-rank {
+	font-size: 1.5rem;
+	text-align: right;
+}
+.tt-club-name {
+	font-size: 1.5rem;
+}
+.tt-age-gender-category {
+	font-size: 1.25rem;
+}
+
+.tt-tag-category-suffix {
+	font-size: 1.65rem;
+	margin-left: -0.5rem;
+}
+
+.tt-tag.tt-rider-category-A {
+	background-color: #cc0000;
+}
+.tt-tag.tt-rider-category-A::before {
+	border-right-color: #cc0000;
+}
+.tt-tag.tt-rider-category-B {
+	background-color: #cc6600;
+}
+.tt-tag.tt-rider-category-B::before {
+	border-right-color: #cc6600;
+}
+.tt-tag.tt-rider-category-C {
+	background-color: #006600;
+}
+.tt-tag.tt-rider-category-C::before {
+	border-right-color: #006600;
+}
+.tt-tag.tt-rider-category-D {
+	background-color: #006666;
+}
+.tt-tag.tt-rider-category-D::before {
+	border-right-color: #006666;
+}
+.tt-tag.tt-rider-category-E {
+	background-color: #000066;
+}
+.tt-tag.tt-rider-category-E::before {
+	border-right-color: #000066;
+}
+
+.tt-tag {
+	color: #fff;
+	display: inline-block;
+	float: right;
+	position: relative;
+	text-decoration: none;
+}
+.tt-tag-large {
+	border-radius: 0 4px 4px 0;
+	height: 40px;
+	line-height: 40px;
+	padding: 0 16px 0 32px;
+	margin: 4px 0 4px 0;
+}
+.tt-tag-small {
+	border-radius: 0 2px 2px 0;
+	height: 20px;
+	line-height: 20px;
+	padding: 0 8px 0 16px;
+	margin: 2px 0 2px 0;
+}
+.tt-tag-very-small {
+	border-radius: 0 2px 2px 0;
+	font-size: 0.75rem;
+	height: 16px;
+	line-height: 16px;
+	padding: 0 4px 0 10px;
+	margin: 0;
+}
+.tt-tag::before {
+  background: #fff;
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0;
+}
+.tt-tag-large::before {
+  border-bottom: 20px transparent solid;
+  border-right: 16px solid;
+  border-top: 20px transparent solid;
+}
+.tt-tag-small::before {
+  border-bottom: 10px transparent solid;
+  border-right: 8px solid;
+  border-top: 10px transparent solid;
+}
+.tt-tag-very-small::before {
+  border-bottom: 8px transparent solid;
+  border-right: 6px solid;
+  border-top: 8px transparent solid;
+}
+.tt-tag::after {
+  background: #fff;
+  box-shadow: inset 0 1px rgba(0, 0, 0, 0.25);
+  content: '';
+  position: absolute;
+}
+.tt-tag-large::after {
+  border-radius: 10px;
+  height: 8px;
+  left: 8px;
+  width: 8px;
+  top: 16px;
+}
+.tt-tag-small::after {
+  border-radius: 5px;
+  height: 4px;
+  left: 4px;
+  width: 4px;
+  top: 8px;
+}
+.tt-tag-very-small::after {
+  border-radius: 4px;
+  height: 3px;
+  left: 3px;
+  width: 3px;
+  top: 6px;
+}
+
+@media only screen and (max-width: 30.938rem) {
+	.tt-tag-large {
+		margin: 0;
+		padding: 0 8px 0 24px;
+	}
+	.tt-rider-rank {
+		min-width: 155px;
+		margin: 0;
+	}
+}
+
+.tt-rider-status .tt-tag {
+	background-color: #cccccc;
+	color: #4f4e53;
+}
+.tt-rider-status .tt-tag::before {
+	border-right-color: #cccccc;
+}
+
+
+.tt-event-date {
+	font-size: 1.5rem;
+}
+.tt-distance {
+	font-size: 1.25rem;
+}
+.tt-event-details {
+	margin: 0 0 0.5rem 0;
+}
+
+.tt-list-heading {
+	display: flex;
+	justify-content: space-between;
+	align-items: baseline;
+}
+.tt-list-title, .tt-rider-count {
+	display: inline-block;
+}
+.tt-rider-count {
+	float: right;
+	font-size: 1.25rem;
+	margin-right: 4px;
+}
+
+/* Rankings list */
+.tt-rank {
+	display: inline-block;
+	text-align: right;
+	width: 36px;
+}
+.tt-rank-change {
+	display: inline-block;
+	margin-left: 1rem;
+}
+
+/* Rankings List */
+.tt-col-position {
+	width: 70px;
+}
+.tt-col-selector {
+	width: 70px;
+}
+.tt-col-selector .btn {
+	display: block;
+    margin: 0 auto;
+}
+.tt-col-rank-status {
+	width: 150px;
+}
+.tt-col-rank-status .tt-rider-status {
+	display: inline-block;
+	padding: 0;
+}
+.tt-col-rider-name {
+	width: 80%;
+}
+.tt-col-age-gender-category {
+	width: 140px;
+}
+.tt-col-club-name {
+	width: 100%;
+}
+.tt-col-score {
+	text-align: center;
+	width: 89px;
+}
+td.tt-col-score {
+	padding: 0 19px;
+	text-align: right;
+}
+.tt-col-event-date {
+	width: 100px;
+}
+.tt-col-event-name {
+	width: 100%;
+}
+.tt-col-event-distance {
+	width: 100px;
+}
+td.tt-col-event-distance {
+	padding: 0 12px;
+	text-align: right;
+}
+.tt-col-ranking-points {
+	text-align: center;
+	width: 90px;
+}
+td.tt-col-ranking-points {
+	text-align: right;
+}
+.tt-col-event-course {
+	width: 100px;
+}
+.tt-col-event-position {
+	text-align: center;
+	width: 110px;
+}
+td.tt-col-event-position {
+	text-align: right;
+}
+.tt-event-position, .tt-event-position-variance {
+	display: inline-block;
+}
+.tt-event-position-variance {
+	text-align: left;
+	width: 40px;
+}
+#tt-rider-ride-list .tt-col-event-position {
+	width: 95px;
+}
+#tt-rider-ride-list td.tt-col-event-position {
+	padding: 0 24px 0 0;
+}
+.tt-col-ride-time {
+	text-align: center;
+	width: 80px;
+}
+td.tt-col-ride-time {
+	padding: 0 10px;
+	text-align: right;
+}
+
+
+@media only screen and (min-width: 48rem) {
+	td.visible-desktop, th.visible-desktop {
+		display: table-cell !important;
+	}
+}
+
+@media only screen and (max-width: 47.938rem) {
+	td.visible-phone, th.visible-phone {
+		display: table-cell !important;
+	}
+	.tt-table {
+		font-size: 0.9rem;
+	}
+	.tt-table td, .tt-table th {
+		padding: 0.375rem;
+	}
+	.tt-col-selector {
+		width: 66px;
+	}
+	.tt-col-rank-status {
+		width: 95px;
+	}
+	.tt-col-score {
+		width: 65px;
+	}
+	td.tt-col-score {
+		padding: 0 14px 0 6px;
+		text-align: right;
+	}
+	.tt-col-event-date {
+		width: 85px;
+	}
+	.tt-col-event-distance {
+		width: 50px;
+	}
+	td.tt-col-event-distance {
+		padding: 0 12px;
+	}
+	.tt-col-ranking-points {
+		width: 75px;
+	}
+	th.tt-col-ranking-points {
+		padding: 0 0.2rem;
+	}
+	.tt-col-ride-time {
+		width: 66px;
+	}
+}
+
+i.fa-arrow-up {
+	color: #006600;
+}
+
+i.fa-arrow-down {
+	color: #660000;
+}
+
+/* Top Riders Module */
+.tt-modtr-col-rank {
+	text-align: center;
+	width: 65px;
+}
+.tt-modtr-col-rider-name {
+	width: 40%;
+}
+
+
+
+/* Top Teams Module */
+.tt-modtt-col-rank {
+	text-align: center;
+	width: 65px;
+}
+.tt-modtt-col-total-score {
+	text-align: center;
+	width: 80px;
+}
+
+.tt-table td {
+  color: #494E6B;
+}
+table.tt-table thead {
+  background: #141A46;
+  background: -moz-linear-gradient(top, #4f5374 0%, #2b3158 66%, #141A46 100%);
+  background: -webkit-linear-gradient(top, #4f5374 0%, #2b3158 66%, #141A46 100%);
+  background: linear-gradient(to bottom, #4f5374 0%, #2b3158 66%, #141A46 100%);
+  border-bottom: 2px solid #6E748F;
+}
+table.tt-table thead th {
+  font-size: 1.05rem;
+  font-weight: 500;
+  color: #FFFFFF;
+  border-left: 1px solid #d0e4f5;
+  letter-spacing: 1px;
+}
+table.tt-table thead th:first-child {
+  border-left: none;
+}
+table.tt-table thead th:last-child {
+  border-right: none;
+}
+table.tt-table tr.tt-table-year-row {
+  background-color: #d0e4f5;
+  border-top: 2px solid #6E748F;
+  font-size: 1.25rem;
+  font-weight: 500;
+  letter-spacing: 1px;
+  padding: 0.375rem;
+  text-align: center;
+}
+table.tt-table tr.tt-rankings-non-counting-ride {
+  background-color: #f5f5f5;
+  text-decoration: line-through;
+}
+.tt-table-rider-link, .tt-table-event-link {
+  font-weight: 500;
+}
+div.tt-pages-counter, div.tt-results-counter {
+    display: inline-block;
+}
+div.tt-pagination {
+  margin: 20px 0 10px 0;
+}

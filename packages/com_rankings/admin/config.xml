@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<config>
+	<fieldset
+		name="database"
+		label="COM_RANKINGS_CONFIG_DATABASE_SETTINGS_LABEL"
+	>
+		<field
+			name="driver"
+			type="text"
+			label="COM_RANKINGS_FIELD_DATABASE_TYPE_LABEL"
+			default="mysqli"
+		/>
+		<field
+			name="host"
+			type="text"
+			label="COM_RANKINGS_FIELD_HOST_LABEL"
+			default="localhost"
+		/>
+		<field
+			name="user"
+			type="text"
+			label="COM_RANKINGS_FIELD_USER_LABEL"
+			default=""
+		/>
+		<field
+			name="password"
+			type="text"
+			label="COM_RANKINGS_FIELD_PASSWORD_LABEL"
+			default=""
+		/>
+		<field
+			name="database"
+			type="text"
+			label="COM_RANKINGS_FIELD_DATABASE_NAME_LABEL"
+			default=""
+		/>
+		<field
+			name="prefix"
+			type="text"
+			label="COM_RANKINGS_FIELD_TABLE_PREFIX_LABEL"
+			default=""
+		/>
+	</fieldset>
+</config>

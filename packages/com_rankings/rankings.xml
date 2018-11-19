@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<extension type="component" version="1.0" method="upgrade">
+
+	<name>Rankings</name>
+	<!-- The following elements are optional and free of formatting constraints -->
+	<creationDate>July 2018</creationDate>
+	<author>Roger Clarke</author>
+	<authorEmail></authorEmail>
+	<authorUrl></authorUrl>
+	<copyright>Copyright Info</copyright>
+	<license>License Info</license>
+	<!--  The version string is recorded in the components table -->
+	<version>1.0</version>
+	<!-- The description is optional and defaults to the name -->
+	<description></description>
+
+	<!-- Site Main File Copy Section -->
+	<!-- Note the folder attribute: This attribute describes the folder
+		to copy FROM in the package to install therefore files copied
+		in this section are copied from /site/ in the package -->
+	<files folder="site">
+		<filename>index.html</filename>
+		<filename>rankings.php</filename>
+		<folder>controllers</folder>
+		<folder>helpers</folder>
+		<folder>language</folder>
+		<folder>models</folder>
+		<folder>views</folder>
+	</files>
+
+	<languages folder="site/language">
+    	<language tag="en-GB">en-GB/en-GB.com_rankings.ini</language>
+    </languages>
+
+	<media destination="com_rankings" folder="media">
+		<filename>index.html</filename>
+		<folder>js</folder>
+		<folder>css</folder>
+	</media>
+
+ 	<administration>
+		<!-- Administration Menu Section -->
+		<menu>COM_RANKINGS</menu>
+		<submenu>
+			<menu view="rankings" alt="RANKINGS/Rankings">COM_RANKINGS_RANKINGS</menu>
+		</submenu>
+		<!-- Administration Main File Copy Section -->
+		<!-- Note the folder attribute: This attribute describes the folder
+			to copy FROM in the package to install therefore files copied
+			in this section are copied from /admin/ in the package -->
+		<files folder="admin">
+			<filename>index.html</filename>
+			<filename>rankings.php</filename>
+			<filename>config.xml</filename>
+			<folder>language</folder>
+		</files>
+		<languages folder="admin/language">
+    		<language tag="en-GB">en-GB/en-GB.com_rankings.ini</language>
+    		<language tag="en-GB">en-GB/en-GB.com_rankings.sys.ini</language>
+    	</languages>
+	</administration>
+
+</extension>

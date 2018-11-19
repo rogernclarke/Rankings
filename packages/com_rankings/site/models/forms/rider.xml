@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<form>
+    <fieldset
+		name="rider_list_toolbar"
+		label="COM_RANKINGS_DETAILS"
+		addfieldpath="/components/com_rankings/models/fields"
+		>
+		<field
+            name="filter_district_code"
+            type="districtlist"
+            id="district_code_filter"
+            extension="com_rankings"
+            label="COM_RANKINGS_DISTRICT"
+            onchange="this.form.submit();"
+            >
+            <option value="All">All</option>
+        </field>
+        <field
+            name="filter_name"
+            type="text"
+            id="name_filter"
+            extension="com_rankings"
+            label="COM_RANKINGS_RIDER_NAME"
+            hint="COM_RANKINGS_SEARCH_IN_NAME"
+            onchange="this.form.submit();"
+            />
+        <field
+        	name="filter_club_name"
+        	type="text"
+        	id="club_name_filter"
+        	extension="com_rankings"
+        	label="COM_RANKINGS_CLUB_NAME"
+        	hint="COM_RANKINGS_SEARCH_IN_CLUB_NAME"
+        	onchange="this.form.submit();"
+        	/>
+    </fieldset>
+</form>
