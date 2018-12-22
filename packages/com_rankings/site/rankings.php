@@ -2,11 +2,11 @@
 /**
  * Rankings Component for Joomla 3.x
  *
- * @version    1.0
+ * @version    1.1
  * @package    Rankings
  * @subpackage Component
  * @copyright  Copyright (C) Spindata. All rights reserved.
- * @license    GNU General Public License version 2 or later; see LICENSE.txt
+ * @license    GNU General Public License version 3 or later; see LICENSE.txt
  */
 
 // No direct access
@@ -20,7 +20,7 @@ JLoader::registerPrefix('Rankings', JPATH_COMPONENT);
 
 // Include stylesheets
 $document = JFactory::getDocument();
-$document->addStyleSheet(JUri::base() . 'media/com_rankings/css/rankings.css');
+$document->addStyleSheet(JUri::base() . 'media/com_rankings/css/rankings_1.1.css');
 
 //Include javascript
 //JHtml::_('jquery.framework');

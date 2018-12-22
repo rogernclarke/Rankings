@@ -1,11 +1,11 @@
 /**
  * Rankings Component for Joomla 3.x
  * 
- * @version    1.0
+ * @version    1.1
  * @package    Rankings
  * @subpackage Component
  * @copyright  Copyright (C) Spindata. All rights reserved.
- * @license    GNU General Public License version 2 or later; see LICENSE.txt
+ * @license    GNU General Public License version 3 or later; see LICENSE.txt
  */
 
 /* Pagination */
@@ -30,26 +30,44 @@ table.tt-table {
   white-space: nowrap;
 }
 
+
+.tt-rider-heading {
+	border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+}
 .tt-rider-heading, .tt-rider-details {
 	display: flex;
 	justify-content: space-between;
 }
-.tt-rider-heading {
-	border-bottom: 1px solid rgba(0, 0, 0, 0.1);
-}
-.tt-rider-details {
+.tt-rider-heading .tt-rider-details {
 	padding: 0 0 1rem 0;
 }
+.tt-rider-heading .tt-rider-name {
+	margin: auto 0;
+}
 
+.tt-rider-heading .tt-rider-category {
+	min-width: 131px;
+	position: relative;
+}
+.tt-rider-heading .tt-rider-status {
+	bottom: 0px;
+	display: block;
+	position: absolute;
+	right: 0px;
+}
 .tt-rider-name, .tt-rider-category, .tt-rider, .tt-rider-rank {
 	display: inline-block;
+}
+
+.tt-rider {
+	position: relative;
 }
 
 .tt-rider-category {
 	display: inline-block;
 	font-size: 2.2rem;
-	min-width: 84px;
-	padding: 1.25rem 0 0 0;
+	min-width: 2.75rem;
+	padding: 0.5rem 0 0 0;
 }
 .tt-rider-status {
 	display: flex;
@@ -60,11 +78,15 @@ table.tt-table {
 	font-size: 1.5rem;
 	text-align: right;
 }
+.tt-rider-rank .tt-overall {
+	color: #aaaaaa;
+}
 .tt-club-name {
 	font-size: 1.5rem;
 }
 .tt-age-gender-category {
 	font-size: 1.25rem;
+	margin-bottom: 3rem;
 }
 
 .tt-tag-category-suffix {
@@ -79,22 +101,22 @@ table.tt-table {
 	border-right-color: #cc0000;
 }
 .tt-tag.tt-rider-category-B {
-	background-color: #cc6600;
+	background-color: #f88717;
 }
 .tt-tag.tt-rider-category-B::before {
-	border-right-color: #cc6600;
+	border-right-color: #f88717;
 }
 .tt-tag.tt-rider-category-C {
-	background-color: #006600;
+	background-color: #cccc00;
 }
 .tt-tag.tt-rider-category-C::before {
-	border-right-color: #006600;
+	border-right-color: #cccc00;
 }
 .tt-tag.tt-rider-category-D {
-	background-color: #006666;
+	background-color: #006600;
 }
 .tt-tag.tt-rider-category-D::before {
-	border-right-color: #006666;
+	border-right-color: #006600;
 }
 .tt-tag.tt-rider-category-E {
 	background-color: #000066;
@@ -119,6 +141,7 @@ table.tt-table {
 }
 .tt-tag-small {
 	border-radius: 0 2px 2px 0;
+	font-size: 1rem;
 	height: 20px;
 	line-height: 20px;
 	padding: 0 8px 0 16px;
@@ -126,11 +149,13 @@ table.tt-table {
 }
 .tt-tag-very-small {
 	border-radius: 0 2px 2px 0;
-	font-size: 0.75rem;
-	height: 16px;
-	line-height: 16px;
-	padding: 0 4px 0 10px;
+	font-size: 14px;
+	height: 14px;
+	line-height: 1.2;
 	margin: 0;
+	min-width: 2.5rem;
+	padding: 0 4px 0 10px;
+	text-align: center;
 }
 .tt-tag::before {
   background: #fff;
@@ -150,9 +175,9 @@ table.tt-table {
   border-top: 10px transparent solid;
 }
 .tt-tag-very-small::before {
-  border-bottom: 8px transparent solid;
+  border-bottom: 7px transparent solid;
   border-right: 6px solid;
-  border-top: 8px transparent solid;
+  border-top: 7px transparent solid;
 }
 .tt-tag::after {
   background: #fff;
@@ -179,7 +204,7 @@ table.tt-table {
   height: 3px;
   left: 3px;
   width: 3px;
-  top: 6px;
+  top: 5px;
 }
 
 @media only screen and (max-width: 30.938rem) {
@@ -226,11 +251,17 @@ table.tt-table {
 	margin-right: 4px;
 }
 
+.tt-buttons {
+	bottom: 0;
+	left: 0;
+	position: absolute;
+}
+
 /* Rankings list */
 .tt-rank {
 	display: inline-block;
 	text-align: right;
-	width: 36px;
+	width: 40px;
 }
 .tt-rank-change {
 	display: inline-block;
@@ -249,14 +280,14 @@ table.tt-table {
     margin: 0 auto;
 }
 .tt-col-rank-status {
-	width: 150px;
+	width: 165px;
 }
 .tt-col-rank-status .tt-rider-status {
 	display: inline-block;
 	padding: 0;
 }
 .tt-col-rider-name {
-	width: 80%;
+	width: 100%;
 }
 .tt-col-age-gender-category {
 	width: 140px;
@@ -315,19 +346,58 @@ td.tt-col-event-position {
 #tt-rider-ride-list td.tt-col-event-position {
 	padding: 0 24px 0 0;
 }
-.tt-col-ride-time {
+.tt-col-ride-result {
 	text-align: center;
-	width: 80px;
+	width: 95px;
 }
-td.tt-col-ride-time {
+td.tt-col-ride-result {
 	padding: 0 10px;
 	text-align: right;
 }
 
+.tt-rider-name-container {
+	display: flex;
+}
+
+.tt-rider-name-container .tt-rider-name {
+	display: block;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;	
+}
+.tt-rider-name-container .tt-rider-category {
+	display: inline-flex;
+	min-width: 2rem;
+	padding: 0.125rem 0.125rem 0 0.25rem;
+	vertical-align: top;
+}
+
+.tt-event-name-container {
+	display: flex;
+	justify-content: space-between;
+}
+.tt-event-name-container .tt-event-name {
+	display: block;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;	
+}
+.tt-event-name-container .tt-rider-category {
+	display: inline-flex;
+	min-width: 2.9rem;
+	padding: 0.125rem 0.125rem 0 0.25rem;
+	vertical-align: top;
+}
 
 @media only screen and (min-width: 48rem) {
 	td.visible-desktop, th.visible-desktop {
 		display: table-cell !important;
+	}
+}
+
+@media only screen and (max-width: 59.938rem) {
+	.tt-col-event-position {
+		width: 110px;
 	}
 }
 
@@ -347,6 +417,9 @@ td.tt-col-ride-time {
 	.tt-col-rank-status {
 		width: 95px;
 	}
+	.tt-rank-change {
+		margin-left: 2px;
+	}
 	.tt-col-score {
 		width: 65px;
 	}
@@ -361,16 +434,16 @@ td.tt-col-ride-time {
 		width: 50px;
 	}
 	td.tt-col-event-distance {
-		padding: 0 12px;
+		padding: 0 6px;
 	}
 	.tt-col-ranking-points {
-		width: 75px;
+		width: 50px;
 	}
 	th.tt-col-ranking-points {
 		padding: 0 0.2rem;
 	}
-	.tt-col-ride-time {
-		width: 66px;
+	.tt-col-ride-result {
+		width: 70px;
 	}
 }
 
@@ -435,9 +508,18 @@ table.tt-table tr.tt-table-year-row {
   padding: 0.375rem;
   text-align: center;
 }
-table.tt-table tr.tt-rankings-non-counting-ride {
+table.tt-table tr.tt-rankings-non-counting-ride td {
   background-color: #f5f5f5;
-  text-decoration: line-through;
+  color: #666666;
+}
+table.tt-table tr.tt-rankings-counting-ride td {
+  font-weight: 500;
+}
+table.tt-rankings-rides tr.tt-rankings-non-counting-ride {
+  /*text-decoration: line-through;*/
+}
+table.tt-rider-rides tr.tt-rankings-non-counting-ride td.tt-col-ranking-points {
+  /*text-decoration: line-through;*/
 }
 .tt-table-rider-link, .tt-table-event-link {
   font-weight: 500;

@@ -2,11 +2,11 @@
 /**
  * Rankings Component for Joomla 3.x
  * 
- * @version    1.0
+ * @version    1.1
  * @package    Rankings
  * @subpackage Form
  * @copyright  Copyright (C) Spindata. All rights reserved.
- * @license    GNU General Public License version 2 or later; see LICENSE.txt
+ * @license    GNU General Public License version 3 or later; see LICENSE.txt
  */
 
 defined('JPATH_PLATFORM') or die;
@@ -15,8 +15,6 @@ JFormHelper::loadFieldClass('list');
 
 /**
  * Supports a custom SQL select list from an external database
- *
- * @since  0.1
  */
 class JFormFieldCourseList extends JFormFieldList
 {
@@ -24,7 +22,6 @@ class JFormFieldCourseList extends JFormFieldList
 	 * The form field type.
 	 *
 	 * @var    string
-	 * @since  0.1
 	 */
 	public $type = 'CourseList';
 
@@ -33,8 +30,6 @@ class JFormFieldCourseList extends JFormFieldList
 	 * Use the query attribute to supply a query to generate the list.
 	 *
 	 * @return  array  The field option objects.
-	 *
-	 * @since   0.1
 	 */
 	protected function getOptions()
 	{
@@ -48,9 +43,10 @@ class JFormFieldCourseList extends JFormFieldList
 
 		$course_code = "DISTINCT e.course_code";
 
-        $query->select($course_code);
-        $query->from('#__events as e');
-        $query->order('e.course_code ASC');
+        $query
+        	->select('DISTINCT ' . $db->qn('e.course_code'))
+        	->from  ($db->qn('#__events', 'e'))
+        	->order ($db->qn('e.course_code') . ' ASC');
 
 		// Filter course list based on other filters selected
 		// Get the form data
@@ -63,8 +59,9 @@ class JFormFieldCourseList extends JFormFieldList
         {
             if ($search != 'All')
             {
-            	$search = $db->quote(str_replace(' ', '%', $db->escape(trim($search), true) . '%'));
-                $query->where('(e.course_code LIKE ' . $search . ')');
+            	$search = $db->q(str_replace(' ', '%', $db->escape(trim($search), true) . '%'));
+                $query
+                	->where($db->qn('e.course_code') . ' LIKE ' . $search);
             }
         }
 
@@ -76,16 +73,18 @@ class JFormFieldCourseList extends JFormFieldList
             switch ($search) 
                 {
                     case 'Other':
-                        $search = $db->quote(str_replace(' ', '%', $db->escape(trim($search), true)));
-                        $query->where('(e.distance NOT IN(10, 25, 50, 100))');
+                        $search = $db->q(str_replace(' ', '%', $db->escape(trim($search), true)));
+                        $query
+                        	->where($db->qn('e.distance') . ' NOT IN(10, 25, 50, 100)');
                         break;
 
                     case '10':
                     case '25':
                     case '50':
                     case '100':
-                        $search = $db->quote(str_replace(' ', '%', $db->escape(trim($search), true)));
-                        $query->where('(e.distance = ' . $search . ')');
+                        $search = $db->q(str_replace(' ', '%', $db->escape(trim($search), true)));
+                        $query
+                        	->where($db->qn('e.distance') . ' = ' . $search);
                         break;
 
                     case 'All':
@@ -103,8 +102,9 @@ class JFormFieldCourseList extends JFormFieldList
             {
                 if ($search != 'All')
                 {
-                    $search = $db->quote(str_replace(' ', '%', $db->escape(trim($search), true)));
-                    $query->where('(YEAR(e.event_date) = ' . $search . ')');
+                    $search = $db->q(str_replace(' ', '%', $db->escape(trim($search), true)));
+                    $query
+                    	->where('YEAR (' . $db->qn('e.event_date') . ') = ' . $search);
                 }
             }
         }
@@ -140,8 +140,6 @@ class JFormFieldCourseList extends JFormFieldList
      * Method to obtain the database connection
 	 *
 	 * @return  database object
-	 *
-	 * @since   0.1
 	 */
     protected function _loadDb()
     {

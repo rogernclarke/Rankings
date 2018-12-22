@@ -2,11 +2,11 @@
 /**
  * Rankings Component for Joomla 3.x
  * 
- * @version    1.0
+ * @version    1.1
  * @package    Rankings
  * @subpackage Form
  * @copyright  Copyright (C) Spindata. All rights reserved.
- * @license    GNU General Public License version 2 or later; see LICENSE.txt
+ * @license    GNU General Public License version 3 or later; see LICENSE.txt
  */
 
 defined('JPATH_PLATFORM') or die;
@@ -15,8 +15,6 @@ JFormHelper::loadFieldClass('list');
 
 /**
  * Supports a custom SQL select list from an external database
- *
- * @since  0.1
  */
 class JFormFieldDistrictList extends JFormFieldList
 {
@@ -24,7 +22,6 @@ class JFormFieldDistrictList extends JFormFieldList
 	 * The form field type.
 	 *
 	 * @var    string
-	 * @since  0.1
 	 */
 	public $type = 'DistrictList';
 
@@ -33,8 +30,6 @@ class JFormFieldDistrictList extends JFormFieldList
 	 * Use the query attribute to supply a query to generate the list.
 	 *
 	 * @return  array  The field option objects.
-	 *
-	 * @since   0.1
 	 */
 	protected function getOptions()
 	{
@@ -45,9 +40,10 @@ class JFormFieldDistrictList extends JFormFieldList
 		
 		// Build the query
 		$query = $db->getQuery(TRUE);
-        $query->select($db->quoteName(array('d.district_code', 'd.district_name')));
-        $query->from('#__districts as d');
-        $query->order('d.district_name ASC');
+        $query
+        	->select($db->qn(array('d.district_code', 'd.district_name')))
+        	->from  ($db->qn('#__districts', 'd'))
+        	->order ($db->qn('d.district_name') . ' ASC');
 
 		// Set the query and get the result list.
 		$db->setQuery($query);
@@ -80,8 +76,6 @@ class JFormFieldDistrictList extends JFormFieldList
      * Method to obtain the database connection
 	 *
 	 * @return  database object
-	 *
-	 * @since   0.1
 	 */
     protected function _loadDb()
     {

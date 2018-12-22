@@ -2,11 +2,23 @@
 /**
  * Rankings Component for Joomla 3.x
  * 
- * @version    1.0
+ * @version    1.1
  * @package    Rankings
  * @subpackage Component
  * @copyright  Copyright (C) Spindata. All rights reserved.
- * @license    GNU General Public License version 2 or later; see LICENSE.txt
+ * @license    GNU General Public License version 3 or later; see LICENSE.txt
+ *
+ * Public functions
+ * __construct  Constructs the event model
+ * listItems    Returns a list of rankings
+ *
+ * Protected functions
+ * _buildQuery                  Builds the select query for rankings
+ * _buildSubqueryRiders         Builds the subquery for determining the set of riders to be returned when positions are being calculated
+ * _buildSubqueryPosition       Builds the subquery for determining position
+ * _buildWhere                  Builds the where clause for the query for rankings
+ * _buildOrder                  Builds the order clause for the query for rankings
+ * _determineFilters            Determines which filters are set
  */
 
 // No direct access
@@ -17,7 +29,14 @@ defined('_JEXEC') or die('Restricted access');
  */
 class RankingsModelsRankings extends RankingsModelsDefault
 {
-    protected $_position_ind = FALSE; // Set to true if position calculation is required
+    /**
+    * Protected fields
+    **/
+    protected $_age_category_search   = FALSE;
+    protected $_club_name_search      = FALSE;
+    protected $_district_code_search  = FALSE;
+    protected $_name_search           = FALSE;
+    protected $_ranking_status_search = array();
 
     /**
      * Constructor
@@ -29,18 +48,27 @@ class RankingsModelsRankings extends RankingsModelsDefault
         // Specify filter fields for model
         $this->_filter_fields = array('gender', 'name', 'club_name', 'district_code', 'age_category');
         $this->_check_fields = array('status');
+
+        // Determine which filters are set
+        $this->_determineFilters();
     }
 
+    /**
+     * listItems
+     *
+     * Gets a list of rankings.
+     *
+     * @return  model The requested rankings
+     **/
     public function listItems()
     {
-        $this->set('_position_ind', $this->getPositionInd());
-
         $rankings = parent::listItems();
 
         $rideModel = new RankingsModelsRide();
-        $n = count($rankings);
+        $n         = count($rankings);
 
-        for($i=0;$i<$n;$i++)
+        // For each rider retrieve the list of rides to be shown on the rankings list
+        for($i=0; $i<$n; $i++)
         {
             $rider = $rankings[$i];
 
@@ -55,6 +83,8 @@ class RankingsModelsRankings extends RankingsModelsDefault
     }
 
     /**
+     * _buildQuery
+     *
      * Builds the query to be used by the rankings model
      * 
      * @return object Query object
@@ -63,150 +93,204 @@ class RankingsModelsRankings extends RankingsModelsDefault
     {
         $query = $this->_db->getQuery(TRUE);
         
-        $query->select($this->_db->quoteName(array('rider_id', 'name', 'gender', 'age', 'age_category', 'age_gender_category', 'club_name', 'score', 'overall_rank', 'gender_rank', )));
-
-        $status = "CASE WHEN ranking_status='F' THEN 'Frequent rider' WHEN ranking_status='C' THEN 'Complete' WHEN ranking_status='P' THEN 'Provisional' WHEN ranking_status='L' THEN 'Lapsed' WHEN ranking_status='' THEN '' END AS status";
-        $change_in_overall_rank_ind = "CASE SIGN(change_in_overall_rank) WHEN -1 THEN 'arrow-down' WHEN 1 THEN 'arrow-up' ELSE IF (newly_complete_ind = FALSE, 'arrow-left', 'circle') END as change_in_overall_rank_ind";
-        $change_in_overall_rank_value = "ABS(change_in_overall_rank) as change_in_overall_rank_value";
-        $change_in_gender_rank_ind = "CASE SIGN(change_in_gender_rank) WHEN -1 THEN 'arrow-down' WHEN 1 THEN 'arrow-up' ELSE IF (newly_complete_ind = FALSE, 'arrow-left', 'circle') END as change_in_gender_rank_ind";
-        $change_in_gender_rank_value = "ABS(change_in_gender_rank) as change_in_gender_rank_value";
-
-        $query->select($status);
-        $query->select($change_in_overall_rank_ind);
-        $query->select($change_in_overall_rank_value);
-        $query->select($change_in_gender_rank_ind);
-        $query->select($change_in_gender_rank_value);
-
-        if ($this->_position_ind)
+        $query
+            ->select($this->_db->qn(array('rider_id', 'name', 'gender', 'age', 'age_category', 'age_gender_category', 'club_name', 'score', 'overall_rank', 'gender_rank', )))
+            ->select('CASE ' . $this->_db->qn('ranking_status') . 
+                ' WHEN "F" THEN "Frequent rider"' . 
+                ' WHEN "C" THEN "Complete"' . 
+                ' WHEN "P" THEN "Provisional"' . 
+                ' WHEN "L" THEN "Lapsed"' . 
+                ' ELSE ""' . 
+                ' END' .
+                ' AS status')
+            ->select('CASE SIGN(' . $this->_db->qn('change_in_overall_rank') . ')' . 
+                ' WHEN -1 THEN "arrow-down"' . 
+                ' WHEN 1 THEN "arrow-up"' . 
+                ' ELSE IF (' . $this->_db->qn('newly_complete_ind') . ' = FALSE, "arrow-left", "circle")' . 
+                ' END' .
+                ' AS change_in_overall_rank_ind')
+            ->select('ABS(' . $this->_db->qn('change_in_overall_rank') . ')' .  
+                    ' AS change_in_overall_rank_value')
+            ->select('CASE SIGN(' . $this->_db->qn('change_in_gender_rank') . ')' . 
+                ' WHEN -1 THEN "arrow-down"' . 
+                ' WHEN 1 THEN "arrow-up"' . 
+                ' ELSE IF (' . $this->_db->qn('newly_complete_ind') . ' = FALSE, "arrow-left", "circle")' . 
+                ' END' .
+                ' AS change_in_gender_rank_ind')
+            ->select('ABS(' . $this->_db->qn('change_in_gender_rank') . ')' .  
+                    ' AS change_in_gender_rank_value');
+        
+        // Calculate position in list only if certain filters are applied
+        if ($this->_age_category_search || $this->_district_code_search || $this->_name_search || $this->_club_name_search)
         {
-            $position = "CASE WHEN @prev_value = overall_rank THEN @position_count WHEN @prev_value := overall_rank THEN @position_count := @sequence END AS position, @sequence:=@sequence + 1";
-            $query->select($position);
-
-            $start = $this->getState('list.start') + 1;
-
-            $search = $this->getState('check.status');
-            if ($search == 1)
-            {
-                $query->from('(select * from tt_rider_current where ranking_status in("F","C","P") ORDER BY overall_rank) as t1, (SELECT @prev_value:=NULL, @position_count:=' . $start . ', @sequence:=' . $start . ') as t2');
-            } else {
-                $query->from('(select * from tt_rider_current where ranking_status in("F","C") ORDER BY overall_rank) as t1, (SELECT @prev_value:=NULL, @position_count:=' . $start . ', @sequence:=' . $start . ') as t2');
-            }
-
-            //$query->from('(select * from tt_rider_current where ranking_status in("F","C","P") ORDER BY overall_rank) as t1, (SELECT @prev_value:=NULL, @position_count:=' . $start . ', @sequence:=' . $start . ') as t2');
+            $query
+                ->select('CASE' .
+                    ' WHEN @prev_value = ' . $this->_db->qn('overall_rank') . ' THEN @position_count' . 
+                    ' WHEN @prev_value := ' . $this->_db->qn('overall_rank') . ' THEN @position_count := @sequence' . 
+                    ' END' .
+                    ' AS position, @sequence:=@sequence + 1')
+                ->from('(' . $this->_buildSubqueryRiders() . ') AS T1, (' . $this->_buildSubqueryPosition() . ') AS T2');
         } ELSE {
-            $query->from('#__rider_current');
+            $query
+                ->from($this->_db->qn('#__rider_current_mat'));
         }
 
         return $query;
     }
 
     /**
+     * _buildSubqueryRiders
+     *
+     * Builds the subquery used to return the set of ranked riders for whom position is to be calculated
+     * 
+     * @return object Subquery object
+     **/
+    protected function _buildSubqueryRiders()
+    {
+        $subquery = $this->_db->getQuery(TRUE);
+        
+        // Determine if provisionally ranked riders are included
+        $include_provisional_riders = $this->getState('check.status');
+
+        if ($include_provisional_riders == 1)
+        {
+            $statuses = array("F", "C", "P");
+        } else {
+            $statuses = array("F", "C");
+        }
+
+        $subquery
+            ->select('*')
+            ->from  ($this->_db->qn('#__rider_current_mat'))
+            ->where ($this->_db->qn('ranking_status') . ' IN ("' . implode('","', $statuses) . '")')
+            ->order ($this->_db->qn('overall_rank'));
+
+        return $subquery;
+    }
+
+    /**
+     * _buildSubqueryPosition
+     *
+     * Builds the subquery used to calculate the position of the returned riders
+     * 
+     * @return object Subquery object
+     **/
+    protected function _buildSubqueryPosition()
+    {
+        $subquery = $this->_db->getQuery(TRUE);
+        
+        // First position is set from number of items per page + 1
+        $offset = $this->getState('list.start') + 1;
+
+        $subquery
+            ->select('@prev_value:=NULL, @position_count:=' . $offset . ' , @sequence:=' . $offset);
+
+        return $subquery;
+    }
+
+    /**
+     * _buildWhere
+     *
      * Builds the filter for the query
      * 
-     * @param object Query object
+     * @param  object Query object
      * @return object Query object
      **/
     protected function _buildWhere($query)
     {
-        if (isset($this->_id))
+        // Apply filters if specified
+
+        // Filter by gender
+        $search = $this->getState('filter.gender');
+
+        if (!empty($search))
         {
-            // Retrieve by id
-            $query->where('rider_id = ' . (int) $this->_id);
+            if ($search != 'All')
+            {
+                $search = $this->_db->q(str_replace(' ', '%', $this->_db->escape(trim($search), true)));
+                $query
+                    ->where($this->_db->qn('gender') . ' = ' . $search);
+            }
         }
-        else
+
+        // Filter by age category
+        if ($this->_age_category_search)
         {
-            // Retrieve by filters
-
-            // Filter by gender
-            $search = $this->getState('filter.gender');
-
-            if (!empty($search))
-            {
-                if ($search != 'All')
-                {
-                    $search = $this->_db->quote(str_replace(' ', '%', $this->_db->escape(trim($search), true)));
-                    $query->where('gender = ' . $search);
-                }
-            }
-
-            // Filter by age category
             $search = $this->getState('filter.age_category');
+            $search = $this->_db->q(str_replace(' ', '%', $this->_db->escape(trim($search), true)));
+            $query
+                ->where($this->_db->qn('age_category') . ' = ' . $search);
+        }
 
-            if (!empty($search))
-            {
-                if ($search != 'All')
-                {
-                    $search = $this->_db->quote(str_replace(' ', '%', $this->_db->escape(trim($search), true)));
-                    $query->where('age_category = ' . $search);
-                }
-            }
-
-            // Filter by district
+        // Filter by district
+        if ($this->_district_code_search)
+        {
             $search = $this->getState('filter.district_code');
+            $search = $this->_db->q(str_replace(' ', '%', $this->_db->escape(trim($search), true)));
+            $query
+                ->where($this->_db->qn('district_code') . ' = ' . $search);
+        }
 
-            if (!empty($search))
-            {
-                if ($search != 'All')
-                {
-                    $search = $this->_db->quote(str_replace(' ', '%', $this->_db->escape(trim($search), true)));
-                    $query->where('district_code = ' . $search);
-                }
-            }
-
-            // Filter by search in name
+        // Filter by search in name
+        if ($this->_name_search)
+        {
             $search = $this->getState('filter.name');
+            $search = $this->_db->q('%' . str_replace(' ', '%', $this->_db->escape(trim($search), true) . '%'));
+            $query
+                ->where($this->_db->qn('name') . ' LIKE ' . $search);
+        }
 
-            if (!empty($search))
-            {
-                $search = $this->_db->quote('%' . str_replace(' ', '%', $this->_db->escape(trim($search), true) . '%'));
-                $query->where('(name LIKE ' . $search . ')');
-            }
-
-            // Filter by search in club name
+        // Filter by search in club name
+        if ($this->_club_name_search)
+        {
             $search = $this->getState('filter.club_name');
+            $search = $this->_db->q('%' . str_replace(' ', '%', $this->_db->escape(trim($search), true) . '%'));
+            $query
+                ->where($this->_db->qn('club_name') . ' LIKE ' . $search);
+        }
 
-            if (!empty($search))
-            {
-                $search = $this->_db->quote('%' . str_replace(' ', '%', $this->_db->escape(trim($search), true) . '%'));
-                $query->where('(club_name LIKE ' . $search . ')');
-            }
+        // Filter by ranking status
+        $search = $this->getState('check.status');
 
-            // Filter by status
-            $search = $this->getState('check.status');
-
-            if ($search == 1)
-            {
-                $query->where('ranking_status in ("C", "F", "P")');
-            } else {
-                $query->where('ranking_status in ("C", "F")');
-            }
+        if ($search == 1)
+        {
+            $query
+                ->where($this->_db->qn('ranking_status') . ' IN ("C", "F", "P")');
+        } else {
+            $query
+                ->where($this->_db->qn('ranking_status') . ' IN ("C", "F")');
         }
         
-        $query->where('blacklist_ind = 0');
+        // Don't retrieve blacklisted riders
+        $query
+            ->where($this->_db->qn('blacklist_ind') . ' = 0');
 
         return $query;
     }
     /**
+     * _buildOrder
+     *
      * Builds the sort for the query
      * 
-     * @param object Query object
+     * @param  object Query object
      * @return object Query object
      **/
     protected function _buildOrder($query)
     {
-        $query->order('overall_rank ASC, score ASC, ranking_status ASC');
+        $query
+            ->order($this->_db->qn('overall_rank') . ' ASC, ' . $this->_db->qn('score') . ' ASC, ' . $this->_db->qn('ranking_status') . ' ASC');
 
         return $query;
     }
-    /**
-     * Determines if position should be calculated
-     * 
-     * @return boolean Position indicator
-     **/
-    public function getPositionInd()
-    {
-        $position_ind = FALSE;
 
+    /**
+     * _determineFilters
+     *
+     * Builds the sort for the query
+     * 
+     **/
+    protected function _determineFilters()
+    {
         // Check filter by age category
         $search = $this->getState('filter.age_category');
 
@@ -214,7 +298,7 @@ class RankingsModelsRankings extends RankingsModelsDefault
         {
             if ($search != 'All')
             {
-                $position_ind = TRUE;
+                $this->_age_category_search = TRUE;
             }
         }
 
@@ -225,7 +309,7 @@ class RankingsModelsRankings extends RankingsModelsDefault
         {
             if ($search != 'All')
             {
-                $position_ind = TRUE;
+                $this->_district_code_search = TRUE;
             }
         }
 
@@ -234,7 +318,7 @@ class RankingsModelsRankings extends RankingsModelsDefault
 
         if (!empty($search))
         {
-            $position_ind = TRUE;
+            $this->_name_search = TRUE;
         }
 
         // Check filter by search in club name
@@ -242,9 +326,15 @@ class RankingsModelsRankings extends RankingsModelsDefault
 
         if (!empty($search))
         {
-            $position_ind = TRUE;
+            $this->_club_name_search = TRUE;
         }
 
-        return $position_ind;
+        // Determine if provisionally ranked riders are included
+        $search = $this->getState('check.status');
+
+        if ($search == 1)
+        {
+
+        }
     }
 }
