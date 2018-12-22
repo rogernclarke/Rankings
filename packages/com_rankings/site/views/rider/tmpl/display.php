@@ -2,11 +2,11 @@
 /**
  * Rankings Component for Joomla 3.x
  * 
- * @version    1.0
+ * @version    1.1
  * @package    Rankings
  * @subpackage Component
  * @copyright  Copyright (C) Spindata. All rights reserved.
- * @license    GNU General Public License version 2 or later; see LICENSE.txt
+ * @license    GNU General Public License version 3 or later; see LICENSE.txt
  */
  
 // No direct access
@@ -22,10 +22,10 @@ defined('_JEXEC') or die('Restricted access');
         </h1>
     </div>
     <?php if(!$this->rider->blacklist_ind)
-    {
-        if (!in_array($this->rider->status, array('Lapsed', ''), true )) 
-        { ?>
-            <div class="tt-rider-category">     
+    { ?>
+        <div class="tt-rider-category">
+            <?php if (in_array($this->rider->status, array('Frequent rider','Qualified'), true ))
+            { ?>
                 <div class="tt-tag tt-tag-large tt-rider-category-<?php echo substr($this->rider->category, 0, 1) ; ?>">
                     <span class="tt-tag-category-prefix">
                         <?php echo substr($this->rider->category,0,1); ?>
@@ -34,24 +34,21 @@ defined('_JEXEC') or die('Restricted access');
                         <?php echo substr($this->rider->category,1,2); ?>
                     </span>
                 </div>
-            </div>
-        <?php
-        }
-    } ?>
-</div>
-
-<?php if(!$this->rider->blacklist_ind)
-{
-    if (in_array($this->rider->status, array('Provisional','Frequent rider'), true ))
-    { ?>
-        <div class="tt-rider-status">
-            <div class="tt-tag tt-tag-small">
-                <?php echo $this->rider->status; ?>
-            </div>
+            <?php
+            }
+            if (!empty($this->rider->status))
+            { ?>
+                <div class="tt-rider-status">
+                    <div class="tt-tag tt-tag-small">
+                        <?php echo $this->rider->status; ?>
+                    </div>
+                </div>
+            <?php
+            } ?>
         </div>
     <?php
-    }
-} ?>
+    } ?>
+</div>
 
 <div class="tt-rider-details">
     <div class="tt-rider">
@@ -65,17 +62,29 @@ defined('_JEXEC') or die('Restricted access');
             </div>
         <?php
         } ?>
+        <div class="tt-buttons">
+            <input class="btn btn-info btn-small tt-btn-back" type="button" value="< Back" onClick="history.go(-1);return true;">
+        </div>
     </div>
     <?php if(!$this->rider->blacklist_ind)
     {
         if (!in_array($this->rider->status, array('Provisional', 'Lapsed', ''), true ))
         { ?>
             <div class="tt-rider-rank">
+                <div class="tt-overall">
+                    <?php echo 'Overall #' . $this->rider->overall_rank; ?>
+                </div>
                 <div>
+                    <i class="fa fa-<?php echo $this->rider->gender_icon; ?>"></i>
                     <?php echo 'Rank #' . $this->rider->gender_rank; ?>
                 </div>
                 <div>
-                    <?php echo 'Overall #' . $this->rider->overall_rank; ?>
+                    <i class="fa fa-<?php echo $this->rider->gender_icon; ?>"></i>
+                    <?php echo $this->rider->age_category . ' #' . $this->rider->age_category_rank; ?>
+                </div>
+                <div>
+                    <i class="fa fa-<?php echo $this->rider->gender_icon; ?>"></i>
+                    <?php echo $this->rider->district_name . ' #' . $this->rider->district_rank; ?>
                 </div>
             </div>
         <?php
@@ -83,14 +92,12 @@ defined('_JEXEC') or die('Restricted access');
     } ?>
 </div>
 
-<input class="btn btn-info btn-small tt-btn-back" type="button" value="< Back" onClick="history.go(-1);return true;">
-
 <?php if(!$this->rider->blacklist_ind)
 {
     if (count($this->rider->rides) > 0)
     { ?>
         <h2><?php echo JText::_('COM_RANKINGS_RIDER_RESULTS'); ?></h2>
-        <table class="table-hover tt-table" id="tt-rider-ride-list">
+        <table class="table-hover tt-table tt-rider-rides">
         <thead>
             <tr>
                 <th class="tt-col-event-date">
@@ -105,11 +112,14 @@ defined('_JEXEC') or die('Restricted access');
                 <th class="tt-col-event-distance visible-phone">
                     <?php echo JText::_('COM_RANKINGS_EVENT_DISTANCE_SHORT'); ?>
                 </th>
-                <th class="tt-col-event-position hidden-phone">
+                <th class="tt-col-event-position hidden-tablet hidden-phone">
                     <?php echo JText::_('COM_RANKINGS_EVENT_POSITION'); ?>
                 </th>
-                <th class="tt-col-ride-time">
-                    <?php echo JText::_('COM_RANKINGS_RIDE_TIME'); ?>
+                <th class="tt-col-event-position hidden-desktop hidden-phone">
+                    <?php echo JText::_('COM_RANKINGS_EVENT_POSITION_SHORT'); ?>
+                </th>
+                <th class="tt-col-ride-result">
+                    <?php echo JText::_('COM_RANKINGS_RIDE_RESULT'); ?>
                 </th>
                 <th class="tt-col-ranking-points hidden-phone">
                     <?php echo JText::_('COM_RANKINGS_RIDE_RANKING_POINTS'); ?>
@@ -130,27 +140,56 @@ defined('_JEXEC') or die('Restricted access');
                     </tr>
                 <?php 
                 } ?>
-                <tr class="row<?php echo $i % 2; ?>">
+                <tr class="row<?php echo $i % 2; ?> tt-rankings-<?php if ($this->_ridesListView->ride->counting_ride_ind) { echo "counting-ride";} else { echo "non-counting-ride";} ?>">
                     <td class="tt-col-event-date">
                         <?php echo date('d M y', strtotime($this->_ridesListView->ride->event_date)); ?>
                     </td>
                     <td class="tt-table-event-link tt-col-event-name">
-                        <a href="<?php echo JRoute::_('index.php?Itemid=454&option=com_rankings&task=event.display&cid=' . $this->_ridesListView->ride->event_id); ?>" rel="nofollow"><?php echo $this->_ridesListView->ride->event_name; ?>
-                        </a>
+                        <div class="tt-event-name-container">
+                            <div class="tt-event-name">
+                                <a href="<?php echo JRoute::_('index.php?Itemid=454&option=com_rankings&task=event.display&cid=' . $this->_ridesListView->ride->event_id); ?>" rel="nofollow"><?php echo $this->_ridesListView->ride->event_name; ?>
+                                </a>
+                            </div>
+                            <?php if ($this->_ridesListView->ride->category_after_day != '')
+                            { ?>
+                                <div class="tt-rider-category hidden-phone">
+                                    <div class="tt-tag tt-tag-very-small tt-rider-category-<?php echo substr($this->_ridesListView->ride->category_after_day, 0, 1) ;?>">
+                                        <?php echo $this->_ridesListView->ride->category_after_day; ?>
+                                    </div>
+                                </div>
+                            <?php
+                            } ?>
+
+                        </div>
                     </td>
                     <td class="tt-col-event-distance visible-desktop">
-                        <?php echo $this->_ridesListView->ride->distance . ' miles'; ?>
+                        <?php if(!empty($this->_ridesListView->ride->ride_distance))
+                        {
+                            echo $this->_ridesListView->ride->distance . ' hours';
+                        } else {
+                            echo $this->_ridesListView->ride->distance . ' miles';
+                        } ?>
                     </td>
                     <td class="tt-col-event-distance visible-phone">
-                        <?php echo $this->_ridesListView->ride->distance; ?>
+                        <?php if(!empty($this->_ridesListView->ride->ride_distance))
+                        {
+                            echo $this->_ridesListView->ride->distance;
+                        } else {
+                            echo $this->_ridesListView->ride->distance;
+                        } ?>
                     </td>
                     <td class="tt-col-event-position hidden-phone">
                         <div class="tt-event-position">
                             <?php echo $this->_ridesListView->ride->position; ?>
                         </div>
                     </td>
-                    <td class="tt-col-ride-time">
-                        <?php echo ltrim(ltrim(date('G:i:s', strtotime($this->_ridesListView->ride->time)), '0'), ':'); ?>
+                    <td class="tt-col-ride-result">
+                        <?php if(!empty($this->_ridesListView->ride->ride_distance))
+                        {
+                            echo $this->_ridesListView->ride->ride_distance;
+                        } else {
+                            echo ltrim(ltrim(date('G:i:s', strtotime($this->_ridesListView->ride->time)), '0'), ':');
+                        } ?>
                     </td>
                     <td class="tt-col-ranking-points hidden-phone">
                         <?php echo $this->_ridesListView->ride->ranking_points; ?>

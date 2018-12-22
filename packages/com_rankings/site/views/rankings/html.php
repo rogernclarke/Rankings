@@ -2,7 +2,7 @@
 /**
  * Rankings Component for Joomla 3.x
  * 
- * @version    1.0
+ * @version    1.1
  * @package    Rankings
  * @subpackage Component
  * @copyright  Copyright (C) Spindata. All rights reserved.
@@ -55,9 +55,6 @@ class RankingsViewsRankingsHtml extends JViewHtml
 
                 // Get the total number of rankings
                 $this->totalRankings = $this->model->getTotal();
-
-                // Get the position indicator
-                $this->positionInd = $this->model->getPositionInd();
 
                 // Get the form
                 $this->form = $this->model->getForm();

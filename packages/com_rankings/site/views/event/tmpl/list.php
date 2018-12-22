@@ -2,11 +2,11 @@
 /**
  * Rankings Component for Joomla 3.x
  * 
- * @version    1.0
+ * @version    1.1
  * @package    Rankings
  * @subpackage Component
  * @copyright  Copyright (C) Spindata. All rights reserved.
- * @license    GNU General Public License version 2 or later; see LICENSE.txt
+ * @license    GNU General Public License version 3 or later; see LICENSE.txt
  */
  
 // No direct access
@@ -91,7 +91,12 @@ defined('_JEXEC') or die('Restricted access');
 						<?php echo $this->_eventsListView->course_code; ?>
 					</td>
 					<td class="tt-col-event-distance hidden-phone">
-						<?php echo $this->_eventsListView->distance . ' miles'; ?>
+						<?php if($this->_eventsListView->duration_event_ind)
+                        {
+                            echo $this->_eventsListView->distance . ' hours';
+                        } else {
+                            echo $this->_eventsListView->distance . ' miles';
+                        } ?>
 					</td>
 					<td class="tt-col-event-distance visible-phone">
 						<?php echo $this->_eventsListView->distance; ?>

@@ -2,11 +2,11 @@
 /**
  * Rankings Component for Joomla 3.x
  * 
- * @version    1.0
+ * @version    1.1
  * @package    Rankings
  * @subpackage Component
  * @copyright  Copyright (C) Spindata. All rights reserved.
- * @license    GNU General Public License version 2 or later; see LICENSE.txt
+ * @license    GNU General Public License version 3 or later; see LICENSE.txt
  */
  
 // No direct access
@@ -28,6 +28,19 @@ defined('_JEXEC') or die('Restricted access');
 						$this->form->setValue('filter_name', null, $this->escape($this->state->get('filter.name')));
 						$this->form->setValue('check_status', null, $this->escape($this->state->get('check.status')));
 						echo $this->form->renderFieldset('rankings_list_toolbar');
+    					if (($this->state->get('filter.age_category') != 'All' &&
+    						!empty($this->state->get('filter.age_category'))) ||
+    						($this->state->get('filter.district_code') != 'All' &&
+    						!empty($this->state->get('filter.district_code'))) ||
+    						$this->state->get('filter.name') != '' ||
+    						$this->state->get('filter.club_name') != '')
+						{ 
+							$position_ind = TRUE;
+							$columns = 7;
+						} else {
+							$position_ind = FALSE;
+							$columns = 6;
+						}
 					?>
 				</div>
 			</fieldset>
@@ -47,7 +60,7 @@ defined('_JEXEC') or die('Restricted access');
     <table id="tt-table-rankings" class="table-hover tt-table">
 		<thead>
 			<tr>
-				<?php if($this->positionInd)
+				<?php if ($position_ind)
 				{ ?>
 					<th class="tt-col-position">
 	            	</th>
@@ -77,7 +90,8 @@ defined('_JEXEC') or die('Restricted access');
     		{
     			$this->_rankingsListView->rider = $this->rankings[$i]; ?>
     			<tr class="row-<?php echo $i % 2; ?>">
-    				<?php if($this->positionInd)
+    				<?php 
+    				if ($position_ind)
 					{ ?>
     					<td class="tt-col-position">
     						<?php echo $this->_rankingsListView->rider->position; ?>
@@ -109,7 +123,7 @@ defined('_JEXEC') or die('Restricted access');
             							<?php echo "Provisional"; ?>
             						</div>
             						<div class="tt-tag tt-tag-very-small hidden-desktop hidden-tablet">
-            							<?php echo "Prov"; ?>
+            							<?php echo "P"; ?>
             						</div>
             					</div>
         					<?php
@@ -152,7 +166,7 @@ defined('_JEXEC') or die('Restricted access');
 					</td>
 				</tr>
 				<tr id="tt-rankings-<?php echo $i+1; ?>-rides" style="display:none">
-					<td colspan="6">
+					<td colspan="<?php echo $columns; ?>">
 						<div class="tt-rides-box">
 							<table class="table-hover tt-table tt-rankings-rides">
 								<thead>
@@ -169,8 +183,11 @@ defined('_JEXEC') or die('Restricted access');
 										<th class="tt-col-event-distance visible-phone">
 											<?php echo JText::_('COM_RANKINGS_EVENT_DISTANCE_SHORT'); ?>
 										</th>
-										<th class="tt-col-ranking-points">
+										<th class="tt-col-ranking-points hidden-phone">
 											<?php echo JText::_('COM_RANKINGS_RIDE_RANKING_POINTS'); ?>
+										</th>
+										<th class="tt-col-ranking-points hidden-desktop hidden-tablet">
+											<?php echo JText::_('COM_RANKINGS_RIDE_RANKING_POINTS_SHORT'); ?>
 										</th>
 									</tr>
 								</thead>
@@ -187,7 +204,12 @@ defined('_JEXEC') or die('Restricted access');
                         </a>
                     						</td>
 											<td class="tt-col-event-distance hidden-phone">
-												<?php echo $this->_ridesListView->ride->distance . ' miles'; ?>
+												<?php if(!empty($this->_ridesListView->ride->ride_distance))
+    						                    {
+                            						echo $this->_ridesListView->ride->distance . ' hours';
+                        						} else {
+                            						echo $this->_ridesListView->ride->distance . ' miles';
+                        						} ?>
 											</td>
 											<td class="tt-col-event-distance visible-phone">
 												<?php echo $this->_ridesListView->ride->distance; ?>

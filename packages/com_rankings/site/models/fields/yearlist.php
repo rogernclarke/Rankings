@@ -2,11 +2,11 @@
 /**
  * Rankings Component for Joomla 3.x
  * 
- * @version    1.0
+ * @version    1.1
  * @package    Rankings
  * @subpackage Form
  * @copyright  Copyright (C) Spindata. All rights reserved.
- * @license    GNU General Public License version 2 or later; see LICENSE.txt
+ * @license    GNU General Public License version 3 or later; see LICENSE.txt
  */
 
 defined('JPATH_PLATFORM') or die;
@@ -15,8 +15,6 @@ JFormHelper::loadFieldClass('list');
 
 /**
  * Supports a custom SQL select list from an external database
- *
- * @since  0.1
  */
 class JFormFieldYearList extends JFormFieldList
 {
@@ -24,7 +22,6 @@ class JFormFieldYearList extends JFormFieldList
 	 * The form field type.
 	 *
 	 * @var    string
-	 * @since  0.1
 	 */
 	public $type = 'YearList';
 
@@ -33,8 +30,6 @@ class JFormFieldYearList extends JFormFieldList
 	 * Use the query attribute to supply a query to generate the list.
 	 *
 	 * @return  array  The field option objects.
-	 *
-	 * @since   0.1
 	 */
 	protected function getOptions()
 	{
@@ -46,11 +41,10 @@ class JFormFieldYearList extends JFormFieldList
 		// Build the query
 		$query = $db->getQuery(TRUE);
 
-		$year = "DISTINCT YEAR(e.event_date) as year";
-
-		$query->select($year);
-        $query->from('#__events as e');
-        $query->order('year DESC');
+		$query
+			->select('DISTINCT YEAR (' . $db->qn('e.event_date') . ') AS year')
+        	->from  ($db->qn('#__events', 'e'))
+        	->order ($db->qn('year') . ' DESC');
 
 		// Set the query and get the result list.
 		$db->setQuery($query);
@@ -83,8 +77,6 @@ class JFormFieldYearList extends JFormFieldList
      * Method to obtain the database connection
 	 *
 	 * @return  database object
-	 *
-	 * @since   0.1
 	 */
     protected function _loadDb()
     {
