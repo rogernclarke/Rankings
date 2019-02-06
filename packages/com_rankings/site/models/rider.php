@@ -2,7 +2,7 @@
 /**
  * Rankings Component for Joomla 3.x
  * 
- * @version    1.1
+ * @version    1.2
  * @package    Rankings
  * @subpackage Component
  * @copyright  Copyright (C) Spindata. All rights reserved.
@@ -76,7 +76,8 @@ class RankingsModelsRider extends RankingsModelsDefault
         $query = $this->_db->getQuery(TRUE);
 
         $query
-            ->select($this->_db->qn(array('rc.rider_id', 'rc.name', 'rc.gender', 'rc.age', 'rc.age_category', 'rc.age_gender_category', 'rc.club_name', 'rc.blacklist_ind', 'rc.score', 'rc.overall_rank', 'rc.gender_rank', 'rc.category', 'rc.district_rank', 'rc.age_category_rank', 'd.district_name')))
+            ->select($this->_db->qn(array('rc.rider_id', 'rc.name', 'rc.gender', 'rc.age', 'rc.age_category', 'rc.club_name', 'rc.blacklist_ind', 'rc.score', 'rc.overall_rank', 'rc.gender_rank', 'rc.category', 'rc.district_rank', 'rc.age_category_rank', 'd.district_name')))
+            ->select('CONCAT(' . $this->_db->qn('age_category') . ' , " ", ' . $this->_db->qn('gender') . ') AS age_gender_category')
             ->select('CASE ' . $this->_db->qn('rc.gender') . 
                         ' WHEN "Male" THEN "mars"' . 
                         ' WHEN "Female" THEN "venus"' . 
@@ -91,7 +92,7 @@ class RankingsModelsRider extends RankingsModelsDefault
                 ' ELSE ""' . 
                 ' END' .
                 ' AS status')
-            ->from($this->_db->qn('#__rider_current_mat', 'rc'))
+            ->from($this->_db->qn('#__rider_current', 'rc'))
             ->join('LEFT', $this->_db->qn('#__districts', 'd') . ' ON (' . $this->_db->qn('rc.district_code') . ' = ' . $this->_db->qn('d.district_code') . ')');
 
         return $query;
@@ -126,7 +127,7 @@ class RankingsModelsRider extends RankingsModelsDefault
                 {
                     $search = $this->_db->q(str_replace(' ', '%', $this->_db->escape(trim($search), true)));
                     $query
-                        ->where($this->_db->qn('district_code') . ' = ' . $search);
+                        ->where($this->_db->qn('rc.district_code') . ' = ' . $search);
                 }
             }
 
@@ -149,6 +150,10 @@ class RankingsModelsRider extends RankingsModelsDefault
                 $query
                     ->where($this->_db->qn('club_name') . ' LIKE ' . $search);
             }
+
+            // Don't retrieve blacklisted riders
+            $query
+                ->where($this->_db->qn('blacklist_ind') . ' = 0');
         }
 
         return $query;

@@ -2,7 +2,7 @@
 /**
  * Rankings Component for Joomla 3.x
  * 
- * @version    1.1
+ * @version    1.2
  * @package    Rankings
  * @subpackage Component
  * @copyright  Copyright (C) Spindata. All rights reserved.
@@ -94,8 +94,9 @@ class RankingsModelsRankings extends RankingsModelsDefault
         $query = $this->_db->getQuery(TRUE);
         
         $query
-            ->select($this->_db->qn(array('rider_id', 'name', 'gender', 'age', 'age_category', 'age_gender_category', 'club_name', 'score', 'overall_rank', 'gender_rank', )))
-            ->select('CASE ' . $this->_db->qn('ranking_status') . 
+            ->select($this->_db->qn(array('rider_id', 'name', 'gender', 'age', 'age_category', 'club_name', 'score', 'overall_rank', 'gender_rank', )))
+            ->select('CONCAT(' . $this->_db->qn('age_category') . ' , " ", ' . $this->_db->qn('gender') . ') AS age_gender_category')
+            ->select('CASE ' . $this->_db->qn('ranking_status') .  
                 ' WHEN "F" THEN "Frequent rider"' . 
                 ' WHEN "C" THEN "Complete"' . 
                 ' WHEN "P" THEN "Provisional"' . 
@@ -132,7 +133,7 @@ class RankingsModelsRankings extends RankingsModelsDefault
                 ->from('(' . $this->_buildSubqueryRiders() . ') AS T1, (' . $this->_buildSubqueryPosition() . ') AS T2');
         } ELSE {
             $query
-                ->from($this->_db->qn('#__rider_current_mat'));
+                ->from($this->_db->qn('#__rider_current'));
         }
 
         return $query;
@@ -161,7 +162,7 @@ class RankingsModelsRankings extends RankingsModelsDefault
 
         $subquery
             ->select('*')
-            ->from  ($this->_db->qn('#__rider_current_mat'))
+            ->from  ($this->_db->qn('#__rider_current'))
             ->where ($this->_db->qn('ranking_status') . ' IN ("' . implode('","', $statuses) . '")')
             ->order ($this->_db->qn('overall_rank'));
 

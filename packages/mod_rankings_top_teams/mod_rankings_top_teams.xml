@@ -2,7 +2,7 @@
 <extension type="module" version="1.0" client="site" method="upgrade">
     <name>Rankings Top Teams</name>
     <author>Roger Clarke</author>
-    <version>1.0</version>
+    <version>1.2</version>
     <description>A module to display the top ranked teams.</description>
     <files>
         <filename>mod_rankings_top_teams.xml</filename>
