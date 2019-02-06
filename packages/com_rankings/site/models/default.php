@@ -528,7 +528,7 @@ class RankingsModelsDefault extends JModelBase
         $query = $this->_db->getQuery(TRUE);
 
         // Table to update
-        $table = $this->_db->quoteName('#__riders');
+        //$table = $this->_db->quoteName('#__riders');
 
         // Fields to update
         $fields = array($this->_db->quoteName('hits') . ' = ' . $this->_db->quoteName('hits') . ' + 1');

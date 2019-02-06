@@ -2,7 +2,7 @@
 /**
  * Rankings Component for Joomla 3.x
  * 
- * @version    1.1
+ * @version    1.2
  * @package    Rankings
  * @subpackage Component
  * @copyright  Copyright (C) Spindata. All rights reserved.
@@ -28,6 +28,12 @@ defined('_JEXEC') or die('Restricted access');
  */
 class RankingsModelsEvent extends RankingsModelsDefault
 {
+
+    public $startsheet_ind = FALSE; // Indicates startsheet exists
+    public $entries_count = 0;      // Count of entries
+    public $results_count = 0;      // Count of rides (results)
+    public $results_ind = FALSE;    // Indicates results exist
+
     /**
      * Constructor
      **/
@@ -54,11 +60,37 @@ class RankingsModelsEvent extends RankingsModelsDefault
     {
         $event = parent::getItem();
 
-        // Get rides for the event
+        // Get entries for the event
         $rideModel    = new RankingsModelsRide();
         $rideModel->set('_event_id', $event->event_id);
-        $rideModel->set('_list_type', "event");
+        $rideModel->set('_list_type', "event_entries");
+        if ($event->duration_event_ind)
+        {
+            $rideModel->set('_event_duration', $event->distance);
+        }
+
+        $event->entries = $rideModel->listItems(0,1000);
+
+        // Get results (rides) for the event
+        $rideModel    = new RankingsModelsRide();
+        $rideModel->set('_event_id', $event->event_id);
+        $rideModel->set('_list_type', "event_results");
+
         $event->rides = $rideModel->listItems(0,1000);
+
+        If ($event->event_date < '2019-02-01')
+        {
+            $event->startsheet_ind = FALSE;
+        } else {
+            $event->startsheet_ind = TRUE;
+        }
+
+        if (count($event->rides) == 0)
+        {
+            $event->results_ind = FALSE;
+        } else {
+            $event->results_ind = TRUE;
+        }
 
         // Update hits for the event
         $this->_updateHits();

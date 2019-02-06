@@ -2,7 +2,7 @@
 /**
  * Rankings Top Teams Module for Joomla 3.x
  * 
- * @version    1.0
+ * @version    1.2
  * @package    Rankings
  * @subpackage Modules
  * @copyright  Copyright (C) Spindata. All rights reserved.
@@ -14,7 +14,7 @@ defined('_JEXEC') or die;
 
 // Include stylesheets
 $document = JFactory::getDocument();
-$document->addStyleSheet(JUri::base() . 'media/com_rankings/css/rankings.css');
+$document->addStyleSheet(JUri::base() . 'media/com_rankings/css/rankings_1.2.css');
 
 // Include the syndicate functions only once
 require_once dirname(__FILE__) . '/helper.php';

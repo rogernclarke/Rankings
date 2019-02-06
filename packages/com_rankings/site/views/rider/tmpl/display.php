@@ -15,14 +15,14 @@ defined('_JEXEC') or die('Restricted access');
 
 <link href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css" rel="stylesheet">
 
-<div class="tt-rider-heading">
-    <div class="tt-rider-name">
-        <h1>
-            <?php echo $this->rider->name; ?>
-        </h1>
-    </div>
-    <?php if(!$this->rider->blacklist_ind)
-    { ?>
+<?php if(!$this->rider->blacklist_ind)
+{ ?>
+    <div class="tt-rider-heading">
+        <div class="tt-rider-name">
+            <h1>
+                <?php echo $this->rider->name; ?>
+            </h1>
+        </div>
         <div class="tt-rider-category">
             <?php if (in_array($this->rider->status, array('Frequent rider','Qualified'), true ))
             { ?>
@@ -46,29 +46,21 @@ defined('_JEXEC') or die('Restricted access');
             <?php
             } ?>
         </div>
-    <?php
-    } ?>
-</div>
+    </div>
 
-<div class="tt-rider-details">
-    <div class="tt-rider">
-        <div class="tt-club-name">
-            <?php echo $this->rider->club_name; ?>
-        </div>
-        <?php if(!$this->rider->blacklist_ind)
-        { ?>
+    <div class="tt-rider-details">
+        <div class="tt-rider">
+            <div class="tt-club-name">
+                <?php echo $this->rider->club_name; ?>
+            </div>
             <div class="tt-age-gender-category">
                 <?php echo $this->rider->age_gender_category; ?>
             </div>
-        <?php
-        } ?>
-        <div class="tt-buttons">
-            <input class="btn btn-info btn-small tt-btn-back" type="button" value="< Back" onClick="history.go(-1);return true;">
+            <div class="tt-buttons">
+                <input class="btn btn-info btn-small tt-btn-back" type="button" value="< Back" onClick="history.go(-1);return true;">
+            </div>
         </div>
-    </div>
-    <?php if(!$this->rider->blacklist_ind)
-    {
-        if (!in_array($this->rider->status, array('Provisional', 'Lapsed', ''), true ))
+        <?php if (!in_array($this->rider->status, array('Provisional', 'Lapsed', ''), true ))
         { ?>
             <div class="tt-rider-rank">
                 <div class="tt-overall">
@@ -88,13 +80,10 @@ defined('_JEXEC') or die('Restricted access');
                 </div>
             </div>
         <?php
-        }
-    } ?>
-</div>
+        } ?>
+    </div>
 
-<?php if(!$this->rider->blacklist_ind)
-{
-    if (count($this->rider->rides) > 0)
+    <?php if (count($this->rider->rides) > 0)
     { ?>
         <h2><?php echo JText::_('COM_RANKINGS_RIDER_RESULTS'); ?></h2>
         <table class="table-hover tt-table tt-rider-rides">
@@ -207,6 +196,7 @@ defined('_JEXEC') or die('Restricted access');
     <?php
     }
 } else { ?>
-    <h2><?php echo "This rider has opted out of Spindata"; ?></h2>
+    <h1><?php echo "Rider not found"; ?></h1>
+    <input class="btn btn-info btn-small tt-btn-back" type="button" value="< Back" onClick="history.go(-1);return true;">
 <?php
 } ?>

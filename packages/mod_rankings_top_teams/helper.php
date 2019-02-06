@@ -2,7 +2,7 @@
 /**
  * Rankings Top Teams Module for Joomla 3.x
  * 
- * @version    1.0
+ * @version    1.2
  * @package    Rankings
  * @subpackage Modules
  * @copyright  Copyright (C) Spindata. All rights reserved.
