@@ -2,7 +2,7 @@
 /**
  * Rankings Component for Joomla 3.x
  * 
- * @version    1.2
+ * @version    1.3
  * @package    Rankings
  * @subpackage Component
  * @copyright  Copyright (C) Spindata. All rights reserved.
@@ -28,7 +28,7 @@ defined('_JEXEC') or die('Restricted access');
             {
                 echo $this->event->distance . ' hours';
             } else {
-                echo $this->event->distance . ' miles';
+                echo (float) $this->event->distance . ' miles';
             } ?></p>
         </div>
     <?php
@@ -95,9 +95,9 @@ defined('_JEXEC') or die('Restricted access');
                     <div class="tabs tabs-style-topline tt-tabs-startsheet">
                         <nav>
                             <ul>
-                                <li class="tab-current" id="tt-start-order"><button type="button" onclick="sort_bib();"><i class="fa fa-clock-o" aria-hidden="true"></i><p><?php echo JText::_('COM_RANKINGS_EVENT_STARTING_ORDER'); ?></p></button></li>
+                                <li id="tt-start-order"><button type="button" onclick="sort_bib();"><i class="fa fa-clock-o" aria-hidden="true"></i><p><?php echo JText::_('COM_RANKINGS_EVENT_STARTING_ORDER'); ?></p></button></li>
                                 <li id="tt-finish-order"><button type="button" onclick="sort_predicted_finish();"><i class="fa fa-flag-checkered" aria-hidden="true"></i><p><?php echo JText::_('COM_RANKINGS_EVENT_PREDICTED_FINISHING_ORDER'); ?></p></button></li>
-                                <li id="tt-result-order"><button type="button" onclick="sort_predicted_position();"><i class="fa fa-sort-amount-asc" aria-hidden="true"></i><p><?php echo JText::_('COM_RANKINGS_EVENT_PREDICTED_FINISHING_POSITION'); ?></p></button></li>
+                                <li class="tab-current" id="tt-result-order"><button type="button" onclick="sort_predicted_position();"><i class="fa fa-sort-amount-asc" aria-hidden="true"></i><p><?php echo JText::_('COM_RANKINGS_EVENT_PREDICTED_FINISHING_POSITION'); ?></p></button></li>
                             </ul>
                         </nav>
                         <div class="tt-tab-panel">
@@ -221,6 +221,7 @@ defined('_JEXEC') or die('Restricted access');
                         <thead>
                             <tr>
                                 <th class="tt-col-event-position"><?php echo JText::_('COM_RANKINGS_EVENT_POSITION'); ?></th>
+                                <th class="tt-col-event-gender-position"><?php echo JText::_('COM_RANKINGS_EVENT_POSITION'); ?></th>
                                 <th class="tt-col-rider-name"><?php echo JText::_('COM_RANKINGS_RIDER_NAME'); ?></th>
                                 <th class="tt-col-club-name hidden-phone"><?php echo JText::_('COM_RANKINGS_CLUB_NAME'); ?></th>
                                 <th class="tt-col-age-gender-category hidden-tablet hidden-phone"><?php echo JText::_('COM_RANKINGS_RIDER_CATEGORY'); ?></th>
@@ -255,6 +256,7 @@ defined('_JEXEC') or die('Restricted access');
                                             }
                                         } ?></div>
                                     </td>
+                                    <td class="tt-col-event-gender-position"><?php echo $this->_eventListView->ride->gender_position; ?></td>
                                     <td class="tt-table-rider-link tt-col-rider-name">
                                         <div class="tt-rider-name-container">
                                             <div class="tt-rider-name">

@@ -1,7 +1,7 @@
 /**
  * Rankings Component for Joomla 3.x
  * 
- * @version    1.2
+ * @version    1.3
  * @package    Rankings
  * @subpackage Component
  * @copyright  Copyright (C) Spindata. All rights reserved.
@@ -182,7 +182,7 @@ td.tt-col-score {
 	width: 100%;
 }
 .tt-col-event-distance {
-	width: 100px;
+	width: 105px;
 }
 td.tt-col-event-distance {
 	padding: 0 12px;
@@ -202,12 +202,15 @@ td.tt-col-ranking-points {
 	text-align: right;
 	width: 48px;
 }
-.tt-col-event-position {
+.tt-col-event-position, .tt-col-event-gender-position {
 	text-align: center;
 	width: 110px;
 }
 td.tt-col-event-position {
 	text-align: right;
+}
+.tt-col-event-gender-position {
+	display: none;
 }
 .tt-event-position, .tt-event-position-variance {
 	display: inline-block;
@@ -219,7 +222,7 @@ td.tt-col-event-position {
 #tt-rider-ride-list .tt-col-event-position {
 	width: 95px;
 }
-#tt-rider-ride-list td.tt-col-event-position {
+#tt-rider-ride-list td.tt-col-event-position, #tt-rider-ride-list td.tt-col-event-gender-position {
 	padding: 0 24px 0 0;
 }
 .tt-col-ride-predicted-position {
@@ -348,7 +351,7 @@ td.tt-col-ride-result {
 		width: 85px;
 	}
 	.tt-col-event-distance {
-		width: 50px;
+		width: 60px;
 	}
 	td.tt-col-event-distance {
 		padding: 0 6px;
@@ -501,6 +504,21 @@ div.tt-pagination {
 .tt-tag.tt-rider-category-E::before {
 	border-right-color: #000066;
 }
+.tt-tag.tt-startsheet {
+	background-color: #000066;
+	font-weight: 400;
+}
+.tt-tag.tt-startsheet::before {
+	border-right-color: #000066;
+}
+.tt-tag.tt-results {
+	background-color: #006600;
+	font-weight: 400;
+}
+.tt-tag.tt-results::before {
+	border-right-color: #006600;
+}
+
 .tt-tag-large {
 	border-radius: 0 4px 4px 0;
 	height: 40px;
@@ -518,9 +536,9 @@ div.tt-pagination {
 }
 .tt-tag-very-small {
 	border-radius: 0 2px 2px 0;
-	font-size: 14px;
-	height: 14px;
-	line-height: 1.2;
+	font-size: 13px;
+	height: 16px;
+	line-height: 16px;
 	margin: 0;
 	min-width: 2.5rem;
 	padding: 0 4px 0 10px;
@@ -544,9 +562,9 @@ div.tt-pagination {
   border-top: 10px transparent solid;
 }
 .tt-tag-very-small::before {
-  border-bottom: 7px transparent solid;
+  border-bottom: 8px transparent solid;
   border-right: 6px solid;
-  border-top: 7px transparent solid;
+  border-top: 8px transparent solid;
 }
 .tt-tag::after {
   background: #fff;
@@ -573,7 +591,7 @@ div.tt-pagination {
   height: 3px;
   left: 3px;
   width: 3px;
-  top: 5px;
+  top: 6px;
 }
 @media only screen and (max-width: 30.938rem) {
 	.tt-tag-large {

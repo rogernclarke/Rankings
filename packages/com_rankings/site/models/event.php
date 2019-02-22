@@ -2,7 +2,7 @@
 /**
  * Rankings Component for Joomla 3.x
  * 
- * @version    1.2
+ * @version    1.3
  * @package    Rankings
  * @subpackage Component
  * @copyright  Copyright (C) Spindata. All rights reserved.
@@ -78,7 +78,7 @@ class RankingsModelsEvent extends RankingsModelsDefault
 
         $event->rides = $rideModel->listItems(0,1000);
 
-        If ($event->event_date < '2019-02-01')
+        if ($event->event_date < '2019-02-01')
         {
             $event->startsheet_ind = FALSE;
         } else {
@@ -140,7 +140,13 @@ class RankingsModelsEvent extends RankingsModelsDefault
                 ' WHEN 0 THEN "Other"' . 
                 ' ELSE ' . $this->_db->qn('e.distance') . 
                 ' END' . 
-                ' AS distance');
+                ' AS distance')
+            ->select('IF (' . $this->_db->qn('e.event_date') . 
+                ' < "2019-02-01", false, true)' .
+                ' AS startsheet_ind')
+            ->select('IF (' . $this->_db->qn('e.processed_date') . 
+                ' > ' . $this->_db->qn('e.event_date') . ', true, false)' .
+                ' AS results_ind');
 
         // If request is for an individual event then determine if the event is a ranking event or not
         if (isset($this->_id))

@@ -2,7 +2,7 @@
 /**
  * Rankings Component for Joomla 3.x
  * 
- * @version    1.1
+ * @version    1.3
  * @package    Rankings
  * @subpackage Component
  * @copyright  Copyright (C) Spindata. All rights reserved.
@@ -82,10 +82,26 @@ defined('_JEXEC') or die('Restricted access');
     					<?php echo date('d M y', strtotime($this->_eventsListView->event_date)); ?>
     				</td>
     				<td class="tt-table-event-link tt-col-event-name">
-    					<span>
-							<a href="<?php echo JRoute::_('index.php?option=com_rankings&task=event.display&cid='.$this->_eventsListView->event_id); ?>"><?php echo $this->_eventsListView->event_name; ?>
-							</a>
-						</span>
+    					<div class="tt-event-name-container">
+                            <div class="tt-event-name">
+								<a href="<?php echo JRoute::_('index.php?option=com_rankings&task=event.display&cid='.$this->_eventsListView->event_id); ?>"><?php echo $this->_eventsListView->event_name; ?></a>
+							</div>
+							<?php if ($this->_eventsListView->results_ind)
+                            { ?>
+                                <div class="hidden-phone">
+                                    <div class="tt-tag tt-tag-very-small tt-results"><?php echo "Results"; ?>
+                                    </div>
+                                </div>
+                            <?php
+                            } else if ($this->_eventsListView->startsheet_ind)
+                            { ?>
+                                <div class="hidden-phone">
+                                    <div class="tt-tag tt-tag-very-small tt-startsheet"><?php echo "Startsheet"; ?>
+                                    </div>
+                                </div>
+                            <?php
+                            } ?>
+						</div>
     				</td>
     				<td class="tt-col-event-course hidden-phone">
 						<?php echo $this->_eventsListView->course_code; ?>
@@ -95,11 +111,11 @@ defined('_JEXEC') or die('Restricted access');
                         {
                             echo $this->_eventsListView->distance . ' hours';
                         } else {
-                            echo $this->_eventsListView->distance . ' miles';
+                            echo round($this->_eventsListView->distance, 1) . ' miles';
                         } ?>
 					</td>
 					<td class="tt-col-event-distance visible-phone">
-						<?php echo $this->_eventsListView->distance; ?>
+						<?php echo round($this->_eventsListView->distance, 1); ?>
 					</td>
 				</tr>
     		<?php
