@@ -1,7 +1,7 @@
 /**
  * Rankings Component for Joomla 3.x
  * 
- * @version    1.2
+ * @version    1.3
  * @package    Rankings
  * @subpackage Component
  * @copyright  Copyright (C) Spindata. All rights reserved.
@@ -110,7 +110,8 @@ function filter_results_overall()
 
 	$('.tabs-style-topline.tt-tabs-results li').removeClass();
 	$('#tt-overall-filter').addClass("tab-current");
-	$('.tt-event-position-variance').css("visibility", "visible");
+	$('.tt-col-event-position').show();
+	$('.tt-col-event-gender-position').hide();
 }
 function filter_results_male()
 {
@@ -124,7 +125,8 @@ function filter_results_male()
 
 	$('.tabs-style-topline.tt-tabs-results li').removeClass();
 	$('#tt-male-filter').addClass("tab-current");
-	$('.tt-event-position-variance').css("visibility", "hidden");
+	$('.tt-col-event-position').hide();
+	$('.tt-col-event-gender-position').show();
 }
 function filter_results_female()
 {
@@ -138,5 +140,6 @@ function filter_results_female()
 
 	$('.tabs-style-topline.tt-tabs-results li').removeClass();
 	$('#tt-female-filter').addClass("tab-current");
-	$('.tt-event-position-variance').css("visibility", "hidden");
+	$('.tt-col-event-position').hide();
+	$('.tt-col-event-gender-position').show();
 }

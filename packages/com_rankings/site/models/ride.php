@@ -2,7 +2,7 @@
 /**
  * Rankings Component for Joomla 3.x
  * 
- * @version    1.2
+ * @version    1.3
  * @package    Rankings
  * @subpackage Component
  * @copyright  Copyright (C) Spindata. All rights reserved.
@@ -97,6 +97,7 @@ class RankingsModelsRide extends RankingsModelsDefault
                 case "rider":
                     // Set the ordinal for position
                     $ride->position = parent::_ordinal($ride->position);
+                    $ride->gender_position = parent::_ordinal($ride->gender_position);
                     break;
             }
         }
@@ -118,7 +119,7 @@ class RankingsModelsRide extends RankingsModelsDefault
         $query
             ->select($this->_db->qn(array('r.rider_id', 'r.event_id', 'r.club_name', 'r.age_on_day', 'r.position', 'r.time', 'r.ranking_points', 'r.counting_ride_ind', 'r.category_on_day', 'r.predicted_position', 'r.predicted_time', 'r.bib', 'r.start_time', 'r.predicted_distance')))
             ->select($this->_db->qn('r.distance') . 'AS ride_distance')
-            ->select($this->_db->qn('rr.blacklist_ind'))
+            ->select($this->_db->qn(array('rr.blacklist_ind', 'rr.gender')))
             ->select('CONCAT(' . $this->_db->qn('rr.first_name') . ', " ", ' . $this->_db->qn('rr.last_name') . ')' . 
                 ' AS name')
             ->select('CONCAT(' . $this->_db->qn('rr.age_category') . ', " ", ' . $this->_db->qn('rr.gender') . ')' . 
@@ -147,17 +148,34 @@ class RankingsModelsRide extends RankingsModelsDefault
                         ' AS position_variance_value');
 
                 // Gender position in list is only applicable for results displayed for an event
-                /*$query
-                    ->select('CASE' .
-                        ' WHEN @prev_value = ' . $this->_db->qn('position') . ' THEN @position_count' . 
-                        ' WHEN @prev_value := ' . $this->_db->qn('position') . ' THEN @position_count := @sequence' . 
-                        ' END' .
-                        ' AS position, @sequence:=@sequence + 1')
-                    ->from('(' . $this->_buildSubqueryEventRides() . ') AS T1, (' . $this->_buildSubqueryGenderPosition() . ') AS T2');*/
                 $query
                     ->from($this->_db->qn('#__rides', 'r'))
                     ->from($this->_db->qn('#__riders', 'rr'))
                     ->from($this->_db->qn('#__events', 'e'));
+
+                $subquery = $this->_buildSubqueryEventRides($query);
+
+                // Create a new query
+                $query = $this->_db->getQuery(TRUE);
+
+                $query
+                    ->select($this->_db->qn(array('rider_id', 'event_id', 'club_name', 'age_on_day', 'position', 'time', 'ranking_points', 'counting_ride_ind', 'category_on_day', 'predicted_position', 'predicted_time', 'bib', 'start_time', 'predicted_distance', 'ride_distance', 'blacklist_ind', 'name', 'age_gender_category', 'position_variance_ind', 'position_variance_value')))
+                    ->select('IF (' . $this->_db->qn('gender') . ' = "Female",' . 
+                        ' CASE' . 
+                        ' WHEN @prev_value = ' . $this->_db->qn('position') . ' THEN @female_position_count' . 
+                        ' WHEN @prev_value:= ' . $this->_db->qn('position') . ' THEN @female_position_count:=@female_sequence' . 
+                        ' END,' . 
+                        ' CASE' . 
+                        ' WHEN @prev_value = ' . $this->_db->qn('position') . ' THEN @male_position_count' . 
+                        ' WHEN @prev_value:= ' . $this->_db->qn('position') . ' THEN @male_position_count:=@male_sequence' . 
+                        ' END)' . 
+                        ' AS gender_position')
+                    ->select('IF (' . $this->_db->qn('gender') . ' = "Female",' . 
+                        ' @female_sequence:=@female_sequence + 1,' . 
+                        ' @male_sequence:=@male_sequence + 1)' . 
+                        ' AS sequence')
+                    ->from('(' . $subquery . ') AS T1')
+                    ->from('(' . $this->_buildSubqueryGenderPosition() . ') AS T2');
                 break;
 
             case "rider":
@@ -249,27 +267,21 @@ class RankingsModelsRide extends RankingsModelsDefault
     /**
      * _buildSubqueryRides
      *
-     * Builds the subquery used to return the set of ranked riders for whom position is to be calculated
+     * Builds the subquery used to return the set of rides for which position is to be calculated
      * 
      * @return object Subquery object
      **/
-    protected function _buildSubqueryEventRides()
+    protected function _buildSubqueryEventRides($query)
     {
-        $subquery = $this->_db->getQuery(TRUE);
+        $query
+            ->where ($this->_db->qn('e.event_id') . ' = ' . (int) $this->_event_id)
+            ->where ($this->_db->qn('r.rider_id') . ' = ' . $this->_db->qn('rr.rider_id'))
+            ->where ($this->_db->qn('r.event_id') . ' = ' . $this->_db->qn('e.event_id'))
+            ->where ($this->_db->qn('time') . ' > "00:00:00"')
+            ->order ($this->_db->qn('time') . ' ASC')
+            ->order ($this->_db->qn('ride_distance') . ' DESC');
 
-        $subquery
-            ->select($this->_db->qn(array('r.rider_id', 'r.event_id', 'r.club_name', 'r.age_on_day', 'r.position', 'r.time', 'r.ranking_points', 'r.counting_ride_ind', 'r.category_on_day', 'r.predicted_position', 'r.predicted_time', 'r.bib', 'r.start_time', 'r.predicted_distance')))
-            ->select($this->_db->qn('r.distance') . 'AS ride_distance')
-            ->select($this->_db->qn('rr.blacklist_ind'))
-            ->select('CONCAT(' . $this->_db->qn('rr.first_name') . ', " ", ' . $this->_db->qn('rr.last_name') . ')' . 
-                ' AS name')
-            ->select('CONCAT(' . $this->_db->qn('rr.age_category') . ', " ", ' . $this->_db->qn('rr.gender') . ')' . 
-                ' AS age_gender_category')
-            ->from  ($this->_db->qn('#__rides'))
-            ->where ($this->_db->qn('event_id') . ' = ' . (int) $this->_event_id)
-            ->order ($this->_db->qn('position'));
-
-        return $subquery;
+        return $query;
     }
 
     /**
@@ -287,7 +299,7 @@ class RankingsModelsRide extends RankingsModelsDefault
         $offset = 1;
 
         $subquery
-            ->select('@prev_value:=NULL, @position_count:=' . $offset . ' , @sequence:=' . $offset);
+            ->select('@prev_value:=NULL, @female_position_count:=' . $offset . ' , @male_position_count:=' . $offset . ' , @female_sequence:=' . $offset . ' , @male_sequence:=' . $offset);
 
         return $subquery;
     }
@@ -308,14 +320,15 @@ class RankingsModelsRide extends RankingsModelsDefault
                 $query
                     ->where($this->_db->qn('e.event_id') . ' = ' . (int) $this->_event_id)
                     ->where($this->_db->qn('r.rider_id') . ' = ' . $this->_db->qn('rr.rider_id'))
-                    ->where($this->_db->qn('r.event_id') . ' = ' . $this->_db->qn('e.event_id'));;
+                    ->where($this->_db->qn('r.event_id') . ' = ' . $this->_db->qn('e.event_id'));
                 break;
             case "event_results":
+                /* commented out for gender calc
                 $query
                     ->where($this->_db->qn('e.event_id') . ' = ' . (int) $this->_event_id)
                     ->where($this->_db->qn('r.rider_id') . ' = ' . $this->_db->qn('rr.rider_id'))
                     ->where($this->_db->qn('r.event_id') . ' = ' . $this->_db->qn('e.event_id'))
-                    ->where($this->_db->qn('r.time') . ' > "00:00:00"');;
+                    ->where($this->_db->qn('r.time') . ' > "00:00:00"');*/
                 break;
             case "rider":
                 $query
@@ -376,11 +389,11 @@ class RankingsModelsRide extends RankingsModelsDefault
         {
             case "event_entries":
                 $query
-                    ->order($this->_db->qn('r.bib') . ' ASC');
+                    ->order('-' . $this->_db->qn('r.predicted_position') . ' DESC');
                 break;
             case "event_results":
                 $query
-                    ->order($this->_db->qn('r.time') . ' ASC')
+                    ->order($this->_db->qn('time') . ' ASC')
                     ->order($this->_db->qn('ride_distance') . ' DESC');
                 break;
             case "rider":

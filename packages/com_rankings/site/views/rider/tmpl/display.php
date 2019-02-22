@@ -2,7 +2,7 @@
 /**
  * Rankings Component for Joomla 3.x
  * 
- * @version    1.1
+ * @version    1.3
  * @package    Rankings
  * @subpackage Component
  * @copyright  Copyright (C) Spindata. All rights reserved.
@@ -24,7 +24,7 @@ defined('_JEXEC') or die('Restricted access');
             </h1>
         </div>
         <div class="tt-rider-category">
-            <?php if (in_array($this->rider->status, array('Frequent rider','Qualified'), true ))
+            <?php if (in_array($this->rider->status, array('Frequent rider','Qualified','Provisional'), true ))
             { ?>
                 <div class="tt-tag tt-tag-large tt-rider-category-<?php echo substr($this->rider->category, 0, 1) ; ?>">
                     <span class="tt-tag-category-prefix">
@@ -156,7 +156,7 @@ defined('_JEXEC') or die('Restricted access');
                         {
                             echo $this->_ridesListView->ride->distance . ' hours';
                         } else {
-                            echo $this->_ridesListView->ride->distance . ' miles';
+                            echo abs($this->_ridesListView->ride->distance) . ' miles';
                         } ?>
                     </td>
                     <td class="tt-col-event-distance visible-phone">
@@ -164,7 +164,7 @@ defined('_JEXEC') or die('Restricted access');
                         {
                             echo $this->_ridesListView->ride->distance;
                         } else {
-                            echo $this->_ridesListView->ride->distance;
+                            echo abs($this->_ridesListView->ride->distance);
                         } ?>
                     </td>
                     <td class="tt-col-event-position hidden-phone">
