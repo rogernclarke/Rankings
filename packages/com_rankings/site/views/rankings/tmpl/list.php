@@ -2,7 +2,7 @@
 /**
  * Rankings Component for Joomla 3.x
  * 
- * @version    1.3
+ * @version    1.3.1
  * @package    Rankings
  * @subpackage Component
  * @copyright  Copyright (C) Spindata. All rights reserved.
@@ -206,7 +206,7 @@ defined('_JEXEC') or die('Restricted access');
 											<td class="tt-col-event-distance hidden-phone">
 												<?php if(!empty($this->_ridesListView->ride->ride_distance))
     						                    {
-                            						echo $this->_ridesListView->ride->distance . ' hours';
+                            						echo abs($this->_ridesListView->ride->distance) . ' hours';
                         						} else {
                             						echo abs($this->_ridesListView->ride->distance) . ' miles';
                         						} ?>
