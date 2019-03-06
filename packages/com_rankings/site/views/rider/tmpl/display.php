@@ -2,7 +2,7 @@
 /**
  * Rankings Component for Joomla 3.x
  * 
- * @version    1.3
+ * @version    1.3.1
  * @package    Rankings
  * @subpackage Component
  * @copyright  Copyright (C) Spindata. All rights reserved.
@@ -154,7 +154,7 @@ defined('_JEXEC') or die('Restricted access');
                     <td class="tt-col-event-distance visible-desktop">
                         <?php if(!empty($this->_ridesListView->ride->ride_distance))
                         {
-                            echo $this->_ridesListView->ride->distance . ' hours';
+                            echo abs($this->_ridesListView->ride->distance) . ' hours';
                         } else {
                             echo abs($this->_ridesListView->ride->distance) . ' miles';
                         } ?>
@@ -162,7 +162,7 @@ defined('_JEXEC') or die('Restricted access');
                     <td class="tt-col-event-distance visible-phone">
                         <?php if(!empty($this->_ridesListView->ride->ride_distance))
                         {
-                            echo $this->_ridesListView->ride->distance;
+                            echo abs($this->_ridesListView->ride->distance);
                         } else {
                             echo abs($this->_ridesListView->ride->distance);
                         } ?>

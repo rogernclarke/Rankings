@@ -2,7 +2,7 @@
 /**
  * Rankings Component for Joomla 3.x
  * 
- * @version    1.3
+ * @version    1.3.1
  * @package    Rankings
  * @subpackage Component
  * @copyright  Copyright (C) Spindata. All rights reserved.
@@ -26,7 +26,7 @@ defined('_JEXEC') or die('Restricted access');
         <div class="tt-distance">
             <p><?php if($this->event->duration_event_ind)
             {
-                echo $this->event->distance . ' hours';
+                echo abs($this->event->distance) . ' hours';
             } else {
                 echo (float) $this->event->distance . ' miles';
             } ?></p>
@@ -155,7 +155,12 @@ defined('_JEXEC') or die('Restricted access');
                                                     } ?>
                                                 </div>
                                             </td>
-                                            <td class="tt-col-club-name hidden-phone"><?php echo $this->_eventListView->entry->club_name; ?></td>
+                                            <td class="tt-col-club-name hidden-phone"><?php if (!empty($this->_eventListView->entry->club_name))
+                                            { 
+                                                echo $this->_eventListView->entry->club_name;
+                                            } else {
+                                                echo $this->_eventListView->entry->rider_club_name;
+                                            } ?></td>
                                             <td class="tt-col-age-gender-category hidden-tablet hidden-phone"><?php echo $this->_eventListView->entry->age_gender_category; ?></td>
                                             <td class="tt-col-predicted-time-at-finish hidden-tablet hidden-phone"><?php echo $this->_eventListView->entry->predicted_time_at_finish; ?></td>
                                             <td class="tt-col-ride-predicted-position"><?php if (!empty($this->_eventListView->entry->predicted_position))
@@ -168,7 +173,7 @@ defined('_JEXEC') or die('Restricted access');
                                             {
                                                 echo $this->_eventListView->entry->predicted_distance;
                                             } else {
-                                                if (!empty($this->_eventListView->entry->predicted_time))
+                                                if (!empty($this->_eventListView->entry->predicted_time) and !($this->_eventListView->entry->predicted_time = '00:00:00'))
                                                 {
                                                     echo ltrim(ltrim(date('G:i:s', strtotime($this->_eventListView->entry->predicted_time)), '0'), ':');
                                                 } else {
@@ -202,7 +207,7 @@ defined('_JEXEC') or die('Restricted access');
                             <p class="alert alert-warning"><i class="fa fa-exclamation-triangle"></i>Events in November, December or January are not awarded ranking points.</p>
                         <?php
                         } else { ?>
-                            <p class="alert alert-warning"><i class="fa fa-exclamation-triangle"></i>Insufficient riders to award ranking points.</p>
+                            <p class="alert alert-warning"><i class="fa fa-exclamation-triangle"></i>Insufficient ranked riders to award ranking points.</p>
                         <?php
                         }        
                     } ?>
@@ -278,13 +283,18 @@ defined('_JEXEC') or die('Restricted access');
                                             } ?>
                                         </div>
                                     </td>
-                                    <td class="tt-col-club-name hidden-phone"><?php echo $this->_eventListView->ride->club_name; ?></td>
+                                    <td class="tt-col-club-name hidden-phone"><?php if (!empty($this->_eventListView->ride->club_name))
+                                    { 
+                                        echo $this->_eventListView->ride->club_name;
+                                    } else {
+                                        echo $this->_eventListView->ride->rider_club_name;
+                                    } ?></td>
                                     <td class="tt-col-age-gender-category hidden-tablet hidden-phone"><?php echo $this->_eventListView->ride->age_gender_category; ?></td>
                                     <td class="tt-col-ride-result hidden-tablet hidden-phone"><?php if($this->event->duration_event_ind)
                                     {
                                         echo $this->_eventListView->ride->predicted_distance;
                                     } else {
-                                        if (!empty($this->_eventListView->ride->predicted_time))
+                                        if (!empty($this->_eventListView->ride->predicted_time) and !($this->_eventListView->entry->predicted_time = '00:00:00'))
                                         {
                                             echo ltrim(ltrim(date('G:i:s', strtotime($this->_eventListView->ride->predicted_time)), '0'), ':');
                                         } else {
