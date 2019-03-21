@@ -130,8 +130,8 @@ class RankingsModelsRide extends RankingsModelsDefault
                 ' ELSE DATE_FORMAT(' . $this->_db->qn('r.predicted_time') . ', "%k:%i:%s")' . 
                 ' END' . 
                 ' AS predicted_time')
-            ->select($this->_db->qn('rr.club_name') . 'AS rider_club_name')
             ->select($this->_db->qn(array('rr.blacklist_ind', 'rr.gender')))
+            ->select($this->_db->qn('rr.club_name') . 'AS rider_club_name')
             ->select('CONCAT(' . $this->_db->qn('rr.first_name') . ', " ", ' . $this->_db->qn('rr.last_name') . ')' . 
                 ' AS name')
             ->select('CONCAT(' . $this->_db->qn('rr.age_category') . ', " ", ' . $this->_db->qn('rr.gender') . ')' . 
