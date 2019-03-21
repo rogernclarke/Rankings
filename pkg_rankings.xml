@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<extension type="package" version="1.1" method="upgrade">
+<extension type="package" version="1.4" method="upgrade">
 	<name>Rankings Package</name>
 	<packagename>rankings</packagename>
-	<creationDate>February 2019</creationDate>
+	<creationDate>March 2019</creationDate>
 	<author>Spindata</author>
 	<authorEmail>contact@spindata.co.uk</authorEmail>
 	<authorUrl>https://www.spindata.co.uk</authorUrl>
@@ -20,8 +20,8 @@
 	<description>National Time Trial Rankings</description>
 	<files folder="packages">	   
 		<file type="module" id="rankings" client="site">mod_rankings_last_updated.zip</file>
-		<file type="module" id="rankings" client="site">mod_rankings_top_riders-1.2.zip</file>	   
-		<file type="module" id="rankings" client="site">mod_rankings_top_teams-1.2.zip</file>
-		<file type="component" id="rankings">com_rankings-1.3.zip</file>
+		<file type="module" id="rankings" client="site">mod_rankings_top_riders-1.4.zip</file>	   
+		<file type="module" id="rankings" client="site">mod_rankings_top_teams-1.4.zip</file>
+		<file type="component" id="rankings">com_rankings-1.4.zip</file>
 	</files>	 
  </extension>

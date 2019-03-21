@@ -1,33 +1,144 @@
 /**
  * Rankings Component for Joomla 3.x
  * 
- * @version    1.3
+ * @version    1.4.1
  * @package    Rankings
  * @subpackage Component
  * @copyright  Copyright (C) Spindata. All rights reserved.
  * @license    GNU General Public License version 3 or later; see LICENSE.txt
  */
 
+/* General */
+@media only screen and (max-width: 24.938rem) {
+	.hidden-small-phone {
+		display: none !important;
+	}
+}
+
+i.fa-arrow-up {
+	color: #006600;
+}
+i.fa-arrow-down {
+	color: #660000;
+}
+
+/* List Filters */
+.tt-list-form {
+	position: relative;
+}
+.form-horizontal.tt-list-filters {
+	display: inline-block;
+}
+.form-horizontal.tt-list-filters .control-group {
+	margin-bottom: 10px;
+}
+.form-horizontal.tt-list-filters .control-label {
+	float: left;
+	font-size: 1.15rem;
+	font-weight: 500;
+	text-align:right;
+}
+.form-horizontal.tt-list-filters .controls {
+	margin-left: 180px;
+}
+.form-horizontal.tt-list-filters .controls input[type="text"] {
+	width: 220px;
+}
+.form-horizontal.tt-list-filters .controls .btn {
+	background-color: $accent-color-1;
+	border-color: $accent-color-1;
+}
+.form-horizontal.tt-list-filters .controls .btn i {
+	color: #fff;
+}
+.form-horizontal.tt-list-filters .controls .btn:hover {
+    background-color: #fff;
+}
+.form-horizontal.tt-list-filters .controls .btn:hover i {
+	color: $accent-color-1;
+}
+@media only screen and (max-width: 34.938rem) {
+	.form-horizontal.tt-list-filters {
+		width: 100%;
+	}
+	.form-horizontal.tt-list-filters .control-label {
+    	float: none;
+    	text-align: left;
+	}
+	.form-horizontal.tt-list-filters .controls {
+    	margin: 0;
+    }
+    .form-horizontal.tt-list-filters .controls select, .form-horizontal.tt-list-filters .controls input[type="text"] {
+		width: 100%;
+	}
+}
+
 /* Pagination */
 .tt-pagination {
 	text-align: center;
 }
+div.tt-pagination {
+  margin: 20px 0 10px 0;
+}
 
 /* Tables - generic */
-table.tt-table {
-  border: 1px solid #1C6EA4;
-  background-color: #FFF;
-  table-layout: fixed;
-  white-space: nowrap;
-  width: 100%;
-  text-align: left;
-  border-collapse: collapse;
+.tt-table {
+	background-color: #fff;
+	border: 1px solid #1c6ea4;
+	border-collapse: collapse;
+	table-layout: fixed;
+	text-align: left;
+	white-space: nowrap;
+	width: 100%;
+}
+.tt-table thead {
+	background: #141A46;
+	background: -moz-linear-gradient(top, #4f5374 0%, #2b3158 66%, #141A46 100%);
+	background: -webkit-linear-gradient(top, #4f5374 0%, #2b3158 66%, #141A46 100%);
+	background: linear-gradient(to bottom, #4f5374 0%, #2b3158 66%, #141A46 100%);
+	border-bottom: 2px solid #6e748f;
+	border-left: 1px solid #d0e4f5;
+	color: #fff;
+	letter-spacing: 1px;
+}
+.tt-table thead th:first-child {
+	border-left: none;
+}
+.tt-table thead th:last-child {
+	border-right: none;
+}
+.tt-table th {
+	font-size: 1rem;
+	font-weight: 500;
 }
 .tt-table td {
-  border: 1px solid #D0E4F5;
+  border: 1px solid #d0e4f5;
+  color: #494e6b;
   overflow: hidden;
   text-overflow: ellipsis;
-  white-space: nowrap;
+}
+@media only screen and (min-width: 85rem) {
+	td.visible-large, th.visible-large {
+		display: table-cell !important;
+	}
+}
+@media only screen and (min-width: 56rem) {
+	td.visible-desktop, th.visible-desktop {
+		display: table-cell !important;
+	}
+}
+@media only screen and (max-width: 34.938rem) {
+	td.visible-phone, th.visible-phone {
+		display: table-cell !important;
+	}
+}
+@media only screen and (max-width: 55.938rem) {
+	.tt-table {
+		font-size: 0.9rem;
+	}
+	.tt-table td, .tt-table th {
+		padding: 0.25rem;
+	}
 }
 
 /* Rider */
@@ -60,6 +171,14 @@ table.tt-table {
 .tt-rider {
 	position: relative;
 }
+.tt-rider-form {
+	color: #cc0000;
+	display: inline;
+	margin-right: 4px;
+}
+.tt-rider-form img {
+	min-width: 10px;
+}
 .tt-rider-category {
 	display: inline-block;
 	font-size: 2.2rem;
@@ -86,14 +205,17 @@ table.tt-table {
 	margin-bottom: 3rem;
 }
 
-@media only screen and (max-width: 30.938rem) {
+@media only screen and (max-width: 55.938rem) {
+	.tt-rider-form img {
+		margin-top: -4px;
+	}
+}
+@media only screen and (max-width: 34.938rem) {
 	.tt-rider-rank {
 		min-width: 155px;
 		margin: 0;
 	}
 }
-
-
 
 /* Event */
 .tt-event-date {
@@ -129,156 +251,126 @@ table.tt-table {
 	position: absolute;
 }
 
-/* Rankings list */
-.tt-rank {
-	display: inline-block;
-	text-align: right;
-	width: 40px;
-}
-.tt-rank-change {
-	display: inline-block;
-	margin-left: 1rem;
-}
-
-/* Rankings List */
-.tt-col-position {
-	width: 70px;
-}
-.tt-col-selector {
-	width: 70px;
-}
-.tt-col-selector .btn {
-	display: block;
-    margin: 0 auto;
-}
-.tt-col-rank-status {
-	width: 165px;
-}
-.tt-col-rank-status .tt-rider-status {
-	display: inline-block;
-	padding: 0;
-}
+/* Riders list */
 .tt-col-rider-name {
+	width: 100%;
+}
+.tt-col-club-name {
 	width: 100%;
 }
 .tt-col-age-gender-category {
 	width: 140px;
 }
-.tt-col-club-name {
-	width: 100%;
+@media only screen and (max-width: 55.938rem) {
+	.tt-col-age-gender-category {
+		width: 140px;
+	}
 }
-.tt-col-score {
-	text-align: center;
-	width: 89px;
+@media only screen and (max-width: 34.938rem) {
+	.tt-col-age-gender-category {
+		width: 120px;
+	}
 }
-td.tt-col-score {
-	padding: 0 19px;
-	text-align: right;
-}
+
+/* Rider rides list */
 .tt-col-event-date {
-	width: 100px;
+	text-align: center;
+	width: 80px;
 }
 .tt-col-event-name {
 	width: 100%;
 }
-.tt-col-event-distance {
-	width: 105px;
+.tt-event-name-container {
+	display: flex;
+	justify-content: space-between;
 }
-td.tt-col-event-distance {
-	padding: 0 12px;
-	text-align: right;
+.tt-event-name-container .tt-event-name {
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;	
 }
-.tt-col-ranking-points {
+.tt-event-name-container .tt-rider-category {
+	display: inline-flex;
+	min-width: 2.9rem;
+	padding: 0.125rem 0.125rem 0 0.25rem;
+	vertical-align: top;
+}
+.tt-col-ride-distance {
 	text-align: center;
-	width: 90px;
-}
-td.tt-col-ranking-points {
-	text-align: right;
-}
-.tt-col-event-course {
 	width: 100px;
 }
-.tt-col-rider-bib {
+td.tt-col-ride-distance {
 	text-align: right;
-	width: 48px;
 }
-.tt-col-event-position, .tt-col-event-gender-position {
+.tt-col-ride-position {
 	text-align: center;
-	width: 110px;
-}
-td.tt-col-event-position {
-	text-align: right;
-}
-.tt-col-event-gender-position {
-	display: none;
-}
-.tt-event-position, .tt-event-position-variance {
-	display: inline-block;
-}
-.tt-event-position-variance {
-	text-align: left;
-	width: 40px;
-}
-#tt-rider-ride-list .tt-col-event-position {
-	width: 95px;
-}
-#tt-rider-ride-list td.tt-col-event-position, #tt-rider-ride-list td.tt-col-event-gender-position {
-	padding: 0 24px 0 0;
-}
-.tt-col-ride-predicted-position {
-	text-align: right;
-	width: 110px;
-}
-td.tt-col-ride-predicted-position {
-	padding: 0 2rem;
-}
-.tt-col-ride-predicted-result {
-	text-align: center;
-	width: 110px;
-}
-.tt-col-predicted-time-at-finish {
-	display: none;
 	width: 90px;
 }
-th.tt-col-predicted-time-at-finish, th.tt-col-ride-predicted-position, th.tt-col-ride-predicted-result {
-	text-align: center;
-	white-space: normal;
+td.tt-col-ride-position {
+	text-align: right;
 }
 .tt-col-ride-result {
 	text-align: center;
-	width: 95px;
+	width: 85px;
 }
 td.tt-col-ride-result {
-	padding: 0 10px;
 	text-align: right;
 }
-
-@media only screen and (max-width: 30.938rem) {
-	.tt-col-ride-predicted {
-		text-align: center;
-		width: 140px;
+.tt-col-rider-ride-points {
+	text-align: center;
+	width: 85px;
+}
+td.tt-col-rider-ride-points {
+	text-align: right;
+}
+@media only screen and (max-width: 55.938rem) {
+	.tt-col-event-date {
+		width: 60px;
 	}
-	.tt-table th.tt-col-ride-predicted {
-		padding-bottom: 0;
+	.tt-col-ride-distance {
+		width: 45px;
 	}
-	.tt-col-ride-predicted-position {
-		width: 40px;
+	.tt-col-ride-position {
+		width: 55px;
 	}
-	.tt-table th.tt-col-ride-predicted-position {
-		padding-top: 0;
+	.tt-col-ride-result {
+		width: 65px;
 	}
-	.tt-col-ride-predicted-result {
-		width: 80px;
-	}
-	.tt-table th.tt-col-ride-predicted-result {
-		padding-top: 0;
+	.tt-col-rider-ride-points {
+		width: 70px;
 	}
 }
 
+/* Events List */
+.tt-col-event-course {
+	width: 100px;
+}
+.tt-col-event-distance {
+	text-align: center;
+	width: 100px;
+}
+td.tt-col-event-distance {
+	text-align: right;
+}
+@media only screen and (max-width: 55.938rem) {
+	.tt-col-event-course {
+		width: 80px;
+	}
+}
+@media only screen and (max-width: 34.938rem) {
+	.tt-col-event-distance {
+		width: 45px;
+	}
+}
+
+/* Event Rides List */
+.tt-col-rider-bib {
+	text-align: right;
+	width: 45px;
+}
 .tt-rider-name-container {
 	display: flex;
 }
-
 .tt-rider-name-container .tt-rider-name {
 	display: block;
 	overflow: hidden;
@@ -291,88 +383,135 @@ td.tt-col-ride-result {
 	padding: 0.125rem 0.125rem 0 0.25rem;
 	vertical-align: top;
 }
-
-.tt-event-name-container {
-	display: flex;
-	justify-content: space-between;
+.tt-col-ride-predicted-position {
+	text-align: right;
+	width: 95px;
 }
-.tt-event-name-container .tt-event-name {
+.tt-col-predicted-time-at-finish {
+	display: none;
+	width: 90px;
+}
+th.tt-col-predicted-time-at-finish, th.tt-col-ride-predicted-position, th.tt-col-ride-predicted-result {
+	text-align: center;
+	white-space: normal;
+}
+.tt-col-event-position, .tt-col-event-gender-position {
+	text-align: center;
+	width: 110px;
+}
+.tt-col-event-gender-position {
+	display: none;
+}
+td.tt-col-event-position, td.tt-col-event-gender-position {
+	text-align: right;
+}
+#tt-event-results-body .tt-event-position, #tt-event-results-body .tt-event-position-variance {
+	display: inline-block;
+}
+#tt-event-results-body .tt-col-event-position .tt-event-position-variance {
+	text-align: left;
+	width: 40px;
+}
+#tt-event-results-body .tt-col-event-gender-position .tt-event-position-variance {
+	text-align: left;
+	width: 20px;
+}
+.tt-col-ride-predicted {
+	text-align: center;
+	width: 120px;
+}
+.tt-col-ride-predicted-result {
+	text-align: center;
+	width: 95px;
+}
+.tt-col-event-ride-points {
+	text-align: right;
+	width: 70px;
+}
+@media only screen and (max-width: 55.938rem) {
+	.tt-col-rider-bib {
+		width: 45px;
+	}
+	.tt-col-event-position, .tt-col-event-gender-position {
+		width: 95px;
+	}
+	.tt-col-event-ride-points {
+		width: 55px;
+	}
+}
+@media only screen and (max-width: 34.938rem) {
+	th.tt-col-ride-predicted {
+		padding-bottom: 0;
+	}
+	th.tt-col-ride-predicted-position {
+		padding-top: 0;
+	}
+	th.tt-col-ride-predicted-result {
+		padding-top: 0;
+	}
+}
+
+/* Rankings list */
+.tt-col-position {
+	text-align:	right;
+	width: 70px;
+}
+.tt-col-selector {
+	width: 70px;
+}
+.tt-col-selector .btn {
 	display: block;
-	overflow: hidden;
-	text-overflow: ellipsis;
-	white-space: nowrap;	
+    margin: 0 auto;
 }
-.tt-event-name-container .tt-rider-category {
-	display: inline-flex;
-	min-width: 2.9rem;
-	padding: 0.125rem 0.125rem 0 0.25rem;
-	vertical-align: top;
+.tt-col-rank-status {
+	width: 110px;
+}
+.tt-col-rank-status .tt-rank {
+	display: inline-block;
+	text-align: right;
+	width: 40px;
+}
+.tt-col-rank-status .tt-rank-change {
+	display: inline-block;
+	margin-left: 0.25rem;
+}
+.tt-col-rank-status .tt-rider-status {
+	display: inline-block;
+	padding: 0;
+}
+.tt-col-ranking-ride-points {
+	text-align: center;
+	width: 70px;
+}
+td.tt-col-ranking-ride-points {
+	text-align: right;
+}
+.tt-col-score {
+	text-align: center;
+	width: 60px;
+}
+td.tt-col-score {
+	text-align: right;
+}
+@media only screen and (max-width: 34.938rem) {
+	.tt-col-rank-status {
+		width: 100px;
+	}
+	.tt-col-position {
+		width: 52px;
+	}
+	.tt-col-ranking-ride-points {
+		width: 52px;
+	}
+	.tt-col-score {
+		width: 60px;
+	}
 }
 
-@media only screen and (min-width: 48rem) {
-	td.visible-desktop, th.visible-desktop {
-		display: table-cell !important;
-	}
-}
-
-@media only screen and (max-width: 59.938rem) {
-	.tt-col-event-position {
-		width: 110px;
-	}
-}
-
-@media only screen and (max-width: 47.938rem) {
-	td.visible-phone, th.visible-phone {
-		display: table-cell !important;
-	}
-	.tt-table {
-		font-size: 0.9rem;
-	}
-	.tt-table td, .tt-table th {
-		padding: 0.375rem;
-	}
+@media only screen and (max-width: 55.938rem) {
 	.tt-col-selector {
 		width: 66px;
 	}
-	.tt-col-rank-status {
-		width: 95px;
-	}
-	.tt-rank-change {
-		margin-left: 2px;
-	}
-	.tt-col-score {
-		width: 65px;
-	}
-	td.tt-col-score {
-		padding: 0 14px 0 6px;
-		text-align: right;
-	}
-	.tt-col-event-date {
-		width: 85px;
-	}
-	.tt-col-event-distance {
-		width: 60px;
-	}
-	td.tt-col-event-distance {
-		padding: 0 6px;
-	}
-	.tt-col-ranking-points {
-		width: 50px;
-	}
-	th.tt-col-ranking-points {
-		padding: 0 0.2rem;
-	}
-	.tt-col-ride-result {
-		width: 70px;
-	}
-}
-
-i.fa-arrow-up {
-	color: #006600;
-}
-
-i.fa-arrow-down {
-	color: #660000;
 }
 
 /* Top Riders Module */
@@ -380,46 +519,31 @@ i.fa-arrow-down {
 	text-align: center;
 	width: 65px;
 }
+@media only screen and (max-width: 55.938rem) {
+	.tt-modtr-col-rank {
+		width: 50px;
+	}
+}
 .tt-modtr-col-rider-name {
 	width: 40%;
 }
-
-
 
 /* Top Teams Module */
 .tt-modtt-col-rank {
 	text-align: center;
 	width: 65px;
 }
+@media only screen and (max-width: 55.938rem) {
+	.tt-modtt-col-rank {
+		width: 50px;
+	}
+}
 .tt-modtt-col-total-score {
 	text-align: center;
 	width: 80px;
 }
 
-.tt-table td {
-  color: #494E6B;
-}
-table.tt-table thead {
-  background: #141A46;
-  background: -moz-linear-gradient(top, #4f5374 0%, #2b3158 66%, #141A46 100%);
-  background: -webkit-linear-gradient(top, #4f5374 0%, #2b3158 66%, #141A46 100%);
-  background: linear-gradient(to bottom, #4f5374 0%, #2b3158 66%, #141A46 100%);
-  border-bottom: 2px solid #6E748F;
-}
-table.tt-table thead th {
-  font-size: 1.05rem;
-  font-weight: 500;
-  color: #FFFFFF;
-  border-left: 1px solid #d0e4f5;
-  letter-spacing: 1px;
-}
-table.tt-table thead th:first-child {
-  border-left: none;
-}
-table.tt-table thead th:last-child {
-  border-right: none;
-}
-table.tt-table tr.tt-table-year-row {
+.tt-table tr.tt-table-year-row {
   background-color: #d0e4f5;
   border-top: 2px solid #6E748F;
   font-size: 1.25rem;
@@ -428,27 +552,18 @@ table.tt-table tr.tt-table-year-row {
   padding: 0.375rem;
   text-align: center;
 }
-table.tt-table tr.tt-rankings-non-counting-ride td {
+.tt-table tr.tt-rankings-non-counting-ride td {
   background-color: #f5f5f5;
   color: #666666;
 }
-table.tt-table tr.tt-rankings-counting-ride td {
+.tt-table tr.tt-rankings-counting-ride td {
   font-weight: 500;
-}
-table.tt-rankings-rides tr.tt-rankings-non-counting-ride {
-  /*text-decoration: line-through;*/
-}
-table.tt-rider-rides tr.tt-rankings-non-counting-ride td.tt-col-ranking-points {
-  /*text-decoration: line-through;*/
 }
 .tt-table-rider-link a, .tt-table-event-link {
   font-weight: 500;
 }
 div.tt-pages-counter, div.tt-results-counter {
     display: inline-block;
-}
-div.tt-pagination {
-  margin: 20px 0 10px 0;
 }
 
 .tt-rides-section {
@@ -593,7 +708,7 @@ div.tt-pagination {
   width: 3px;
   top: 6px;
 }
-@media only screen and (max-width: 30.938rem) {
+@media only screen and (max-width: 34.938rem) {
 	.tt-tag-large {
 		margin: 0;
 		padding: 0 8px 0 24px;
@@ -838,7 +953,7 @@ div.tt-pagination {
 	display: inline-block;
 }
 
-@media screen and (max-width: 56rem) {
+@media screen and (max-width: 55.938rem) {
 	.tabs nav li p {
 		display: none;
 	}

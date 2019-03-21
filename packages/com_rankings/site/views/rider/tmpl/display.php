@@ -2,7 +2,7 @@
 /**
  * Rankings Component for Joomla 3.x
  * 
- * @version    1.3
+ * @version    1.4
  * @package    Rankings
  * @subpackage Component
  * @copyright  Copyright (C) Spindata. All rights reserved.
@@ -89,30 +89,14 @@ defined('_JEXEC') or die('Restricted access');
         <table class="table-hover tt-table tt-rider-rides">
         <thead>
             <tr>
-                <th class="tt-col-event-date">
-                    <?php echo JText::_('COM_RANKINGS_EVENT_DATE'); ?>
-                </th>
-                <th class="tt-col-event-name">
-                    <?php echo JText::_('COM_RANKINGS_EVENT_NAME'); ?>
-                </th>
-                <th class="tt-col-event-distance visible-desktop">
-                    <?php echo JText::_('COM_RANKINGS_EVENT_DISTANCE'); ?>
-                </th>
-                <th class="tt-col-event-distance visible-phone">
-                    <?php echo JText::_('COM_RANKINGS_EVENT_DISTANCE_SHORT'); ?>
-                </th>
-                <th class="tt-col-event-position hidden-tablet hidden-phone">
-                    <?php echo JText::_('COM_RANKINGS_EVENT_POSITION'); ?>
-                </th>
-                <th class="tt-col-event-position hidden-desktop hidden-phone">
-                    <?php echo JText::_('COM_RANKINGS_EVENT_POSITION_SHORT'); ?>
-                </th>
-                <th class="tt-col-ride-result">
-                    <?php echo JText::_('COM_RANKINGS_RIDE_RESULT'); ?>
-                </th>
-                <th class="tt-col-ranking-points hidden-phone">
-                    <?php echo JText::_('COM_RANKINGS_RIDE_RANKING_POINTS'); ?>
-                </th>
+                <th class="tt-col-event-date"><?php echo JText::_('COM_RANKINGS_EVENT_DATE'); ?></th>
+                <th class="tt-col-event-name"><?php echo JText::_('COM_RANKINGS_EVENT_NAME'); ?></th>
+                <th class="tt-col-ride-distance visible-desktop"><?php echo JText::_('COM_RANKINGS_EVENT_DISTANCE'); ?></th>
+                <th class="tt-col-ride-distance hidden-desktop"><?php echo JText::_('COM_RANKINGS_EVENT_DISTANCE_SHORT'); ?></th>
+                <th class="tt-col-ride-position visible-desktop"><?php echo JText::_('COM_RANKINGS_EVENT_POSITION'); ?></th>
+                <th class="tt-col-ride-position hidden-desktop hidden-phone"><?php echo JText::_('COM_RANKINGS_EVENT_POSITION_SHORT'); ?></th>
+                <th class="tt-col-ride-result hidden-phone"><?php echo JText::_('COM_RANKINGS_RIDE_RESULT'); ?></th>
+                <th class="tt-col-rider-ride-points"><?php echo JText::_('COM_RANKINGS_RIDE_RANKING_POINTS'); ?></th>
             </tr>
         </thead>
         <tbody>
@@ -123,16 +107,12 @@ defined('_JEXEC') or die('Restricted access');
                 If (($i==0) or ($i>0 && date('Y', strtotime($this->rider->rides[$i]->event_date)) != date('Y', strtotime($this->rider->rides[$i-1]->event_date))))
                 { ?>
                     <tr class="tt-table-year-row">
-                        <td colspan="6">
-                            <?php echo date('Y', strtotime($this->_ridesListView->ride->event_date)); ?>
-                        </td>
+                        <td colspan="6"><?php echo date('Y', strtotime($this->_ridesListView->ride->event_date)); ?></td>
                     </tr>
                 <?php 
                 } ?>
                 <tr class="row<?php echo $i % 2; ?> tt-rankings-<?php if ($this->_ridesListView->ride->counting_ride_ind) { echo "counting-ride";} else { echo "non-counting-ride";} ?>">
-                    <td class="tt-col-event-date">
-                        <?php echo date('d M y', strtotime($this->_ridesListView->ride->event_date)); ?>
-                    </td>
+                    <td class="tt-col-event-date"><?php echo date('d M', strtotime($this->_ridesListView->ride->event_date)); ?></td>
                     <td class="tt-table-event-link tt-col-event-name">
                         <div class="tt-event-name-container">
                             <div class="tt-event-name">
@@ -141,49 +121,33 @@ defined('_JEXEC') or die('Restricted access');
                             </div>
                             <?php if ($this->_ridesListView->ride->category_after_day != '')
                             { ?>
-                                <div class="tt-rider-category hidden-phone">
-                                    <div class="tt-tag tt-tag-very-small tt-rider-category-<?php echo substr($this->_ridesListView->ride->category_after_day, 0, 1) ;?>">
-                                        <?php echo $this->_ridesListView->ride->category_after_day; ?>
-                                    </div>
+                                <div class="tt-rider-category hidden-small-phone">
+                                    <div class="tt-tag tt-tag-very-small tt-rider-category-<?php echo substr($this->_ridesListView->ride->category_after_day, 0, 1) ;?>"><?php echo $this->_ridesListView->ride->category_after_day; ?></div>
                                 </div>
                             <?php
                             } ?>
-
                         </div>
                     </td>
-                    <td class="tt-col-event-distance visible-desktop">
-                        <?php if(!empty($this->_ridesListView->ride->ride_distance))
+                    <td class="tt-col-ride-distance visible-desktop"><?php if(!empty($this->_ridesListView->ride->ride_distance))
                         {
-                            echo $this->_ridesListView->ride->distance . ' hours';
+                            echo abs($this->_ridesListView->ride->distance) . ' hours';
                         } else {
                             echo abs($this->_ridesListView->ride->distance) . ' miles';
-                        } ?>
-                    </td>
-                    <td class="tt-col-event-distance visible-phone">
-                        <?php if(!empty($this->_ridesListView->ride->ride_distance))
+                        } ?></td>
+                    <td class="tt-col-ride-distance hidden-desktop"><?php if(!empty($this->_ridesListView->ride->ride_distance))
                         {
-                            echo $this->_ridesListView->ride->distance;
-                        } else {
                             echo abs($this->_ridesListView->ride->distance);
-                        } ?>
-                    </td>
-                    <td class="tt-col-event-position hidden-phone">
-                        <div class="tt-event-position">
-                            <?php echo $this->_ridesListView->ride->position; ?>
-                        </div>
-                    </td>
-                    <td class="tt-col-ride-result">
-                        <?php if(!empty($this->_ridesListView->ride->ride_distance))
+                        } else {
+                            echo floor($this->_ridesListView->ride->distance);
+                        } ?></td>
+                    <td class="tt-col-ride-position hidden-phone"><?php echo $this->_ridesListView->ride->position; ?></td>
+                    <td class="tt-col-ride-result hidden-phone"><?php if(!empty($this->_ridesListView->ride->ride_distance))
                         {
-                            echo $this->_ridesListView->ride->ride_distance;
+                            echo abs($this->_ridesListView->ride->ride_distance);
                         } else {
                             echo ltrim(ltrim(date('G:i:s', strtotime($this->_ridesListView->ride->time)), '0'), ':');
-                        } ?>
-                    </td>
-                    <td class="tt-col-ranking-points hidden-phone">
-                        <?php echo $this->_ridesListView->ride->ranking_points; ?>
-                        <i class="fa fa-<?php echo $this->_ridesListView->ride->improved_ride; ?>"></i>
-                    </td>
+                        } ?></td>
+                    <td class="tt-col-rider-ride-points"><?php echo $this->_ridesListView->ride->ranking_points; ?><i class="fa fa-<?php echo $this->_ridesListView->ride->improved_ride; ?>"></i></td>
                 </tr>
             <?php
             } ?>

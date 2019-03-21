@@ -2,7 +2,7 @@
 /**
  * Rankings Component for Joomla 3.x
  * 
- * @version    1.0
+ * @version    1.4
  * @package    Rankings
  * @subpackage Component
  * @copyright  Copyright (C) Spindata. All rights reserved.
@@ -27,6 +27,11 @@ class RankingsControllersList extends RankingsControllersDefault
         // Set view and layout
         $jinput->set('view', $viewName);
         $jinput->set('layout', 'list');
+
+        if ($jinput->getMethod() === "POST")
+        {
+            $this->setRedirect(JRoute::_('index.php?option=com_rankings&view=' . $viewName),false);
+        }
 
         // Display view
         return parent::execute();
