@@ -2,7 +2,7 @@
 /**
  * Rankings Component for Joomla 3.x
  * 
- * @version    1.3.1
+ * @version    1.4
  * @package    Rankings
  * @subpackage Component
  * @copyright  Copyright (C) Spindata. All rights reserved.
@@ -117,8 +117,19 @@ class RankingsModelsRide extends RankingsModelsDefault
         $query = $this->_db->getQuery(TRUE);
 
         $query
-            ->select($this->_db->qn(array('r.rider_id', 'r.event_id', 'r.club_name', 'r.age_on_day', 'r.position', 'r.time', 'r.ranking_points', 'r.counting_ride_ind', 'r.category_on_day', 'r.predicted_position', 'r.predicted_time', 'r.bib', 'r.start_time', 'r.predicted_distance')))
+            ->select($this->_db->qn(array('r.rider_id', 'r.event_id', 'r.club_name', 'r.age_on_day', 'r.position', 'r.ranking_points', 'r.counting_ride_ind', 'r.category_on_day', 'r.predicted_position', 'r.bib', 'r.start_time', 'r.predicted_distance')))
             ->select($this->_db->qn('r.distance') . 'AS ride_distance')
+            ->select('DATE_FORMAT(' . $this->_db->qn('r.time') . ', "%k:%i:%s") AS complete_time')
+            ->select('CASE DATE_FORMAT(' . $this->_db->qn('r.time') . ', "%k")' . 
+                ' WHEN 0 THEN DATE_FORMAT(' . $this->_db->qn('r.time') . ', "%i:%s")' . 
+                ' ELSE DATE_FORMAT(' . $this->_db->qn('r.time') . ', "%k:%i:%s")' . 
+                ' END' . 
+                ' AS time')
+            ->select('CASE DATE_FORMAT(' . $this->_db->qn('r.predicted_time') . ', "%k")' . 
+                ' WHEN 0 THEN DATE_FORMAT(' . $this->_db->qn('r.predicted_time') . ', "%i:%s")' . 
+                ' ELSE DATE_FORMAT(' . $this->_db->qn('r.predicted_time') . ', "%k:%i:%s")' . 
+                ' END' . 
+                ' AS predicted_time')
             ->select($this->_db->qn(array('rr.blacklist_ind', 'rr.gender')))
             ->select($this->_db->qn('rr.club_name') . ' AS rider_club_name')
             ->select('CONCAT(' . $this->_db->qn('rr.first_name') . ', " ", ' . $this->_db->qn('rr.last_name') . ')' . 
@@ -130,6 +141,7 @@ class RankingsModelsRide extends RankingsModelsDefault
         {
             case "event_entries":
                 $query
+                    ->select($this->_db->qn('r.pre_ride_form') . 'AS form')
                     ->from($this->_db->qn('#__rides', 'r'))
                     ->from($this->_db->qn('#__riders', 'rr'))
                     ->from($this->_db->qn('#__events', 'e'));
@@ -139,6 +151,7 @@ class RankingsModelsRide extends RankingsModelsDefault
 
                 // Position variance is only applicable for results displayed for an event
                 $query
+                    ->select($this->_db->qn('r.post_ride_form') . 'AS form')
                     ->select('CASE SIGN (' . $this->_db->qn('r.position_variance') . ')' . 
                         ' WHEN -1 THEN "arrow-down"' . 
                         ' WHEN 1 THEN "arrow-up"' . 
@@ -160,7 +173,7 @@ class RankingsModelsRide extends RankingsModelsDefault
                 $query = $this->_db->getQuery(TRUE);
 
                 $query
-                    ->select($this->_db->qn(array('rider_id', 'event_id', 'club_name', 'age_on_day', 'position', 'time', 'ranking_points', 'counting_ride_ind', 'category_on_day', 'predicted_position', 'predicted_time', 'bib', 'start_time', 'predicted_distance', 'ride_distance', 'blacklist_ind', 'name', 'age_gender_category', 'position_variance_ind', 'position_variance_value', 'rider_club_name')))
+                    ->select($this->_db->qn(array('rider_id', 'event_id', 'club_name', 'age_on_day', 'position', 'time', 'ranking_points', 'counting_ride_ind', 'category_on_day', 'predicted_position', 'predicted_time', 'bib', 'start_time', 'predicted_distance', 'ride_distance', 'blacklist_ind', 'name', 'age_gender_category', 'position_variance_ind', 'position_variance_value', 'rider_club_name', 'form')))
                     ->select('IF (' . $this->_db->qn('gender') . ' = "Female",' . 
                         ' CASE' . 
                         ' WHEN @prev_value = ' . $this->_db->qn('position') . ' THEN @female_position_count' . 
@@ -189,7 +202,10 @@ class RankingsModelsRide extends RankingsModelsDefault
                         ' ELSE "circle"' . 
                         ' END' . 
                         ' AS improved_ride')
-                
+                    
+                // Post-ride form is applicable for rides displayed for a rider
+                    ->select($this->_db->qn('r.post_ride_form') . 'AS form')
+
                 // Rider category after event is only applicable for rides displayed for a rider
                     ->select($this->_db->qn('rh.category') . ' AS category_after_day')
                     ->from  ($this->_db->qn('#__rider_history', 'rh'));
@@ -253,8 +269,7 @@ class RankingsModelsRide extends RankingsModelsDefault
             ->where($this->_db->qn('r.rider_id') . ' = ' . (int) $this->_rider_id)
             ->where($this->_db->qn('r.rider_id') . ' = ' . $this->_db->qn('rr.rider_id'))
             ->where($this->_db->qn('r.event_id') . ' = ' . $this->_db->qn('e.event_id'))
-            ->where($this->_db->qn('r.position') . ' > 0')
-            ->where($this->_db->qn('r.ranking_points') . ' > 0') 
+            ->where ($this->_db->qn('r.time') . ' > "00:00:00"')
             ->order($this->_db->qn('e.event_date') . ' DESC');
 
         if ($this->_ranking_status === "Complete")
@@ -333,7 +348,7 @@ class RankingsModelsRide extends RankingsModelsDefault
                     ->where($this->_db->qn('r.rider_id') . ' = ' . $this->_db->qn('rr.rider_id'))
                     ->where($this->_db->qn('r.event_id') . ' = ' . $this->_db->qn('e.event_id'))
                     ->where($this->_db->qn('r.rider_id') . ' = ' . $this->_db->qn('rh.rider_id'))
-                    ->where ($this->_db->qn('r.position') . ' > 0')
+                    ->where($this->_db->qn('r.time') . ' > "00:00:00"')
                     ->where($this->_db->qn('rh.effective_date') . ' = (' . $this->_buildSubqueryNextHistory() . ')');
                 break;
             case "rankings":
@@ -391,7 +406,7 @@ class RankingsModelsRide extends RankingsModelsDefault
                 break;
             case "event_results":
                 $query
-                    ->order($this->_db->qn('time') . ' ASC')
+                    ->order($this->_db->qn('complete_time') . ' ASC')
                     ->order($this->_db->qn('ride_distance') . ' DESC');
                 break;
             case "rider":

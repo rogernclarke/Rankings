@@ -2,7 +2,7 @@
 /**
  * Rankings Component for Joomla 3.x
  * 
- * @version    1.0
+ * @version    1.4
  * @package    Rankings
  * @subpackage Component
  * @copyright  Copyright (C) Spindata. All rights reserved.
@@ -43,15 +43,9 @@ defined('_JEXEC') or die('Restricted access');
     <table id="tt-table-riders" class="table-hover tt-table">
 		<thead>
 			<tr>
-    	    	<th class="tt-col-rider-name">
-	                <?php echo JText::_('COM_RANKINGS_RIDER_NAME'); ?>
-    	    	</th>
-    	    	<th class="tt-col-club-name">
-	                <?php echo JText::_('COM_RANKINGS_CLUB_NAME'); ?>
-    	    	</th>
-    	    	<th class="tt-col-age-gender-category hidden-phone">
-	                <?php echo JText::_('COM_RANKINGS_RIDER_CATEGORY'); ?>
-    	    	</th>
+    	    	<th class="tt-col-rider-name"><?php echo JText::_('COM_RANKINGS_RIDER_NAME'); ?></th>
+    	    	<th class="tt-col-club-name"><?php echo JText::_('COM_RANKINGS_CLUB_NAME'); ?></th>
+    	    	<th class="tt-col-age-gender-category hidden-phone"><?php echo JText::_('COM_RANKINGS_RIDER_CATEGORY'); ?></th>
         	</tr>
 		</thead>
 		<tbody>
@@ -60,15 +54,9 @@ defined('_JEXEC') or die('Restricted access');
     			$this->_ridersListView->rider = $this->riders[$i]; ?>
     			<tr class="row<?php echo $i % 2; ?>">
 					<td class="tt-col-rider-name">
-						<a href="<?php echo JRoute::_('index.php?option=com_rankings&task=rider.display&cid='.$this->_ridersListView->rider->rider_id); ?>">
-						<?php echo $this->_ridersListView->rider->name; ?>
-					</td>
-					<td class="tt-col-club-name">
-						<?php echo $this->_ridersListView->rider->club_name; ?>
-					</td>
-					<td class="tt-col-age-gender-category hidden-phone">
-						<?php echo $this->_ridersListView->rider->age_gender_category; ?>
-					</td>
+						<a href="<?php echo JRoute::_('index.php?option=com_rankings&task=rider.display&cid='.$this->_ridersListView->rider->rider_id); ?>"><?php echo $this->_ridersListView->rider->name; ?></td>
+					<td class="tt-col-club-name"><?php echo $this->_ridersListView->rider->club_name; ?></td>
+					<td class="tt-col-age-gender-category hidden-phone"><?php echo $this->_ridersListView->rider->age_gender_category; ?></td>
 				</tr>
     		<?php
     		} ?>
@@ -77,16 +65,10 @@ defined('_JEXEC') or die('Restricted access');
     		<tr>
     			<td colspan="3">
     				<div class="tt-table-counters">
-    					<div class="tt-pages-counter pull-left">
-							<?php echo $this->pagination->getPagesCounter(); ?>
-						</div>
-						<div class="tt-results-counter pull-right">
-							<?php echo $this->pagination->getResultsCounter(); ?>
-						</div>
+    					<div class="tt-pages-counter pull-left"><?php echo $this->pagination->getPagesCounter(); ?></div>
+						<div class="tt-results-counter pull-right"><?php echo $this->pagination->getResultsCounter(); ?></div>
 					</div>
-					<div class="pagination tt-pagination">
-						<?php echo $this->pagination->getPagesLinks(); ?>
-					</div>
+					<div class="pagination tt-pagination"><?php echo $this->pagination->getPagesLinks(); ?></div>
 				</td>
 			</tr>
 		</tfoot>

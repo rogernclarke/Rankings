@@ -2,7 +2,7 @@
 /**
  * Rankings Component for Joomla 3.x
  * 
- * @version    1.3
+ * @version    1.4
  * @package    Rankings
  * @subpackage Component
  * @copyright  Copyright (C) Spindata. All rights reserved.
@@ -45,21 +45,11 @@ defined('_JEXEC') or die('Restricted access');
     <table id="tt-table-events" class="table-hover tt-table">
 		<thead>
 			<tr>
-				<th class="tt-col-event-date">
-	                <?php echo JText::_('COM_RANKINGS_EVENT_DATE'); ?>
-    	    	</th>
-    	    	<th class="tt-col-event-name">
-	                <?php echo JText::_('COM_RANKINGS_EVENT_NAME'); ?>
-    	    	</th>
-    	    	<th class="tt-col-event-course hidden-phone">
-	                <?php echo JText::_('COM_RANKINGS_COURSE'); ?>
-    	    	</th>
-    	    	<th class="tt-col-event-distance hidden-phone">
-	                <?php echo JText::_('COM_RANKINGS_EVENT_DISTANCE'); ?>
-    	    	</th>
-    	    	<th class="tt-col-event-distance visible-phone">
-    	    		<?php echo JText::_('COM_RANKINGS_EVENT_DISTANCE_SHORT'); ?>
-				</th>
+				<th class="tt-col-event-date"><?php echo JText::_('COM_RANKINGS_EVENT_DATE'); ?></th>
+    	    	<th class="tt-col-event-name"><?php echo JText::_('COM_RANKINGS_EVENT_NAME'); ?></th>
+    	    	<th class="tt-col-event-course hidden-phone"><?php echo JText::_('COM_RANKINGS_COURSE'); ?></th>
+    	    	<th class="tt-col-event-distance hidden-phone"><?php echo JText::_('COM_RANKINGS_EVENT_DISTANCE'); ?></th>
+    	    	<th class="tt-col-event-distance visible-phone"><?php echo JText::_('COM_RANKINGS_EVENT_DISTANCE_SHORT'); ?></th>
         	</tr>
 		</thead>
 		<tbody>
@@ -70,17 +60,13 @@ defined('_JEXEC') or die('Restricted access');
     			If (($i==0) or ($i>0 && date('Y', strtotime($this->events[$i]->event_date)) != date('Y', strtotime($this->events[$i-1]->event_date))))
                 { ?>
                     <tr class="tt-table-year-row">
-                        <td colspan="4">
-                            <?php echo date('Y', strtotime($this->_eventsListView->event_date)); ?>
-                        </td>
+                        <td colspan="4"><?php echo date('Y', strtotime($this->_eventsListView->event_date)); ?></td>
                     </tr>
                 <?php 
                 } ?>
 
     			<tr class="row<?php echo $i % 2; ?>">
-    				<td class="tt-col-event-date">
-    					<?php echo date('d M y', strtotime($this->_eventsListView->event_date)); ?>
-    				</td>
+    				<td class="tt-col-event-date"><?php echo date('d M', strtotime($this->_eventsListView->event_date)); ?></td>
     				<td class="tt-table-event-link tt-col-event-name">
     					<div class="tt-event-name-container">
                             <div class="tt-event-name">
@@ -89,34 +75,26 @@ defined('_JEXEC') or die('Restricted access');
 							<?php if ($this->_eventsListView->results_ind)
                             { ?>
                                 <div class="hidden-phone">
-                                    <div class="tt-tag tt-tag-very-small tt-results"><?php echo "Results"; ?>
-                                    </div>
+                                    <div class="tt-tag tt-tag-very-small tt-results"><?php echo "Results"; ?></div>
                                 </div>
                             <?php
                             } else if ($this->_eventsListView->startsheet_ind)
                             { ?>
                                 <div class="hidden-phone">
-                                    <div class="tt-tag tt-tag-very-small tt-startsheet"><?php echo "Startsheet"; ?>
-                                    </div>
+                                    <div class="tt-tag tt-tag-very-small tt-startsheet"><?php echo "Startsheet"; ?></div>
                                 </div>
                             <?php
                             } ?>
 						</div>
     				</td>
-    				<td class="tt-col-event-course hidden-phone">
-						<?php echo $this->_eventsListView->course_code; ?>
-					</td>
-					<td class="tt-col-event-distance hidden-phone">
-						<?php if($this->_eventsListView->duration_event_ind)
+    				<td class="tt-col-event-course hidden-phone"><?php echo $this->_eventsListView->course_code; ?></td>
+					<td class="tt-col-event-distance hidden-phone"><?php if($this->_eventsListView->duration_event_ind)
                         {
                             echo $this->_eventsListView->distance . ' hours';
                         } else {
                             echo round($this->_eventsListView->distance, 1) . ' miles';
-                        } ?>
-					</td>
-					<td class="tt-col-event-distance visible-phone">
-						<?php echo round($this->_eventsListView->distance, 1); ?>
-					</td>
+                        } ?></td>
+					<td class="tt-col-event-distance visible-phone"><?php echo round($this->_eventsListView->distance, 1); ?></td>
 				</tr>
     		<?php
     		} ?>
@@ -125,16 +103,10 @@ defined('_JEXEC') or die('Restricted access');
     		<tr>
     			<td colspan="4">
     				<div class="tt-table-counters">
-    					<div class="tt-pages-counter pull-left">
-							<?php echo $this->pagination->getPagesCounter(); ?>
-						</div>
-						<div class="tt-results-counter pull-right">
-							<?php echo $this->pagination->getResultsCounter(); ?>
-						</div>
+    					<div class="tt-pages-counter pull-left"><?php echo $this->pagination->getPagesCounter(); ?></div>
+						<div class="tt-results-counter pull-right"><?php echo $this->pagination->getResultsCounter(); ?></div>
 					</div>
-    				<div class="pagination tt-pagination">
-						<?php echo $this->pagination->getPagesLinks(); ?>
-					</div>
+    				<div class="pagination tt-pagination"><?php echo $this->pagination->getPagesLinks(); ?></div>
 				</td>
 			</tr>
     	</tfoot>
