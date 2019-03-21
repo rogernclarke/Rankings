@@ -160,7 +160,7 @@ defined('_JEXEC') or die('Restricted access');
 											<td class="tt-col-event-name tt-table-event-link"><a href="<?php echo JRoute::_('index.php?Itemid=454&option=com_rankings&task=event.display&cid=' . $this->_ridesListView->ride->event_id); ?>" rel="nofollow"><?php echo $this->_ridesListView->ride->event_name; ?></a></td>
 											<td class="tt-col-event-distance hidden-phone"><?php if(!empty($this->_ridesListView->ride->ride_distance))
     						                    {
-                            						echo $this->_ridesListView->ride->distance . ' hours';
+                            						echo abs($this->_ridesListView->ride->distance) . ' hours';
                         						} else {
                             						echo abs($this->_ridesListView->ride->distance) . ' miles';
                         						} ?></td>

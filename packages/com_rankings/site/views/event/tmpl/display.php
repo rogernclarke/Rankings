@@ -26,7 +26,7 @@ defined('_JEXEC') or die('Restricted access');
         <div class="tt-distance">
             <p><?php if($this->event->duration_event_ind)
             {
-                echo $this->event->distance . ' hours';
+                echo abs($this->event->distance) . ' hours';
             } else {
                 echo (float) $this->event->distance . ' miles';
             } ?></p>
@@ -180,7 +180,7 @@ defined('_JEXEC') or die('Restricted access');
                                             {
                                                 echo $this->_eventListView->entry->predicted_distance;
                                             } else {
-                                                if (!empty($this->_eventListView->entry->predicted_time))
+                                                if (!empty($this->_eventListView->entry->predicted_time) and !($this->_eventListView->entry->predicted_time = '00:00:00'))
                                                 {
                                                     echo $this->_eventListView->entry->predicted_time;
                                                 } else {
@@ -214,7 +214,7 @@ defined('_JEXEC') or die('Restricted access');
                             <p class="alert alert-warning"><i class="fa fa-exclamation-triangle"></i>Events in November, December or January are not awarded ranking points.</p>
                         <?php
                         } else { ?>
-                            <p class="alert alert-warning"><i class="fa fa-exclamation-triangle"></i>Insufficient riders to award ranking points.</p>
+                            <p class="alert alert-warning"><i class="fa fa-exclamation-triangle"></i>Insufficient ranked riders to award ranking points.</p>
                         <?php
                         }        
                     } ?>
@@ -316,7 +316,7 @@ defined('_JEXEC') or die('Restricted access');
                                     {
                                         echo $this->_eventListView->ride->predicted_distance;
                                     } else {
-                                        if (!empty($this->_eventListView->ride->predicted_time))
+                                        if (!empty($this->_eventListView->ride->predicted_time) and !($this->_eventListView->entry->predicted_time = '00:00:00'))
                                         {
                                             echo $this->_eventListView->ride->predicted_time;
                                         } else {

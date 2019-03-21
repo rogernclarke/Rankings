@@ -131,7 +131,7 @@ class RankingsModelsRide extends RankingsModelsDefault
                 ' END' . 
                 ' AS predicted_time')
             ->select($this->_db->qn(array('rr.blacklist_ind', 'rr.gender')))
-            ->select($this->_db->qn('rr.club_name') . 'AS rider_club_name')
+            ->select($this->_db->qn('rr.club_name') . ' AS rider_club_name')
             ->select('CONCAT(' . $this->_db->qn('rr.first_name') . ', " ", ' . $this->_db->qn('rr.last_name') . ')' . 
                 ' AS name')
             ->select('CONCAT(' . $this->_db->qn('rr.age_category') . ', " ", ' . $this->_db->qn('rr.gender') . ')' . 
@@ -295,7 +295,7 @@ class RankingsModelsRide extends RankingsModelsDefault
             ->where ($this->_db->qn('e.event_id') . ' = ' . (int) $this->_event_id)
             ->where ($this->_db->qn('r.rider_id') . ' = ' . $this->_db->qn('rr.rider_id'))
             ->where ($this->_db->qn('r.event_id') . ' = ' . $this->_db->qn('e.event_id'))
-            ->where ($this->_db->qn('time') . ' > "00:00:00"')
+            ->where ($this->_db->qn('position') . ' > 0')
             ->order ($this->_db->qn('time') . ' ASC')
             ->order ($this->_db->qn('ride_distance') . ' DESC');
 
