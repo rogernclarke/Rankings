@@ -130,6 +130,7 @@ class RankingsModelsRide extends RankingsModelsDefault
                 ' ELSE DATE_FORMAT(' . $this->_db->qn('r.predicted_time') . ', "%k:%i:%s")' . 
                 ' END' . 
                 ' AS predicted_time')
+            ->select($this->_db->qn('rr.club_name') . 'AS rider_club_name')
             ->select($this->_db->qn(array('rr.blacklist_ind', 'rr.gender')))
             ->select('CONCAT(' . $this->_db->qn('rr.first_name') . ', " ", ' . $this->_db->qn('rr.last_name') . ')' . 
                 ' AS name')
@@ -172,7 +173,7 @@ class RankingsModelsRide extends RankingsModelsDefault
                 $query = $this->_db->getQuery(TRUE);
 
                 $query
-                    ->select($this->_db->qn(array('rider_id', 'event_id', 'club_name', 'age_on_day', 'position', 'time', 'ranking_points', 'counting_ride_ind', 'category_on_day', 'predicted_position', 'predicted_time', 'bib', 'start_time', 'predicted_distance', 'ride_distance', 'blacklist_ind', 'name', 'age_gender_category', 'position_variance_ind', 'position_variance_value', 'form')))
+                    ->select($this->_db->qn(array('rider_id', 'event_id', 'club_name', 'age_on_day', 'position', 'time', 'ranking_points', 'counting_ride_ind', 'category_on_day', 'predicted_position', 'predicted_time', 'bib', 'start_time', 'predicted_distance', 'ride_distance', 'blacklist_ind', 'name', 'age_gender_category', 'position_variance_ind', 'position_variance_value', 'rider_club_name', 'form')))
                     ->select('IF (' . $this->_db->qn('gender') . ' = "Female",' . 
                         ' CASE' . 
                         ' WHEN @prev_value = ' . $this->_db->qn('position') . ' THEN @female_position_count' . 
