@@ -2,7 +2,7 @@
 /**
  * Rankings Component for Joomla 3.x
  * 
- * @version    1.4.1
+ * @version    1.4.2
  * @package    Rankings
  * @subpackage Component
  * @copyright  Copyright (C) Spindata. All rights reserved.
@@ -268,7 +268,7 @@ class RankingsModelsRide extends RankingsModelsDefault
             ->where($this->_db->qn('r.rider_id') . ' = ' . (int) $this->_rider_id)
             ->where($this->_db->qn('r.rider_id') . ' = ' . $this->_db->qn('rr.rider_id'))
             ->where($this->_db->qn('r.event_id') . ' = ' . $this->_db->qn('e.event_id'))
-            ->where ($this->_db->qn('r.time') . ' > "00:00:00"')
+            ->where($this->_db->qn('r.ranking_points') . ' > 0')
             ->order($this->_db->qn('e.event_date') . ' DESC');
 
         if ($this->_ranking_status === "Complete")
