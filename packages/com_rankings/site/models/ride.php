@@ -2,7 +2,7 @@
 /**
  * Rankings Component for Joomla 3.x
  * 
- * @version    1.4
+ * @version    1.4.1
  * @package    Rankings
  * @subpackage Component
  * @copyright  Copyright (C) Spindata. All rights reserved.
@@ -80,10 +80,8 @@ class RankingsModelsRide extends RankingsModelsDefault
                     {                     
                         $ride->predicted_time_at_finish = gmdate("H:i:s", (date("H", strtotime($ride->start_time)) * 3600) + date("i", strtotime($ride->start_time)) * 60 + date("s", strtotime($ride->start_time)) + $this->_event_duration * 3600);
                     } else {
-                        if (!empty($ride->predicted_time) && $ride->bib > 0)
+                        if (empty($ride->predicted_time) or $ride->bib == 0)
                         {
-                            $ride->predicted_time_at_finish = gmdate("H:i:s", (date("H", strtotime($ride->start_time)) * 3600) + date("i", strtotime($ride->start_time)) * 60 + date("s", strtotime($ride->start_time)) + (date("H", strtotime($ride->predicted_time)) * 3600) + date("i", strtotime($ride->predicted_time)) * 60 + date("s", strtotime($ride->predicted_time)));
-                        } else {
                             $ride->predicted_time_at_finish = "-";
                         }
                     }
@@ -130,6 +128,7 @@ class RankingsModelsRide extends RankingsModelsDefault
                 ' ELSE DATE_FORMAT(' . $this->_db->qn('r.predicted_time') . ', "%k:%i:%s")' . 
                 ' END' . 
                 ' AS predicted_time')
+            ->select('DATE_FORMAT(ADDTIME(' . $this->_db->qn('r.start_time') . ', ' . $this->_db->qn('r.predicted_time') . '), "%H:%i:%s") AS predicted_time_at_finish')
             ->select($this->_db->qn(array('rr.blacklist_ind', 'rr.gender')))
             ->select($this->_db->qn('rr.club_name') . ' AS rider_club_name')
             ->select('CONCAT(' . $this->_db->qn('rr.first_name') . ', " ", ' . $this->_db->qn('rr.last_name') . ')' . 
