@@ -2,7 +2,7 @@
 /**
  * Rankings Component for Joomla 3.x
  * 
- * @version    1.4
+ * @version    1.4.1
  * @package    Rankings
  * @subpackage Component
  * @copyright  Copyright (C) Spindata. All rights reserved.
@@ -180,7 +180,7 @@ defined('_JEXEC') or die('Restricted access');
                                             {
                                                 echo $this->_eventListView->entry->predicted_distance;
                                             } else {
-                                                if (!empty($this->_eventListView->entry->predicted_time) and !($this->_eventListView->entry->predicted_time = '00:00:00'))
+                                                if (!empty($this->_eventListView->entry->predicted_time))
                                                 {
                                                     echo $this->_eventListView->entry->predicted_time;
                                                 } else {

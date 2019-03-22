@@ -2,7 +2,7 @@
 /**
  * Rankings Component for Joomla 3.x
  * 
- * @version    1.4
+ * @version    1.4.1
  * @package    Rankings
  * @subpackage Component
  * @copyright  Copyright (C) Spindata. All rights reserved.
@@ -145,7 +145,7 @@ defined('_JEXEC') or die('Restricted access');
                         {
                             echo abs($this->_ridesListView->ride->ride_distance);
                         } else {
-                            echo ltrim(ltrim(date('G:i:s', strtotime($this->_ridesListView->ride->time)), '0'), ':');
+                            echo $this->_ridesListView->ride->time;
                         } ?></td>
                     <td class="tt-col-rider-ride-points"><?php echo $this->_ridesListView->ride->ranking_points; ?><i class="fa fa-<?php echo $this->_ridesListView->ride->improved_ride; ?>"></i></td>
                 </tr>
