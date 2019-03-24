@@ -1,7 +1,7 @@
 /**
  * Rankings Component for Joomla 3.x
  * 
- * @version    1.4.1
+ * @version    1.4.3
  * @package    Rankings
  * @subpackage Component
  * @copyright  Copyright (C) Spindata. All rights reserved.
@@ -277,6 +277,9 @@ div.tt-pagination {
 	text-align: center;
 	width: 80px;
 }
+td.tt-col-event-date {
+	font-family: "Helvetica";
+}
 .tt-col-event-name {
 	width: 100%;
 }
@@ -300,6 +303,7 @@ div.tt-pagination {
 	width: 100px;
 }
 td.tt-col-ride-distance {
+	font-family: "Helvetica";
 	text-align: right;
 }
 .tt-col-ride-position {
@@ -307,6 +311,7 @@ td.tt-col-ride-distance {
 	width: 90px;
 }
 td.tt-col-ride-position {
+	font-family: "Helvetica";
 	text-align: right;
 }
 .tt-col-ride-result {
@@ -314,6 +319,7 @@ td.tt-col-ride-position {
 	width: 85px;
 }
 td.tt-col-ride-result {
+	font-family: "Helvetica";
 	text-align: right;
 }
 .tt-col-rider-ride-points {
@@ -321,6 +327,7 @@ td.tt-col-ride-result {
 	width: 85px;
 }
 td.tt-col-rider-ride-points {
+	font-family: "Helvetica";
 	text-align: right;
 }
 @media only screen and (max-width: 55.938rem) {
@@ -350,6 +357,7 @@ td.tt-col-rider-ride-points {
 	width: 100px;
 }
 td.tt-col-event-distance {
+	font-family: "Helvetica";
 	text-align: right;
 }
 @media only screen and (max-width: 55.938rem) {
@@ -367,6 +375,9 @@ td.tt-col-event-distance {
 .tt-col-rider-bib {
 	text-align: right;
 	width: 45px;
+}
+td.tt-col-rider-bib {
+	font-family: "Helvetica";
 }
 .tt-rider-name-container {
 	display: flex;
@@ -387,9 +398,15 @@ td.tt-col-event-distance {
 	text-align: right;
 	width: 95px;
 }
+td.tt-col-ride-predicted-position {
+	font-family: "Helvetica";
+}
 .tt-col-predicted-time-at-finish {
 	display: none;
 	width: 90px;
+}
+td.tt-col-predicted-time-at-finish {
+	font-family: "Helvetica";
 }
 th.tt-col-predicted-time-at-finish, th.tt-col-ride-predicted-position, th.tt-col-ride-predicted-result {
 	text-align: center;
@@ -403,6 +420,7 @@ th.tt-col-predicted-time-at-finish, th.tt-col-ride-predicted-position, th.tt-col
 	display: none;
 }
 td.tt-col-event-position, td.tt-col-event-gender-position {
+	font-family: "Helvetica";
 	text-align: right;
 }
 #tt-event-results-body .tt-event-position, #tt-event-results-body .tt-event-position-variance {
@@ -424,9 +442,15 @@ td.tt-col-event-position, td.tt-col-event-gender-position {
 	text-align: center;
 	width: 95px;
 }
+td.tt-col-ride-predicted-result {
+	font-family: "Helvetica";
+}
 .tt-col-event-ride-points {
 	text-align: right;
 	width: 70px;
+}
+td.tt-col-event-ride-points {
+	font-family: "Helvetica";
 }
 @media only screen and (max-width: 55.938rem) {
 	.tt-col-rider-bib {
@@ -456,6 +480,9 @@ td.tt-col-event-position, td.tt-col-event-gender-position {
 	text-align:	right;
 	width: 70px;
 }
+td.tt-col-position {
+	font-family: "Helvetica";
+}
 .tt-col-selector {
 	width: 70px;
 }
@@ -479,11 +506,15 @@ td.tt-col-event-position, td.tt-col-event-gender-position {
 	display: inline-block;
 	padding: 0;
 }
+td.tt-col-rank-status .tt-rank {
+	font-family: "Helvetica";
+}
 .tt-col-ranking-ride-points {
 	text-align: center;
 	width: 70px;
 }
 td.tt-col-ranking-ride-points {
+	font-family: "Helvetica";
 	text-align: right;
 }
 .tt-col-score {
@@ -491,6 +522,7 @@ td.tt-col-ranking-ride-points {
 	width: 60px;
 }
 td.tt-col-score {
+	font-family: "Helvetica";
 	text-align: right;
 }
 @media only screen and (max-width: 34.938rem) {
@@ -557,10 +589,10 @@ td.tt-col-score {
   color: #666666;
 }
 .tt-table tr.tt-rankings-counting-ride td {
-  font-weight: 500;
+  font-weight: 600;
 }
 .tt-table-rider-link a, .tt-table-event-link {
-  font-weight: 500;
+  font-weight: 500 !important;
 }
 div.tt-pages-counter, div.tt-results-counter {
     display: inline-block;
