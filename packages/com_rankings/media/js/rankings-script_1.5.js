@@ -1,7 +1,7 @@
 /**
  * Rankings Component for Joomla 3.x
  * 
- * @version    1.3
+ * @version    1.5
  * @package    Rankings
  * @subpackage Component
  * @copyright  Copyright (C) Spindata. All rights reserved.
@@ -63,11 +63,11 @@ function sort_predicted_finish()
 	tbody.find('tr').sort(function(a, b) 
 	{
 		var stringA = $('td.tt-col-predicted-time-at-finish', a).text();
-		if (stringA == "-") {
+		if (stringA == "-" | !stringA) {
 			stringA = "23:59:59";
 		}
 		var stringB = $('td.tt-col-predicted-time-at-finish', b).text();
-		if (stringB == "-") {
+		if (stringB == "-" | !stringB) {
 			stringB = "23:59:59";
 		}
 		var dateA = new Date('2019-01-01T' + stringA + 'Z');
@@ -108,10 +108,20 @@ function filter_results_overall()
 
 	$('#tt-event-results-body tr').css("display", "table-row");
 
+	tbody.find('tr').sort(function(a, b) 
+	{
+		return strip_ordinal($('td.tt-col-event-position .tt-event-position', a).text())-strip_ordinal($('td.tt-col-event-position .tt-event-position', b).text());
+	}).appendTo(tbody);
+
 	$('.tabs-style-topline.tt-tabs-results li').removeClass();
 	$('#tt-overall-filter').addClass("tab-current");
-	$('.tt-col-event-position').show();
 	$('.tt-col-event-gender-position').hide();
+	$('.tt-col-event-vets-position').hide();
+	$('.tt-col-ride-vets-standard-time').hide();
+	$('.tt-col-ride-vets-standard-result').hide();
+	$('.tt-col-event-position').show();
+	$('.tt-col-ride-predicted-result').show();
+	$('.tt-col-event-ride-points').show();
 }
 function filter_results_male()
 {
@@ -123,10 +133,20 @@ function filter_results_male()
 		$(this).toggle($(this).text().indexOf("Male") > -1)
 	});
 
+	tbody.find('tr').sort(function(a, b) 
+	{
+		return strip_ordinal($('td.tt-col-event-position .tt-event-position', a).text())-strip_ordinal($('td.tt-col-event-position .tt-event-position', b).text());
+	}).appendTo(tbody);
+
 	$('.tabs-style-topline.tt-tabs-results li').removeClass();
 	$('#tt-male-filter').addClass("tab-current");
 	$('.tt-col-event-position').hide();
+	$('.tt-col-event-vets-position').hide();
+	$('.tt-col-ride-vets-standard-time').hide();
+	$('.tt-col-ride-vets-standard-result').hide();
 	$('.tt-col-event-gender-position').show();
+	$('.tt-col-ride-predicted-result').show();
+	$('.tt-col-event-ride-points').show();
 }
 function filter_results_female()
 {
@@ -138,8 +158,51 @@ function filter_results_female()
 		$(this).toggle($(this).text().indexOf("Female") > -1)
 	});
 
+	tbody.find('tr').sort(function(a, b) 
+	{
+		return strip_ordinal($('td.tt-col-event-position .tt-event-position', a).text())-strip_ordinal($('td.tt-col-event-position .tt-event-position', b).text());
+	}).appendTo(tbody);
+
 	$('.tabs-style-topline.tt-tabs-results li').removeClass();
 	$('#tt-female-filter').addClass("tab-current");
 	$('.tt-col-event-position').hide();
+	$('.tt-col-event-vets-position').hide();
+	$('.tt-col-ride-vets-standard-time').hide();
+	$('.tt-col-ride-vets-standard-result').hide();
 	$('.tt-col-event-gender-position').show();
+	$('.tt-col-ride-predicted-result').show();
+	$('.tt-col-event-ride-points').show();
+}
+function filter_results_veterans()
+{
+	var table = $('#tt-event-results');
+	var tbody = $('#tt-event-results-body');
+
+	tbody.find('tr').filter(function() 
+	{
+		$(this).toggle($(this).text().indexOf("Veteran") > -1)
+	});
+	tbody.find('tr').sort(function(a, b) 
+	{
+		var stringA = strip_ordinal($('td.tt-col-event-vets-position .tt-event-position', a).text());
+		if (!stringA) {
+			stringA = "999";
+		}
+		var stringB = strip_ordinal($('td.tt-col-event-vets-position .tt-event-position', b).text());
+		if (!stringB) {
+			stringB = "999";
+		}
+		return stringA - stringB;
+	}).appendTo(tbody);
+	
+
+	$('.tabs-style-topline.tt-tabs-results li').removeClass();
+	$('#tt-veterans-filter').addClass("tab-current");
+	$('.tt-col-event-position').hide();
+	$('.tt-col-event-gender-position').hide();
+	$('.tt-col-ride-predicted-result').hide();
+	$('.tt-col-event-ride-points').hide();
+	$('.tt-col-event-vets-position').show();
+	$('.tt-col-ride-vets-standard-time').show();
+	$('.tt-col-ride-vets-standard-result').show();
 }

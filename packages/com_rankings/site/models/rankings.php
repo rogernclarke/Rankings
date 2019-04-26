@@ -2,7 +2,7 @@
 /**
  * Rankings Component for Joomla 3.x
  * 
- * @version    1.2
+ * @version    1.5
  * @package    Rankings
  * @subpackage Component
  * @copyright  Copyright (C) Spindata. All rights reserved.
@@ -130,7 +130,8 @@ class RankingsModelsRankings extends RankingsModelsDefault
                     ' WHEN @prev_value := ' . $this->_db->qn('overall_rank') . ' THEN @position_count := @sequence' . 
                     ' END' .
                     ' AS position, @sequence:=@sequence + 1')
-                ->from('(' . $this->_buildSubqueryRiders() . ') AS T1, (' . $this->_buildSubqueryPosition() . ') AS T2');
+                ->from('(' . $this->_buildSubqueryRiders() . ') AS T1')
+                ->from('(' . $this->_buildSubqueryPosition() . ') AS T2');
         } ELSE {
             $query
                 ->from($this->_db->qn('#__rider_current'));
