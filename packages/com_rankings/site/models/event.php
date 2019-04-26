@@ -2,7 +2,7 @@
 /**
  * Rankings Component for Joomla 3.x
  * 
- * @version    1.3
+ * @version    1.5
  * @package    Rankings
  * @subpackage Component
  * @copyright  Copyright (C) Spindata. All rights reserved.
@@ -29,10 +29,13 @@ defined('_JEXEC') or die('Restricted access');
 class RankingsModelsEvent extends RankingsModelsDefault
 {
 
-    public $startsheet_ind = FALSE; // Indicates startsheet exists
-    public $entries_count = 0;      // Count of entries
-    public $results_count = 0;      // Count of rides (results)
-    public $results_ind = FALSE;    // Indicates results exist
+    public $entries_count = 0;          // Count of entries
+    public $female_results_ind = FALSE; // Indicates female results exist
+    public $male_results_ind = FALSE;   // Indicates male results exist
+    public $results_count = 0;          // Count of rides (results)
+    public $results_ind = FALSE;        // Indicates results exist
+    public $startsheet_ind = FALSE;     // Indicates startsheet exists
+    public $vets_results_ind = FALSE;   // Indicates vets results exist
 
     /**
      * Constructor
@@ -90,6 +93,26 @@ class RankingsModelsEvent extends RankingsModelsDefault
             $event->results_ind = FALSE;
         } else {
             $event->results_ind = TRUE;
+        }
+
+        foreach ($event->rides as $ride)
+        {
+            if ($ride->gender === "Female")
+            {
+                $event->female_results_ind = TRUE;
+            } else {
+                $event->male_results_ind = TRUE;
+            }
+
+            if (isset($ride->vets_standard_result))
+            {
+                $event->vets_results_ind = TRUE;
+            }
+
+            if ($event->female_results_ind && $event->male_results_ind && $event->vets_results_ind)
+            {
+                break;
+            }
         }
 
         // Update hits for the event

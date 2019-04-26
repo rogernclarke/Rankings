@@ -2,7 +2,7 @@
 /**
  * Rankings Component for Joomla 3.x
  * 
- * @version    1.4
+ * @version    1.5
  * @package    Rankings
  * @subpackage Component
  * @copyright  Copyright (C) Spindata. All rights reserved.
@@ -90,7 +90,7 @@ defined('_JEXEC') or die('Restricted access');
     				<td class="tt-col-event-course hidden-phone"><?php echo $this->_eventsListView->course_code; ?></td>
 					<td class="tt-col-event-distance hidden-phone"><?php if($this->_eventsListView->duration_event_ind)
                         {
-                            echo $this->_eventsListView->distance . ' hours';
+                            echo abs($this->_eventsListView->distance) . ' hours';
                         } else {
                             echo round($this->_eventsListView->distance, 1) . ' miles';
                         } ?></td>

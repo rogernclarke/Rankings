@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<extension type="package" version="1.4.2" method="upgrade">
+<extension type="package" version="1.5" method="upgrade">
 	<name>Rankings Package</name>
 	<packagename>rankings</packagename>
-	<creationDate>March 2019</creationDate>
+	<creationDate>April 2019</creationDate>
 	<author>Spindata</author>
 	<authorEmail>contact@spindata.co.uk</authorEmail>
 	<authorUrl>https://www.spindata.co.uk</authorUrl>
@@ -16,12 +16,12 @@
 
     You should have received a copy of the GNU General Public License
     along with this program. If not, see https://www.gnu.org/licenses.</license>
-	<version>1.4.2</version>
+	<version>1.5</version>
 	<description>National Time Trial Rankings</description>
 	<files folder="packages">	   
 		<file type="module" id="rankings" client="site">mod_rankings_last_updated.zip</file>
 		<file type="module" id="rankings" client="site">mod_rankings_top_riders-1.4.zip</file>	   
 		<file type="module" id="rankings" client="site">mod_rankings_top_teams-1.4.zip</file>
-		<file type="component" id="rankings">com_rankings-1.4.2.zip</file>
+		<file type="component" id="rankings">com_rankings-1.5.zip</file>
 	</files>	 
  </extension>

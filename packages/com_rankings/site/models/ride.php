@@ -2,7 +2,7 @@
 /**
  * Rankings Component for Joomla 3.x
  * 
- * @version    1.4.2
+ * @version    1.5
  * @package    Rankings
  * @subpackage Component
  * @copyright  Copyright (C) Spindata. All rights reserved.
@@ -90,8 +90,39 @@ class RankingsModelsRide extends RankingsModelsDefault
                     if ($ride->bib == 0) {
                         $ride->bib = "Res";
                     }
+
+                    // Set form
+                    switch (true)
+                    {
+                        case $ride->form >= 27:
+                            $ride->form = 2;
+                            break;
+                        case $ride->form >= 17:
+                            $ride->form = 1;
+                            break;
+                        default:
+                            $ride->form = 0;
+                    }
                     break;
                 case "event_results":
+                    // Set the ordinal for vets position
+                    if (isset($ride->vets_position))
+                    {
+                        $ride->vets_position = parent::_ordinal($ride->vets_position);
+                    }
+
+                    // Set form
+                    switch (true)
+                    {
+                        case $ride->form >= 27:
+                            $ride->form = 2;
+                            break;
+                        case $ride->form >= 17:
+                            $ride->form = 1;
+                            break;
+                        default:
+                            $ride->form = 0;
+                    }
                 case "rider":
                     // Set the ordinal for position
                     $ride->position = parent::_ordinal($ride->position);
@@ -116,13 +147,8 @@ class RankingsModelsRide extends RankingsModelsDefault
 
         $query
             ->select($this->_db->qn(array('r.rider_id', 'r.event_id', 'r.club_name', 'r.age_on_day', 'r.position', 'r.ranking_points', 'r.counting_ride_ind', 'r.category_on_day', 'r.predicted_position', 'r.bib', 'r.start_time', 'r.predicted_distance')))
-            ->select($this->_db->qn('r.distance') . 'AS ride_distance')
-            ->select('DATE_FORMAT(' . $this->_db->qn('r.time') . ', "%k:%i:%s") AS complete_time')
-            ->select('CASE DATE_FORMAT(' . $this->_db->qn('r.time') . ', "%k")' . 
-                ' WHEN 0 THEN DATE_FORMAT(' . $this->_db->qn('r.time') . ', "%i:%s")' . 
-                ' ELSE DATE_FORMAT(' . $this->_db->qn('r.time') . ', "%k:%i:%s")' . 
-                ' END' . 
-                ' AS time')
+            ->select($this->_db->qn('r.distance') . ' AS ride_distance')
+            ->select($this->_db->qn('r.time') . ' AS complete_time')
             ->select('CASE DATE_FORMAT(' . $this->_db->qn('r.predicted_time') . ', "%k")' . 
                 ' WHEN 0 THEN DATE_FORMAT(' . $this->_db->qn('r.predicted_time') . ', "%i:%s")' . 
                 ' ELSE DATE_FORMAT(' . $this->_db->qn('r.predicted_time') . ', "%k:%i:%s")' . 
@@ -133,7 +159,7 @@ class RankingsModelsRide extends RankingsModelsDefault
             ->select($this->_db->qn('rr.club_name') . ' AS rider_club_name')
             ->select('CONCAT(' . $this->_db->qn('rr.first_name') . ', " ", ' . $this->_db->qn('rr.last_name') . ')' . 
                 ' AS name')
-            ->select('CONCAT(' . $this->_db->qn('rr.age_category') . ', " ", ' . $this->_db->qn('rr.gender') . ')' . 
+            ->select('CONCAT(' . $this->_db->qn('r.age_category_on_day') . ', " ", ' . $this->_db->qn('rr.gender') . ')' . 
                 ' AS age_gender_category');
 
         switch ($this->_list_type)
@@ -158,7 +184,11 @@ class RankingsModelsRide extends RankingsModelsDefault
                         ' END' . 
                         ' AS position_variance_ind')
                     ->select('ABS(' . $this->_db->qn('r.position_variance') . ')' .  
-                        ' AS position_variance_value');
+                        ' AS position_variance_value')
+
+                // Vets standards are applicable for rides displayed for a rider or for event results
+                    ->select($this->_db->qn('r.vets_standard_time'))
+                    ->select($this->_db->qn('r.vets_standard_distance'));
 
                 // Gender position in list is only applicable for results displayed for an event
                 $query
@@ -172,23 +202,28 @@ class RankingsModelsRide extends RankingsModelsDefault
                 $query = $this->_db->getQuery(TRUE);
 
                 $query
-                    ->select($this->_db->qn(array('rider_id', 'event_id', 'club_name', 'age_on_day', 'position', 'time', 'ranking_points', 'counting_ride_ind', 'category_on_day', 'predicted_position', 'predicted_time', 'bib', 'start_time', 'predicted_distance', 'ride_distance', 'blacklist_ind', 'name', 'age_gender_category', 'position_variance_ind', 'position_variance_value', 'rider_club_name', 'form')))
-                    ->select('IF (' . $this->_db->qn('gender') . ' = "Female",' . 
-                        ' CASE' . 
-                        ' WHEN @prev_value = ' . $this->_db->qn('position') . ' THEN @female_position_count' . 
-                        ' WHEN @prev_value:= ' . $this->_db->qn('position') . ' THEN @female_position_count:=@female_sequence' . 
-                        ' END,' . 
-                        ' CASE' . 
-                        ' WHEN @prev_value = ' . $this->_db->qn('position') . ' THEN @male_position_count' . 
-                        ' WHEN @prev_value:= ' . $this->_db->qn('position') . ' THEN @male_position_count:=@male_sequence' . 
-                        ' END)' . 
-                        ' AS gender_position')
-                    ->select('IF (' . $this->_db->qn('gender') . ' = "Female",' . 
-                        ' @female_sequence:=@female_sequence + 1,' . 
-                        ' @male_sequence:=@male_sequence + 1)' . 
-                        ' AS sequence')
+                    ->select($this->_db->qn(array('T1.rider_id', 'T1.event_id', 'club_name', 'age_on_day', 'position', 'ranking_points', 'counting_ride_ind', 'category_on_day', 'predicted_position', 'predicted_time', 'bib', 'start_time', 'predicted_distance', 'ride_distance', 'blacklist_ind', 'name', 'age_gender_category', 'position_variance_ind', 'position_variance_value', 'rider_club_name', 'form', 'vets_standard_time', 'vets_standard_distance', 'vets_position', 'gender_position', 'gender')))
+                    ->select('CASE DATE_FORMAT(' . $this->_db->qn('complete_time') . ', "%k")' . 
+                        ' WHEN 0 THEN DATE_FORMAT(' . $this->_db->qn('complete_time') . ', "%i:%s")' . 
+                        ' ELSE DATE_FORMAT(' . $this->_db->qn('complete_time') . ', "%k:%i:%s")' . 
+                        ' END' . 
+                        ' AS time')
+                    ->select('CASE DATE_FORMAT(' . $this->_db->qn('vets_standard_time') . ', "%k")' . 
+                        ' WHEN 0 THEN DATE_FORMAT(' . $this->_db->qn('vets_standard_time') . ', "%i:%s")' . 
+                        ' ELSE DATE_FORMAT(' . $this->_db->qn('vets_standard_time') . ', "%k:%i:%s")' . 
+                        ' END' . 
+                        ' AS vets_standard_time')
+                    ->select('IF (' . $this->_db->qn('complete_time') . ' IN ("12:00:00", "24:00:00"), ' . 
+                        $this->_db->qn('ride_distance') . ' - ' . $this->_db->qn('vets_standard_distance') . ' , ' . 
+                        ' CASE TIME_FORMAT(' . $this->_db->qn('vets_standard_result') . ', "%k")' . 
+                        ' WHEN 0 THEN TIME_FORMAT(' . $this->_db->qn('vets_standard_result') . ', "%i:%s")' . 
+                        ' ELSE TIME_FORMAT(' . $this->_db->qn('vets_standard_result') . ', "%k:%i:%s")' . 
+                        ' END' .
+                        ') AS vets_standard_result')
+
                     ->from('(' . $subquery . ') AS T1')
-                    ->from('(' . $this->_buildSubqueryGenderPosition() . ') AS T2');
+                    ->from('(' . $this->_buildSubqueryGenderPosition() . ') AS GP')
+                    ->from('(' . $this->_buildSubqueryVetsPosition() . ') AS VP');
                 break;
 
             case "rider":
@@ -201,7 +236,13 @@ class RankingsModelsRide extends RankingsModelsDefault
                         ' ELSE "circle"' . 
                         ' END' . 
                         ' AS improved_ride')
-                    
+                
+                    ->select('CASE DATE_FORMAT(' . $this->_db->qn('r.time') . ', "%k")' . 
+                        ' WHEN 0 THEN DATE_FORMAT(' . $this->_db->qn('r.time') . ', "%i:%s")' . 
+                        ' ELSE DATE_FORMAT(' . $this->_db->qn('r.time') . ', "%k:%i:%s")' . 
+                        ' END' . 
+                        ' AS time')
+
                 // Post-ride form is applicable for rides displayed for a rider
                     ->select($this->_db->qn('r.post_ride_form') . 'AS form')
 
@@ -227,6 +268,11 @@ class RankingsModelsRide extends RankingsModelsDefault
                 // Event details are applicable for rides displayed for a rider or rankings
                 $query
                     ->select($this->_db->qn(array('e.event_date','e.event_name')))
+                    ->select('CASE DATE_FORMAT(' . $this->_db->qn('r.time') . ', "%k")' . 
+                        ' WHEN 0 THEN DATE_FORMAT(' . $this->_db->qn('r.time') . ', "%i:%s")' . 
+                        ' ELSE DATE_FORMAT(' . $this->_db->qn('r.time') . ', "%k:%i:%s")' . 
+                        ' END' . 
+                        ' AS time')
                     ->select('CASE ' . $this->_db->qn('e.distance') . ' WHEN 0 THEN "Other"' . 
                         ' ELSE ' . $this->_db->qn('e.distance') . 
                         ' END' . 
@@ -304,11 +350,56 @@ class RankingsModelsRide extends RankingsModelsDefault
     /**
      * _buildSubqueryGenderPosition
      *
-     * Builds the subquery used to calculate the gender position of the returned rides within an event
+     * Builds the subquery used to retrieve the gender position for the rides within an event
      * 
      * @return object Subquery object
      **/
     protected function _buildSubqueryGenderPosition()
+    {
+        $subquery = $this->_db->getQuery(TRUE);
+
+        $subquery
+            ->select($this->_db->qn('rr.rider_id'))
+            ->select('IF (' . $this->_db->qn('gender') . ' = "Female",' . 
+                ' CASE' . 
+                ' WHEN @prev_gender_value = ' . $this->_db->qn('position') . ' THEN @female_position_count' . 
+                ' WHEN @prev_gender_value:= ' . $this->_db->qn('position') . ' THEN @female_position_count:=@female_sequence' . 
+                ' END,' . 
+                ' CASE' . 
+                ' WHEN @prev_gender_value = ' . $this->_db->qn('position') . ' THEN @male_position_count' . 
+                ' WHEN @prev_gender_value:= ' . $this->_db->qn('position') . ' THEN @male_position_count:=@male_sequence' . 
+                ' END)' . 
+                ' AS gender_position')
+            ->select('IF (' . $this->_db->qn('gender') . ' = "Female",' . 
+                ' @female_sequence:=@female_sequence + 1,' . 
+                ' @male_sequence:=@male_sequence + 1)' . 
+                ' AS gender_sequence')
+            
+            ->from($this->_db->qn('#__rides', 'r'))
+            ->from($this->_db->qn('#__riders', 'rr'))
+            ->from($this->_db->qn('#__events', 'e'))
+            ->from('(' . $this->_buildSubqueryGenderInitialPosition() . ') AS GIP')
+            
+            ->where($this->_db->qn('r.rider_id') . ' = ' . $this->_db->qn('rr.rider_id'))
+            ->where($this->_db->qn('r.event_id') . ' = ' . $this->_db->qn('e.event_id'))
+            ->where($this->_db->qn('e.event_id') . ' = ' . (int) $this->_event_id)
+            ->where($this->_db->qn('position') . ' > 0')
+
+            ->order($this->_db->qn('time') . ' ASC')
+            ->order($this->_db->qn('r.distance') . ' DESC');
+
+        return $subquery;
+
+    }
+
+    /**
+     * _buildSubqueryGenderPosition
+     *
+     * Builds the subquery used to calculate the gender position of the returned rides within an event
+     * 
+     * @return object Subquery object
+     **/
+    protected function _buildSubqueryGenderInitialPosition()
     {
         $subquery = $this->_db->getQuery(TRUE);
         
@@ -316,7 +407,91 @@ class RankingsModelsRide extends RankingsModelsDefault
         $offset = 1;
 
         $subquery
-            ->select('@prev_value:=NULL, @female_position_count:=' . $offset . ' , @male_position_count:=' . $offset . ' , @female_sequence:=' . $offset . ' , @male_sequence:=' . $offset);
+            ->select('@prev_gender_value:=NULL, @female_position_count:=' . $offset . ' , @male_position_count:=' . $offset . ' , @female_sequence:=' . $offset . ' , @male_sequence:=' . $offset);
+
+        return $subquery;
+    }
+
+    /**
+     * _buildSubqueryVetsPosition
+     *
+     * Builds the subquery used to retrieve the vets position for the rides within an event
+     * 
+     * @return object Subquery object
+     **/
+    protected function _buildSubqueryVetsPosition()
+    {
+        $subquery = $this->_db->getQuery(TRUE);
+        
+        $subquery
+            ->select($this->_db->qn(array('rider_id', 'time', 'vets_standard_result')))
+            ->select('IF (' . $this->_db->qn('time') . ' IN ("12:00:00", "24:00:00"),' .
+                ' CASE' . 
+                ' WHEN @prev_vets_value = ' . $this->_db->qn('vets_standard_result') . ' THEN @vets_position_count' .
+                ' WHEN @prev_vets_value:= ' . $this->_db->qn('vets_standard_result') . ' THEN @vets_position_count:=@vets_sequence' . 
+                ' END,' .
+                ' CASE' . 
+                ' WHEN @prev_vets_value = TIME_TO_SEC(' . $this->_db->qn('vets_standard_result') . ') THEN @vets_position_count' .
+                ' WHEN 99999 + @prev_vets_value:= TIME_TO_SEC(' . $this->_db->qn('vets_standard_result') . ') THEN @vets_position_count:=@vets_sequence' . 
+                ' END)' .
+                ' AS vets_position')
+            ->select('@vets_sequence:=@vets_sequence + 1 AS vets_sequence')
+            
+            ->from('(' . $this->_buildSubqueryVetsData() . ') AS VD')
+            ->from('(' . $this->_buildSubqueryVetsInitialPosition() . ') AS VIP');
+
+        return $subquery;
+    }
+
+    /**
+     * _buildSubqueryVetsData
+     *
+     * Builds the subquery used to retrieve the vets data for the rides within an event
+     * 
+     * @return object Subquery object
+     **/
+    protected function _buildSubqueryVetsData()
+    {
+        $subquery = $this->_db->getQuery(TRUE);
+        
+        $subquery
+            ->select($this->_db->qn(array('r.rider_id', 'r.time')))
+            ->select('IF (' . $this->_db->qn('time') . ' IN ("12:00:00", "24:00:00"), ' .
+                $this->_db->qn('r.distance') . ' - ' . $this->_db->qn('vets_standard_distance') . ',' .
+                ' SUBTIME(' . $this->_db->qn('vets_standard_time') . ', ' . $this->_db->qn('time') . ')) AS vets_standard_result')
+            
+            ->from($this->_db->qn('#__rides', 'r'))
+            ->from($this->_db->qn('#__events', 'e'))
+            
+            ->where($this->_db->qn('r.event_id') . ' = ' . $this->_db->qn('e.event_id'))
+            ->where($this->_db->qn('e.event_id') . ' = ' . (int) $this->_event_id)
+            ->where($this->_db->qn('position') . ' > 0')
+
+            ->order('CASE' .
+                ' WHEN ' . $this->_db->qn('e.duration_event_ind') . ' THEN ' . $this->_db->qn('vets_standard_result') . ' + 0' .
+                ' ELSE TIME_TO_SEC(' . $this->_db->qn('vets_standard_result') . ')' .
+                ' END' .
+                ' DESC');
+
+        return $subquery;
+    }
+
+    /**
+     * _buildSubqueryVetsInitialPosition
+     *
+     * Builds the subquery used to initialise the vets position
+     * 
+     * @return object Subquery object
+     **/
+    protected function _buildSubqueryVetsInitialPosition()
+    {
+        $subquery = $this->_db->getQuery(TRUE);
+        
+        // First position is 1
+        $offset = 1;
+
+        $subquery
+            ->select('@prev_vets_value:=NULL, @vets_position_count:=' . $offset . ', @vets_sequence:=' . $offset);
 
         return $subquery;
     }
@@ -340,6 +515,9 @@ class RankingsModelsRide extends RankingsModelsDefault
                     ->where($this->_db->qn('r.event_id') . ' = ' . $this->_db->qn('e.event_id'));
                 break;
             case "event_results":
+                $query
+                    ->where($this->_db->qn('T1.rider_id') . ' = ' . $this->_db->qn('VP.rider_id'))
+                    ->where($this->_db->qn('T1.rider_id') . ' = ' . $this->_db->qn('GP.rider_id'));
                 break;
             case "rider":
                 $query

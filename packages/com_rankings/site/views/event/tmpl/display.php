@@ -2,7 +2,7 @@
 /**
  * Rankings Component for Joomla 3.x
  * 
- * @version    1.4.1
+ * @version    1.5
  * @package    Rankings
  * @subpackage Component
  * @copyright  Copyright (C) Spindata. All rights reserved.
@@ -136,10 +136,14 @@ defined('_JEXEC') or die('Restricted access');
                                             <td class="tt-col-rider-bib"><?php echo $this->_eventListView->entry->bib; ?></td>
                                             <td class="tt-table-rider-link tt-col-rider-name">
                                                 <div class="tt-rider-name-container">
-                                                    <?php if(!$this->_eventListView->entry->blacklist_ind && !empty($this->_eventListView->entry->form))
+                                                    <?php if(!$this->_eventListView->entry->blacklist_ind && $this->_eventListView->entry->form > 0)
                                                     { ?>
                                                         <div class = "tt-rider-form">
-                                                            <img src="/images/flame.png" alt="improving rider">
+                                                            <img src="/media/com_rankings/images/flame.png" alt="improving rider">
+                                                            <?php if($this->_eventListView->entry->form == 2)
+                                                            { ?><img src="/media/com_rankings/images/flame.png" alt="improving rider">
+                                                            <?php
+                                                            } ?>
                                                         </div>
                                                     <?php
                                                     } ?>
@@ -148,9 +152,8 @@ defined('_JEXEC') or die('Restricted access');
                                                         { ?>
                                                             <a href="<?php echo JRoute::_('index.php?Itemid=816&option=com_rankings&task=rider.display&cid=' . $this->_eventListView->entry->rider_id); ?>"rel="nofollow"><?php echo $this->_eventListView->entry->name; ?></a>
                                                         <?php
-                                                        } else { ?>
-                                                            <p><?php echo $this->_eventListView->entry->name; ?></p>
-                                                        <?php
+                                                        } else { 
+                                                            echo $this->_eventListView->entry->name;
                                                         } ?>
                                                     </div>
                                                     <?php if ($this->_eventListView->entry->category_on_day != '' && !$this->_eventListView->entry->blacklist_ind)
@@ -169,22 +172,31 @@ defined('_JEXEC') or die('Restricted access');
                                                 echo $this->_eventListView->entry->rider_club_name;
                                             } ?></td>
                                             <td class="tt-col-age-gender-category hidden-tablet hidden-phone"><?php echo $this->_eventListView->entry->age_gender_category; ?></td>
-                                            <td class="tt-col-predicted-time-at-finish hidden-tablet hidden-phone"><?php echo $this->_eventListView->entry->predicted_time_at_finish; ?></td>
-                                            <td class="tt-col-ride-predicted-position"><?php if (!empty($this->_eventListView->entry->predicted_position))
+                                            <td class="tt-col-predicted-time-at-finish hidden-tablet hidden-phone"><?php if(!$this->_eventListView->entry->blacklist_ind)
                                             {
-                                                echo trim($this->_eventListView->entry->predicted_position);
-                                            } else {
-                                                echo "-";
+                                                echo $this->_eventListView->entry->predicted_time_at_finish;
                                             } ?></td>
-                                            <td class="tt-col-ride-result"><?php if($this->event->duration_event_ind)
+                                            <td class="tt-col-ride-predicted-position"><?php if(!$this->_eventListView->entry->blacklist_ind)
                                             {
-                                                echo $this->_eventListView->entry->predicted_distance;
-                                            } else {
-                                                if (!empty($this->_eventListView->entry->predicted_time))
+                                                if (!empty($this->_eventListView->entry->predicted_position))
                                                 {
-                                                    echo $this->_eventListView->entry->predicted_time;
+                                                    echo trim($this->_eventListView->entry->predicted_position);
                                                 } else {
                                                     echo "-";
+                                                }
+                                            } ?></td>
+                                            <td class="tt-col-ride-result"><?php if(!$this->_eventListView->entry->blacklist_ind)
+                                            {
+                                                if($this->event->duration_event_ind)
+                                                {
+                                                    echo $this->_eventListView->entry->predicted_distance;
+                                                } else {
+                                                    if (!empty($this->_eventListView->entry->predicted_time))
+                                                    {
+                                                        echo $this->_eventListView->entry->predicted_time;
+                                                    } else {
+                                                        echo "-";
+                                                    }
                                                 }
                                             } ?></td>
                                         </tr>
@@ -223,8 +235,21 @@ defined('_JEXEC') or die('Restricted access');
                         <nav>
                             <ul>
                                 <li class="tab-current" id="tt-overall-filter"><button type="button" onclick="filter_results_overall();"><i class="fa fa-clock-o" aria-hidden="true"></i><p>Overall</p></button></li>
-                                <li id="tt-male-filter"><button type="button" onclick="filter_results_male();"><i class="fa fa-mars" aria-hidden="true"></i><p>Men</p></button></li>
-                                <li id="tt-female-filter"><button type="button" onclick="filter_results_female();"><i class="fa fa-venus" aria-hidden="true"></i><p>Women</p></button></li>
+                                <?php if ($this->event->male_results_ind)
+                                { ?>
+                                    <li id="tt-male-filter"><button type="button" onclick="filter_results_male();"><i class="fa fa-mars" aria-hidden="true"></i><p>Men</p></button></li>
+                                <?php 
+                                }
+                                if ($this->event->female_results_ind)
+                                { ?>
+                                    <li id="tt-female-filter"><button type="button" onclick="filter_results_female();"><i class="fa fa-venus" aria-hidden="true"></i><p>Women</p></button></li>
+                                <?php
+                                } 
+                                if ($this->event->vets_results_ind)
+                                { ?>
+                                    <li id="tt-veterans-filter"><button type="button" onclick="filter_results_veterans();"><i class="fa fa-plus" aria-hidden="true"></i><p>Veterans</p></button></li>
+                                <?php
+                                } ?>
                             </ul>
                         </nav>
                         <div class="tt-tab-panel">
@@ -234,6 +259,7 @@ defined('_JEXEC') or die('Restricted access');
                             <tr>
                                 <th class="tt-col-event-position"><?php echo JText::_('COM_RANKINGS_EVENT_POSITION'); ?></th>
                                 <th class="tt-col-event-gender-position"><?php echo JText::_('COM_RANKINGS_EVENT_POSITION'); ?></th>
+                                <th class="tt-col-event-vets-position"><?php echo JText::_('COM_RANKINGS_EVENT_POSITION'); ?></th>
                                 <th class="tt-col-rider-name"><?php echo JText::_('COM_RANKINGS_RIDER_NAME'); ?></th>
                                 <th class="tt-col-club-name hidden-phone"><?php echo JText::_('COM_RANKINGS_CLUB_NAME'); ?></th>
                                 <th class="tt-col-age-gender-category visible-large"><?php echo JText::_('COM_RANKINGS_RIDER_CATEGORY'); ?></th>
@@ -251,6 +277,9 @@ defined('_JEXEC') or die('Restricted access');
                                 } ?></th>
                                 <th class="tt-col-event-ride-points hidden-tablet hidden-phone"><?php echo JText::_('COM_RANKINGS_RIDE_RANKING_POINTS'); ?></th>
                                 <th class="tt-col-event-ride-points hidden-desktop"><?php echo JText::_('COM_RANKINGS_RIDE_RANKING_POINTS_SHORT'); ?></th>
+                                <th class="tt-col-ride-vets-standard-time hidden-tablet hidden-phone"><?php echo JText::_('COM_RANKINGS_RIDE_VETS_STANDARD'); ?></th>
+                                <th class="tt-col-ride-vets-standard-time hidden-desktop"><?php echo JText::_('COM_RANKINGS_RIDE_VETS_STANDARD_SHORT'); ?></th>
+                                <th class="tt-col-ride-vets-standard-result"><?php echo JText::_('COM_RANKINGS_RIDE_VETS_STANDARD_RESULT'); ?></th>
                             </tr>
                         </thead>
                         <tbody id="tt-event-results-body">
@@ -272,15 +301,18 @@ defined('_JEXEC') or die('Restricted access');
                                         <div class="tt-event-position"><?php echo $this->_eventListView->ride->gender_position; ?></div>
                                         <div class="tt-event-position-variance"></div>
                                     </td>
+                                    <td class="tt-col-event-vets-position">
+                                        <div class="tt-event-position"><?php echo $this->_eventListView->ride->vets_position; ?></div>
+                                        <div class="tt-event-position-variance"></div>
+                                    </td>
                                     <td class="tt-table-rider-link tt-col-rider-name">
                                         <div class="tt-rider-name-container">
-                                            <?php if(!$this->_eventListView->entry->blacklist_ind && !empty($this->_eventListView->ride->form))
+                                            <?php if(!$this->_eventListView->ride->blacklist_ind && $this->_eventListView->ride->form > 0)
                                             { ?>
                                                 <div class = "tt-rider-form">
                                                     <img src="/media/com_rankings/images/flame.png" alt="improving rider">
-                                                    <?php if($this->_eventListView->ride->form > 3)
-                                                    { ?>
-                                                        <img src="/media/com_rankings/images/flame.png" alt="improving rider">
+                                                    <?php if($this->_eventListView->ride->form == 2)
+                                                    { ?><img src="/media/com_rankings/images/flame.png" alt="improving rider">
                                                     <?php
                                                     } ?>
                                                 </div>
@@ -291,9 +323,8 @@ defined('_JEXEC') or die('Restricted access');
                                                 { ?>
                                                     <a href="<?php echo JRoute::_('index.php?Itemid=816&option=com_rankings&task=rider.display&cid=' . $this->_eventListView->ride->rider_id); ?>"rel="nofollow">   <?php echo $this->_eventListView->ride->name; ?></a>
                                                 <?php 
-                                                } else {?>
-                                                    <p><?php echo $this->_eventListView->ride->name; ?></p>
-                                                <?php
+                                                } else {
+                                                    echo $this->_eventListView->ride->name;
                                                 } ?>
                                             </div>
                                             <?php if ($this->_eventListView->ride->category_on_day != '' && !$this->_eventListView->ride->blacklist_ind)
@@ -312,15 +343,18 @@ defined('_JEXEC') or die('Restricted access');
                                                 echo $this->_eventListView->ride->rider_club_name;
                                             } ?></td>
                                     <td class="tt-col-age-gender-category visible-large"><?php echo $this->_eventListView->ride->age_gender_category; ?></td>
-                                    <td class="tt-col-ride-result hidden-tablet hidden-phone"><?php if($this->event->duration_event_ind)
+                                    <td class="tt-col-ride-predicted-result hidden-tablet hidden-phone"><?php if(!$this->_eventListView->ride->blacklist_ind)
                                     {
-                                        echo $this->_eventListView->ride->predicted_distance;
-                                    } else {
-                                        if (!empty($this->_eventListView->ride->predicted_time) and !($this->_eventListView->entry->predicted_time = '00:00:00'))
+                                        if($this->event->duration_event_ind)
                                         {
-                                            echo $this->_eventListView->ride->predicted_time;
+                                            echo $this->_eventListView->ride->predicted_distance;
                                         } else {
-                                            echo "-";
+                                            if (!empty($this->_eventListView->ride->predicted_time))
+                                            {
+                                                echo $this->_eventListView->ride->predicted_time;
+                                            } else {
+                                                echo "-";
+                                            }
                                         }
                                     } ?></td>
                                     <td class="tt-col-ride-result"><?php if($this->event->duration_event_ind)
@@ -333,6 +367,14 @@ defined('_JEXEC') or die('Restricted access');
                                     {
                                         echo $this->_eventListView->ride->ranking_points;
                                     } ?></td>
+                                    <td class="tt-col-ride-vets-standard-time"><?php if($this->event->duration_event_ind)
+                                    {
+                                        echo $this->_eventListView->ride->vets_standard_distance;
+                                    } else {
+                                        echo $this->_eventListView->ride->vets_standard_time;
+                                    } ?>
+                                    </td>
+                                    <td class="tt-col-ride-vets-standard-result"><?php echo $this->_eventListView->ride->vets_standard_result; ?></td>
                                 </tr>
                             <?php
                             } ?>
