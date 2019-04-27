@@ -2,7 +2,7 @@
 /**
  * Rankings Component for Joomla 3.x
  * 
- * @version    1.4.1
+ * @version    1.5.1
  * @package    Rankings
  * @subpackage Component
  * @copyright  Copyright (C) Spindata. All rights reserved.
@@ -15,13 +15,11 @@ defined('_JEXEC') or die('Restricted access');
 
 <link href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css" rel="stylesheet">
 
-<?php if(!$this->rider->blacklist_ind)
+<?php if(!$this->rider->blacklist_ind && !empty($this->rider->name))
 { ?>
     <div class="tt-rider-heading">
         <div class="tt-rider-name">
-            <h1>
-                <?php echo $this->rider->name; ?>
-            </h1>
+            <h1><?php echo $this->rider->name; ?></h1>
         </div>
         <div class="tt-rider-category">
             <?php if (in_array($this->rider->status, array('Frequent rider','Qualified','Provisional'), true ))

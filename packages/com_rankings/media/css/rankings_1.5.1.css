@@ -1,7 +1,7 @@
 /**
  * Rankings Component for Joomla 3.x
  * 
- * @version    1.5
+ * @version    1.5.1
  * @package    Rankings
  * @subpackage Component
  * @copyright  Copyright (C) Spindata. All rights reserved.
@@ -439,7 +439,7 @@ td.tt-col-event-position, td.tt-col-event-gender-position, td.tt-col-event-vets-
 	width: 120px;
 }
 .tt-col-ride-predicted-result {
-	text-align: center;
+	text-align: right;
 	width: 95px;
 }
 td.tt-col-ride-predicted-result {
