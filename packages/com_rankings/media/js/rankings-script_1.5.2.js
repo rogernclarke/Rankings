@@ -1,7 +1,7 @@
 /**
  * Rankings Component for Joomla 3.x
  * 
- * @version    1.5
+ * @version    1.5.2
  * @package    Rankings
  * @subpackage Component
  * @copyright  Copyright (C) Spindata. All rights reserved.
@@ -119,6 +119,7 @@ function filter_results_overall()
 	$('.tt-col-event-vets-position').hide();
 	$('.tt-col-ride-vets-standard-time').hide();
 	$('.tt-col-ride-vets-standard-result').hide();
+	$('.tt-tab-vets-footer').hide();
 	$('.tt-col-event-position').show();
 	$('.tt-col-ride-predicted-result').show();
 	$('.tt-col-event-ride-points').show();
@@ -144,6 +145,7 @@ function filter_results_male()
 	$('.tt-col-event-vets-position').hide();
 	$('.tt-col-ride-vets-standard-time').hide();
 	$('.tt-col-ride-vets-standard-result').hide();
+	$('.tt-tab-vets-footer').hide();
 	$('.tt-col-event-gender-position').show();
 	$('.tt-col-ride-predicted-result').show();
 	$('.tt-col-event-ride-points').show();
@@ -169,6 +171,7 @@ function filter_results_female()
 	$('.tt-col-event-vets-position').hide();
 	$('.tt-col-ride-vets-standard-time').hide();
 	$('.tt-col-ride-vets-standard-result').hide();
+	$('.tt-tab-vets-footer').hide();
 	$('.tt-col-event-gender-position').show();
 	$('.tt-col-ride-predicted-result').show();
 	$('.tt-col-event-ride-points').show();
@@ -205,4 +208,5 @@ function filter_results_veterans()
 	$('.tt-col-event-vets-position').show();
 	$('.tt-col-ride-vets-standard-time').show();
 	$('.tt-col-ride-vets-standard-result').show();
+	$('.tt-tab-vets-footer').show();
 }
