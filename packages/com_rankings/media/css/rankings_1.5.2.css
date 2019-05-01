@@ -1,7 +1,7 @@
 /**
  * Rankings Component for Joomla 3.x
  * 
- * @version    1.5.1
+ * @version    1.5.2
  * @package    Rankings
  * @subpackage Component
  * @copyright  Copyright (C) Spindata. All rights reserved.
@@ -503,7 +503,7 @@ td.tt-col-position {
     margin: 0 auto;
 }
 .tt-col-rank-status {
-	width: 110px;
+	width: 135px;
 }
 .tt-col-rank-status .tt-rank {
 	display: inline-block;
@@ -979,6 +979,12 @@ div.tt-pages-counter, div.tt-results-counter {
 	border-top:	none;
 	padding: 0.25rem 0 0;
 	position: relative;
+}
+.tt-tab-vets-footer {
+	display: none;
+	font-weight: bold;
+	margin: 0.5rem;
+	padding: 0.5rem;
 }
 
 /* Fallback */
