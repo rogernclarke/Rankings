@@ -2,7 +2,7 @@
 /**
  * Rankings Component for Joomla 3.x
  * 
- * @version    1.0
+ * @version    1.6
  * @package    Rankings
  * @subpackage Component
  * @copyright  Copyright (C) Spindata. All rights reserved.
@@ -37,6 +37,12 @@ class RankingsViewsRiderHtml extends JViewHtml
             case "display":
                 // Get the rider
                 $this->rider = $this->model->getItem();
+
+                // List the awards
+                //$this->rider->awards = $this->rider->award->listItems();
+
+                // Handle pagination
+                //$this->pagination = $this->rider->award->getPagination();
             break;
 
             case "list":

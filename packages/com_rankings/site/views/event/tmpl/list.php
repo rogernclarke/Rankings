@@ -2,7 +2,7 @@
 /**
  * Rankings Component for Joomla 3.x
  * 
- * @version    1.5
+ * @version    1.6
  * @package    Rankings
  * @subpackage Component
  * @copyright  Copyright (C) Spindata. All rights reserved.
@@ -68,19 +68,19 @@ defined('_JEXEC') or die('Restricted access');
     			<tr class="row<?php echo $i % 2; ?>">
     				<td class="tt-col-event-date"><?php echo date('d M', strtotime($this->_eventsListView->event_date)); ?></td>
     				<td class="tt-table-event-link tt-col-event-name">
-    					<div class="tt-event-name-container">
+    					<div class="tt-flex-container">
                             <div class="tt-event-name">
 								<a href="<?php echo JRoute::_('index.php?option=com_rankings&task=event.display&cid='.$this->_eventsListView->event_id); ?>"><?php echo $this->_eventsListView->event_name; ?></a>
 							</div>
 							<?php if ($this->_eventsListView->results_ind)
                             { ?>
-                                <div class="hidden-phone">
+                                <div class="tt-tag-container hidden-phone">
                                     <div class="tt-tag tt-tag-very-small tt-results"><?php echo "Results"; ?></div>
                                 </div>
                             <?php
                             } else if ($this->_eventsListView->startsheet_ind)
                             { ?>
-                                <div class="hidden-phone">
+                                <div class="tt-tag-container hidden-phone">
                                     <div class="tt-tag tt-tag-very-small tt-startsheet"><?php echo "Startsheet"; ?></div>
                                 </div>
                             <?php

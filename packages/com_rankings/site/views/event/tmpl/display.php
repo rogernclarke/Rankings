@@ -2,7 +2,7 @@
 /**
  * Rankings Component for Joomla 3.x
  * 
- * @version    1.5.2
+ * @version    1.6
  * @package    Rankings
  * @subpackage Component
  * @copyright  Copyright (C) Spindata. All rights reserved.
@@ -23,8 +23,7 @@ defined('_JEXEC') or die('Restricted access');
         <div class="tt-event-date">
             <p><?php echo date('jS F Y', strtotime($this->event->event_date)); ?></p>
         </div>
-        <?php
-        if ($this->event->distance !== 'Other')
+        <?php if ($this->event->distance !== 'Other')
         { ?>
             <div class="tt-distance">
                 <p><?php if($this->event->duration_event_ind)
@@ -69,14 +68,30 @@ defined('_JEXEC') or die('Restricted access');
                     <?php if ($this->event->results_ind)
                     { ?>
                         <a href="#results" aria-controls="results" role="tab" data-toggle="tab">
-                            <i class="fa fa-clipboard" aria-hidden="true"></i>
+                            <i class="fas fa-paste" aria-hidden="true"></i>
                             <p>Results</p>
                         </a>
                     <?php
                     } else { ?>
                         <div>
-                            <i class="fa fa-clipboard" aria-hidden="true"></i>
+                            <i class="fas fa-paste" aria-hidden="true"></i>
                             <p>Results</p>
+                        </div>
+                    <?php
+                    } ?>
+                </li>
+                <li role="presentation" class="<?php if (!$this->event->results_ind) { echo "disabled"; } ?>">
+                    <?php if ($this->event->results_ind)
+                    { ?>
+                        <a href="#awards" aria-controls="awards" role="tab" data-toggle="tab">
+                            <i class="fas fa-award" aria-hidden="true"></i>
+                            <p>Awards</p>
+                        </a>
+                    <?php
+                    } else { ?>
+                        <div>
+                            <i class="fas fa-award" aria-hidden="true"></i>
+                            <p>Awards</p>
                         </div>
                     <?php
                     } ?>
@@ -98,7 +113,7 @@ defined('_JEXEC') or die('Restricted access');
                         <div class="tabs tabs-style-topline tt-tabs-startsheet">
                             <nav>
                                 <ul>
-                                    <li id="tt-start-order"><button type="button" onclick="sort_bib();"><i class="fa fa-clock-o" aria-hidden="true"></i><p><?php echo JText::_('COM_RANKINGS_EVENT_STARTING_ORDER'); ?></p></button></li>
+                                    <li id="tt-start-order"><button type="button" onclick="sort_bib();"><i class="far fa-clock-o" aria-hidden="true"></i><p><?php echo JText::_('COM_RANKINGS_EVENT_STARTING_ORDER'); ?></p></button></li>
                                     <li id="tt-finish-order"><button type="button" onclick="sort_predicted_finish();"><i class="fa fa-flag-checkered" aria-hidden="true"></i><p><?php echo JText::_('COM_RANKINGS_EVENT_PREDICTED_FINISHING_ORDER'); ?></p></button></li>
                                     <li class="tab-current" id="tt-result-order"><button type="button" onclick="sort_predicted_position();"><i class="fa fa-sort-amount-asc" aria-hidden="true"></i><p><?php echo JText::_('COM_RANKINGS_EVENT_PREDICTED_FINISHING_POSITION'); ?></p></button></li>
                                 </ul>
@@ -172,7 +187,7 @@ defined('_JEXEC') or die('Restricted access');
                                                 { 
                                                     echo $this->_eventListView->entry->club_name;
                                                 } else {
-                                                    echo $this->_eventListView->entry->rider_club_name;
+                                                    echo $this->_eventListView->entry->club_name;
                                                 } ?></td>
                                                 <td class="tt-col-age-gender-category hidden-tablet hidden-phone"><?php echo $this->_eventListView->entry->age_gender_category; ?></td>
                                                 <td class="tt-col-predicted-time-at-finish hidden-tablet hidden-phone"><?php if(!$this->_eventListView->entry->blacklist_ind)
@@ -237,7 +252,7 @@ defined('_JEXEC') or die('Restricted access');
                         <div class="tabs tabs-style-topline tt-tabs-results">
                             <nav>
                                 <ul>
-                                    <li class="tab-current" id="tt-overall-filter"><button type="button" onclick="filter_results_overall();"><i class="fa fa-clock-o" aria-hidden="true"></i><p>Overall</p></button></li>
+                                    <li class="tab-current" id="tt-overall-filter"><button type="button" onclick="filter_results_overall();"><i class="far fa-clock-o" aria-hidden="true"></i><p>Overall</p></button></li>
                                     <?php if ($this->event->male_results_ind)
                                     { ?>
                                         <li id="tt-male-filter"><button type="button" onclick="filter_results_male();"><i class="fa fa-mars" aria-hidden="true"></i><p>Men</p></button></li>
@@ -309,31 +324,56 @@ defined('_JEXEC') or die('Restricted access');
                                                     <div class="tt-event-position-variance"></div>
                                                 </td>
                                                 <td class="tt-table-rider-link tt-col-rider-name">
-                                                    <div class="tt-rider-name-container">
-                                                        <?php if(!$this->_eventListView->ride->blacklist_ind && $this->_eventListView->ride->form > 0)
-                                                        { ?>
-                                                            <div class = "tt-rider-form">
-                                                                <img src="/media/com_rankings/images/flame.png" alt="improving rider">
-                                                                <?php if($this->_eventListView->ride->form == 2)
-                                                                { ?><img src="/media/com_rankings/images/flame.png" alt="improving rider">
-                                                                <?php
+                                                    <div class="tt-flex-container">
+                                                        <div class="tt-rider-name-container">
+                                                            <?php if(!$this->_eventListView->ride->blacklist_ind && $this->_eventListView->ride->form > 0)
+                                                            { ?>
+                                                                <div class = "tt-rider-form hidden-small-phone">
+                                                                    <img src="/media/com_rankings/images/flame.png" alt="improving rider">
+                                                                    <?php if($this->_eventListView->ride->form == 2)
+                                                                    { ?><img src="/media/com_rankings/images/flame.png" alt="improving rider">
+                                                                    <?php
+                                                                    } ?>
+                                                                </div>
+                                                            <?php
+                                                            } ?>
+                                                            <div class="tt-rider-name">
+                                                                <?php if(!$this->_eventListView->ride->blacklist_ind)
+                                                                { ?>
+                                                                    <a href="<?php echo JRoute::_('index.php?Itemid=816&option=com_rankings&task=rider.display&cid=' . $this->_eventListView->ride->rider_id); ?>"rel="nofollow">   <?php echo $this->_eventListView->ride->name; ?></a>
+                                                                <?php 
+                                                                } else {
+                                                                    echo $this->_eventListView->ride->name;
                                                                 } ?>
                                                             </div>
-                                                        <?php
-                                                        } ?>
-                                                        <div class="tt-rider-name">
-                                                            <?php if(!$this->_eventListView->ride->blacklist_ind)
+                                                            <?php if ($this->_eventListView->ride->category_on_day != '' && !$this->_eventListView->ride->blacklist_ind)
                                                             { ?>
-                                                                <a href="<?php echo JRoute::_('index.php?Itemid=816&option=com_rankings&task=rider.display&cid=' . $this->_eventListView->ride->rider_id); ?>"rel="nofollow">   <?php echo $this->_eventListView->ride->name; ?></a>
-                                                            <?php 
-                                                            } else {
-                                                                echo $this->_eventListView->ride->name;
+                                                                <div class="tt-rider-category hidden-small-phone">
+                                                                    <div class="tt-tag tt-tag-very-small tt-rider-category-<?php echo substr($this->_eventListView->ride->category_on_day, 0, 1) ;?>"><?php echo $this->_eventListView->ride->category_on_day; ?></div>
+                                                                </div>
+                                                            <?php
                                                             } ?>
                                                         </div>
-                                                        <?php if ($this->_eventListView->ride->category_on_day != '' && !$this->_eventListView->ride->blacklist_ind)
+                                                        <?php if (count($this->_eventListView->ride->awards) > 0)
                                                         { ?>
-                                                            <div class="tt-rider-category hidden-small-phone">
-                                                                <div class="tt-tag tt-tag-very-small tt-rider-category-<?php echo substr($this->_eventListView->ride->category_on_day, 0, 1) ;?>"><?php echo $this->_eventListView->ride->category_on_day; ?></div>
+                                                            <div class="tt-rider-awards hidden-phone" style="min-width: <?php echo count($this->_eventListView->ride->awards) * 20; ?>px;">
+                                                                <?php for($j=1; $j<4; $j++)
+                                                                {
+                                                                    foreach ($this->_eventListView->ride->awards as $award)
+                                                                    {
+                                                                        if (substr($award->position, 0, 1) == $j)
+                                                                        {
+                                                                            if ($j == 1)
+                                                                            { ?>
+                                                                                <i class="fas fa-trophy tt-award-position-<?php echo substr($award->position, 0, 1);?>" title="<?php echo $award->position . ' ' . $award->award_name; ?>" aria-hidden="true"></i>
+                                                                            <?php
+                                                                            } else { ?>
+                                                                                <i class="fas fa-award tt-award-position-<?php echo substr($award->position, 0, 1);?>" title="<?php echo $award->position . ' ' . $award->award_name; ?>" aria-hidden="true"></i>
+                                                                            <?php
+                                                                            }
+                                                                        }
+                                                                    }
+                                                                } ?>
                                                             </div>
                                                         <?php
                                                         } ?>
@@ -343,7 +383,7 @@ defined('_JEXEC') or die('Restricted access');
                                                         { 
                                                             echo $this->_eventListView->ride->club_name;
                                                         } else {
-                                                            echo $this->_eventListView->ride->rider_club_name;
+                                                            echo $this->_eventListView->ride->club_name;
                                                         } ?></td>
                                                 <td class="tt-col-age-gender-category visible-large"><?php echo $this->_eventListView->ride->age_gender_category; ?></td>
                                                 <td class="tt-col-ride-predicted-result hidden-tablet hidden-phone"><?php if(!$this->_eventListView->ride->blacklist_ind)
@@ -388,6 +428,146 @@ defined('_JEXEC') or die('Restricted access');
                                 </div>
                             </div>
                         </div>
+                    </div>
+                </div>
+                <div role="tabpanel" class="tab-pane" id="awards">
+                    <div class="tt-nav-tab-content">
+                        <div class="tt-list-heading">
+                            <div class="tt-list-title">
+                                <h2><?php echo JText::_('COM_RANKINGS_EVENT_AWARDS'); ?></h2>
+                            </div>
+                        </div>
+                        <?php $previous_award_name = null;
+
+                        for($i=0, $n = count($this->event->awards); $i<$n; $i++) 
+                        {
+                            $this->_eventListView->award = $this->event->awards[$i];
+
+                            if ($previous_award_name !== $this->_eventListView->award->award_name)
+                            {
+                                if (isset($previous_award_name))
+                                { ?>
+                                    </tbody>
+                                </table>
+                                <?php
+                                } ?>
+                                <table class="table-hover tt-table tt-event-awards">
+                                    <thead>
+                                        <tr>
+                                            <?php if (!$this->_eventListView->award->team_ind)
+                                            { ?>
+                                                <th class="tt-col-award-position"></th>
+                                                <th class="tt-col-award-rider-name"></th>
+                                                <th class="tt-col-award-club-name hidden-phone"></th>
+                                                <th class="tt-col-award-result"></th>
+                                            <?php
+                                            } else { ?>
+                                                <th class="tt-col-award-position"></th>
+                                                <th class="tt-col-award-club-name"></th>
+                                                <th class="tt-col-award-riders hidden-small-phone"></th>
+                                                <th class="tt-col-award-individual-result hidden-phone"></th>
+                                                <th class="tt-col-award-team-result"></th>
+                                            <?php
+                                            } ?>
+                                        </tr>
+                                        <tr>
+                                            <th class="tt-col-award-name" colspan="5"><?php echo $this->_eventListView->award->award_name; ?></th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                            <?php $previous_award_name = $this->_eventListView->award->award_name;
+                            }
+                            if (!$this->_eventListView->award->team_ind)
+                            { ?>
+                                        <tr>
+                                            <td class="tt-col-award-position"><?php echo $this->_eventListView->award->position; ?></td>
+                                            <td class="tt-table-rider-link tt-col-award-rider-name">
+                                                <div class="tt-rider-name-container">
+                                                    <div class="tt-rider-name"><?php if(!$this->_eventListView->award->blacklist_ind)
+                                                    { ?>
+                                                        <a href="<?php echo JRoute::_('index.php?Itemid=816&option=com_rankings&task=rider.display&cid=' . $this->_eventListView->award->rider_id); ?>"rel="nofollow">   <?php echo $this->_eventListView->award->name; ?></a>
+                                                    <?php 
+                                                    } else {
+                                                        echo $this->_eventListView->award->name;
+                                                    } ?>
+                                                    </div>
+                                                    <?php if ($this->_eventListView->award->category_on_day != '' && !$this->_eventListView->award->blacklist_ind)
+                                                    { ?>
+                                                        <div class="tt-rider-category hidden-small-phone">
+                                                            <div class="tt-tag tt-tag-very-small tt-rider-category-<?php echo substr($this->_eventListView->award->category_on_day, 0, 1) ;?>"><?php echo $this->_eventListView->award->category_on_day; ?></div>
+                                                        </div>
+                                                    <?php
+                                                    } ?>
+                                                </div>
+                                            </td>
+                                            <td class="tt-col-award-club-name hidden-phone"><?php echo $this->_eventListView->award->club_name; ?></td>
+                                            <td class="tt-col-award-result"><?php switch ($this->_eventListView->award->award_basis)
+                                            {
+                                                case "Standard":
+                                                    echo $this->_eventListView->award->vets_standard_result;
+                                                    break;
+                                                case "Handicap":
+                                                    echo $this->_eventListView->award->handicap_result;
+                                                    break;
+                                                default:
+                                                    if($this->event->duration_event_ind)
+                                                    {
+                                                        echo $this->_eventListView->award->ride_distance;
+                                                    } else {
+                                                        echo $this->_eventListView->award->ride_time;
+                                                    }
+                                                    break;
+                                            } ?></td>
+                                        </tr>
+                            <?php
+                            } else { ?>
+                                        <tr>
+                                            <?php if($this->_eventListView->award->team_counter == 1)
+                                            { ?>
+                                                <td class="tt-col-award-position" rowspan="3"><?php echo $this->_eventListView->award->position; ?></td>
+                                                <td class="tt-col-award-club-name" rowspan="3"><?php echo $this->_eventListView->award->club_name; ?></td>
+                                            <?php 
+                                            } ?>
+                                                <td class="tt-table-rider-link tt-col-award-riders hidden-small-phone">
+                                                    <div class="tt-rider-name-container">
+                                                        <div class="tt-rider-name"><?php if(!$this->_eventListView->award->blacklist_ind)
+                                                        { ?>
+                                                            <a href="<?php echo JRoute::_('index.php?Itemid=816&option=com_rankings&task=rider.display&cid=' . $this->_eventListView->award->rider_id); ?>"rel="nofollow">   <?php echo $this->_eventListView->award->name; ?></a>
+                                                        <?php 
+                                                        } else {
+                                                            echo $this->_eventListView->award->name;
+                                                        } ?>
+                                                        </div>
+                                                        <?php if ($this->_eventListView->award->category_on_day != '' && !$this->_eventListView->award->blacklist_ind)
+                                                        { ?>
+                                                            <div class="tt-rider-category hidden-phone">
+                                                                <div class="tt-tag tt-tag-very-small tt-rider-category-<?php echo substr($this->_eventListView->award->category_on_day, 0, 1) ;?>"><?php echo $this->_eventListView->award->category_on_day; ?></div>
+                                                            </div>
+                                                        <?php
+                                                        } ?>
+                                                    </div>
+                                                </td>
+                                                <td class="tt-col-award-individual-result hidden-phone">
+                                                    <?php if($this->event->duration_event_ind)
+                                                    {
+                                                        echo $this->_eventListView->award->ride_distance;
+                                                    } else {
+                                                        echo $this->_eventListView->award->ride_time;
+                                                    } ?>
+                                                </td>
+                                            <?php if($this->_eventListView->award->team_counter == 1)
+                                            { ?>
+                                                <td class="tt-col-award-team-result" rowspan="3">
+                                                    <?php echo $this->_eventListView->award->team_result; ?>
+                                                </td>
+                                            <?php 
+                                            } ?>
+                                        </tr>
+                            <?php
+                            } 
+                        } ?>
+                                    </tbody>
+                                </table>
                     </div>
                 </div>
             </div>
