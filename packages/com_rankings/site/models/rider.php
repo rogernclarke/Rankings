@@ -2,7 +2,7 @@
 /**
  * Rankings Component for Joomla 3.x
  * 
- * @version    1.2
+ * @version    1.6
  * @package    Rankings
  * @subpackage Component
  * @copyright  Copyright (C) Spindata. All rights reserved.
@@ -57,6 +57,34 @@ class RankingsModelsRider extends RankingsModelsDefault
         $rideModel->set('_rider_id', $rider->rider_id);
         $rideModel->set('_list_type', "rider");
         $rider->rides = $rideModel->listItems(0,1000);
+
+        // Get awards for the rider
+        $awardModel    = new RankingsModelsAward();
+        $awardModel->set('_rider_id', $rider->rider_id);
+        $awardModel->set('_list_type', "rider");
+
+        //$rider->award = $awardModel;
+
+        $rider->awards = $awardModel->listItems(0,1000);
+
+        $_awards = $awardModel->listItems(0,1000);
+
+        // Assign awards to rides
+        $_ride_count = 0;
+        foreach ($rider->rides as $_ride)
+        {
+            $_award_count = 0;
+            foreach ($rider->awards as $_award)
+            //foreach ($_awards as $_award)
+            {
+                if ($_ride->event_id === $_award->event_id)
+                {
+                    $rider->rides[$_ride_count]->awards[$_award_count] = $_award;
+                    $_award_count++;
+                }
+            }
+            $_ride_count++;
+        }
 
         // Update hits for the rider
         $this->_updateHits();

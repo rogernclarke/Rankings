@@ -2,7 +2,7 @@
 /**
  * Rankings Component for Joomla 3.x
  * 
- * @version    1.5
+ * @version    1.6
  * @package    Rankings
  * @subpackage Component
  * @copyright  Copyright (C) Spindata. All rights reserved.
@@ -33,8 +33,6 @@ class RankingsModelsEvent extends RankingsModelsDefault
     public $female_results_ind = FALSE; // Indicates female results exist
     public $male_results_ind = FALSE;   // Indicates male results exist
     public $results_count = 0;          // Count of rides (results)
-    public $results_ind = FALSE;        // Indicates results exist
-    public $startsheet_ind = FALSE;     // Indicates startsheet exists
     public $vets_results_ind = FALSE;   // Indicates vets results exist
 
     /**
@@ -81,20 +79,14 @@ class RankingsModelsEvent extends RankingsModelsDefault
 
         $event->rides = $rideModel->listItems(0,1000);
 
-        if ($event->event_date < '2019-02-01')
-        {
-            $event->startsheet_ind = FALSE;
-        } else {
-            $event->startsheet_ind = TRUE;
-        }
+        // Get awards for the event
+        $awardModel    = new RankingsModelsAward();
+        $awardModel->set('_event_id', $event->event_id);
+        $awardModel->set('_list_type', "event");
 
-        if (count($event->rides) == 0)
-        {
-            $event->results_ind = FALSE;
-        } else {
-            $event->results_ind = TRUE;
-        }
+        $event->awards = $awardModel->listItems(0,1000);
 
+        $ride_count = 0;
         foreach ($event->rides as $ride)
         {
             if ($ride->gender === "Female")
@@ -109,10 +101,17 @@ class RankingsModelsEvent extends RankingsModelsDefault
                 $event->vets_results_ind = TRUE;
             }
 
-            if ($event->female_results_ind && $event->male_results_ind && $event->vets_results_ind)
+            // Assign awards to rides
+            $award_count = 0;
+            foreach ($event->awards as $award) 
             {
-                break;
+                if ($ride->rider_id === $award->rider_id)
+                {
+                    $event->rides[$ride_count]->awards[$award_count] = $award;
+                    $award_count++;
+                }
             }
+            $ride_count++;
         }
 
         // Update hits for the event
@@ -169,7 +168,11 @@ class RankingsModelsEvent extends RankingsModelsDefault
                 ' AS startsheet_ind')
             ->select('IF (' . $this->_db->qn('e.processed_date') . 
                 ' > ' . $this->_db->qn('e.event_date') . ', true, false)' .
-                ' AS results_ind');
+                ' AS results_ind')
+            ->select("IF ((" . $this->_buildSubqueryResultsExist() . " LIMIT 1), 1, 0)" . 
+                    " AS results_ind")
+            ->select("IF ((" . $this->_buildSubqueryStartsheetExists() . " LIMIT 1), 1, 0)" . 
+                    " AS startsheet_ind");
 
         // If request is for an individual event then determine if the event is a ranking event or not
         if (isset($this->_id))
@@ -201,8 +204,50 @@ class RankingsModelsEvent extends RankingsModelsDefault
         $subquery
             ->select($this->_db->qn('r.ranking_points'))
             ->from  ($this->_db->qn('#__rides', 'r'))
-            ->where ($this->_db->qn('r.event_id') . ' = ' . $this->_id)
+            ->where ($this->_db->qn('r.event_id') . ' = ' . $this->_db->qn('e.event_id'))
             ->where ($this->_db->qn('r.ranking_points') . ' > 0');
+
+        return $subquery;
+    }
+
+    /**
+     * _buildSubqueryResultsExist
+     *
+     * Builds the subquery used to determine if the results are loaded
+     * 
+     * @return object Subquery object
+     **/
+    protected function _buildSubqueryResultsExist()
+    {
+        $subquery = $this->_db->getQuery(TRUE);
+        
+        // Select any ride for this event which has a position
+        $subquery
+            ->select($this->_db->qn('r.position'))
+            ->from  ($this->_db->qn('#__rides', 'r'))
+            ->where ($this->_db->qn('r.event_id') . ' = ' . $this->_db->qn('e.event_id'))
+            ->where ($this->_db->qn('r.position') . ' > 0');
+
+        return $subquery;
+    }
+
+    /**
+     * _buildSubqueryStartsheetExists
+     *
+     * Builds the subquery used to determine if the startsheet exists
+     * 
+     * @return object Subquery object
+     **/
+    protected function _buildSubqueryStartsheetExists()
+    {
+        $subquery = $this->_db->getQuery(TRUE);
+        
+        // Select any ride for this event which has a bib number not zero
+        $subquery
+            ->select($this->_db->qn('r.bib'))
+            ->from  ($this->_db->qn('#__rides', 'r'))
+            ->where ($this->_db->qn('r.event_id') . ' = ' . $this->_db->qn('e.event_id'))
+            ->where ($this->_db->qn('r.bib') . ' > 0');
 
         return $subquery;
     }
