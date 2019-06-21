@@ -2,7 +2,7 @@
 /**
  * Rankings Component for Joomla 3.x
  * 
- * @version    1.5
+ * @version    1.6.1
  * @package    Rankings
  * @subpackage Component
  * @copyright  Copyright (C) Spindata. All rights reserved.
@@ -146,8 +146,10 @@ class RankingsModelsRide extends RankingsModelsDefault
         $query = $this->_db->getQuery(TRUE);
 
         $query
-            ->select($this->_db->qn(array('r.rider_id', 'r.event_id', 'r.club_name', 'r.age_on_day', 'r.position', 'r.ranking_points', 'r.counting_ride_ind', 'r.category_on_day', 'r.predicted_position', 'r.bib', 'r.start_time', 'r.predicted_distance')))
-            ->select($this->_db->qn('r.distance') . ' AS ride_distance')
+            ->select($this->_db->qn(array('r.rider_id', 'r.event_id', 'r.club_name', 'r.age_on_day', 'r.position', 'r.ranking_points', 'r.counting_ride_ind', 'r.category_on_day', 'r.predicted_position', 'r.bib')))
+            ->select('TIME_FORMAT(' . $this->_db->qn('r.start_time') . ', "%H:%i") AS start_time')
+            ->select('ROUND(' . $this->_db->qn('r.predicted_distance') . ',2) AS predicted_distance')
+            ->select('ROUND(' . $this->_db->qn('r.distance') . ',2) AS ride_distance')
             ->select($this->_db->qn('r.time') . ' AS complete_time')
             ->select('CASE DATE_FORMAT(' . $this->_db->qn('r.predicted_time') . ', "%k")' . 
                 ' WHEN 0 THEN DATE_FORMAT(' . $this->_db->qn('r.predicted_time') . ', "%i:%s")' . 
@@ -362,12 +364,12 @@ class RankingsModelsRide extends RankingsModelsDefault
             ->select($this->_db->qn('rr.rider_id'))
             ->select('IF (' . $this->_db->qn('gender') . ' = "Female",' . 
                 ' CASE' . 
-                ' WHEN @prev_gender_value = ' . $this->_db->qn('position') . ' THEN @female_position_count' . 
-                ' WHEN @prev_gender_value:= ' . $this->_db->qn('position') . ' THEN @female_position_count:=@female_sequence' . 
+                ' WHEN @prev_female_value = ' . $this->_db->qn('position') . ' THEN @female_position_count' . 
+                ' WHEN @prev_female_value:= ' . $this->_db->qn('position') . ' THEN @female_position_count:=@female_sequence' . 
                 ' END,' . 
                 ' CASE' . 
-                ' WHEN @prev_gender_value = ' . $this->_db->qn('position') . ' THEN @male_position_count' . 
-                ' WHEN @prev_gender_value:= ' . $this->_db->qn('position') . ' THEN @male_position_count:=@male_sequence' . 
+                ' WHEN @prev_male_value = ' . $this->_db->qn('position') . ' THEN @male_position_count' . 
+                ' WHEN @prev_male_value:= ' . $this->_db->qn('position') . ' THEN @male_position_count:=@male_sequence' . 
                 ' END)' . 
                 ' AS gender_position')
             ->select('IF (' . $this->_db->qn('gender') . ' = "Female",' . 
@@ -407,7 +409,7 @@ class RankingsModelsRide extends RankingsModelsDefault
         $offset = 1;
 
         $subquery
-            ->select('@prev_gender_value:=NULL, @female_position_count:=' . $offset . ' , @male_position_count:=' . $offset . ' , @female_sequence:=' . $offset . ' , @male_sequence:=' . $offset);
+            ->select('@prev_female_value:=NULL, @prev_male_value:=NULL, @female_position_count:=' . $offset . ' , @male_position_count:=' . $offset . ' , @female_sequence:=' . $offset . ' , @male_sequence:=' . $offset);
 
         return $subquery;
     }

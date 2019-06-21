@@ -2,7 +2,7 @@
 /**
  * Rankings Component for Joomla 3.x
  * 
- * @version    1.6
+ * @version    1.6.1
  * @package    Rankings
  * @subpackage Component
  * @copyright  Copyright (C) Spindata. All rights reserved.
@@ -32,6 +32,7 @@ class RankingsModelsEvent extends RankingsModelsDefault
     public $entries_count = 0;          // Count of entries
     public $female_results_ind = FALSE; // Indicates female results exist
     public $male_results_ind = FALSE;   // Indicates male results exist
+    public $predicted_results_ind = FALSE; // Indicates predicted results exist
     public $results_count = 0;          // Count of rides (results)
     public $vets_results_ind = FALSE;   // Indicates vets results exist
 
@@ -85,6 +86,14 @@ class RankingsModelsEvent extends RankingsModelsDefault
         $awardModel->set('_list_type', "event");
 
         $event->awards = $awardModel->listItems(0,1000);
+
+        foreach ($event->entries as $entry)
+        {
+            if (isset($entry->predicted_time))
+            {
+                $event->predicted_results_ind = TRUE;
+            }
+        }
 
         $ride_count = 0;
         foreach ($event->rides as $ride)

@@ -1,7 +1,7 @@
 /**
  * Rankings Component for Joomla 3.x
  * 
- * @version    1.5.2
+ * @version    1.6.1
  * @package    Rankings
  * @subpackage Component
  * @copyright  Copyright (C) Spindata. All rights reserved.
@@ -53,6 +53,7 @@ function sort_bib()
 
 	$('.tt-tabs-startsheet li').removeClass();
 	$('#tt-start-order').addClass("tab-current");
+	$('.tt-col-rider-start-time').show();
 	$('.tt-col-predicted-time-at-finish').hide();
 }
 function sort_predicted_finish()
@@ -78,6 +79,7 @@ function sort_predicted_finish()
 	$('.tt-tabs-startsheet li').removeClass();
 	$('#tt-finish-order').addClass("tab-current");
 	$('.tt-col-predicted-time-at-finish').show();
+	$('.tt-col-rider-start-time').hide();
 }
 function sort_predicted_position()
 {
@@ -92,6 +94,7 @@ function sort_predicted_position()
 	$('.tt-tabs-startsheet li').removeClass();
 	$('#tt-result-order').addClass("tab-current");
 	$('.tt-col-predicted-time-at-finish').hide();
+	$('.tt-col-rider-start-time').hide();
 }
 function strip_ordinal(numberWithOrdinal) {
 	if (numberWithOrdinal == "-") {

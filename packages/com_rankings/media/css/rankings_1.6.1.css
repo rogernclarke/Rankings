@@ -1,7 +1,7 @@
 /**
  * Rankings Component for Joomla 3.x
  * 
- * @version    1.6
+ * @version    1.6.1
  * @package    Rankings
  * @subpackage Component
  * @copyright  Copyright (C) Spindata. All rights reserved.
@@ -237,13 +237,24 @@ div.tt-pagination {
 .tt-distance {
 	font-size: 1.25rem;
 }
+.tt-course {
+	margin-bottom : 3rem;
+}
 .tt-event-details {
+	display: flex;
+	justify-content: space-between;
 	margin: 0 0 0.5rem 0;
 }
 .tt-event-details p {
 	margin: 0;
 }
-
+.tt-event {
+	position: relative;
+}
+.tt-event-external {
+	text-align: right;
+    max-width: 40%;
+}
 .tt-list-heading {
 	display: flex;
 	justify-content: space-between;
@@ -329,7 +340,7 @@ td.tt-col-ride-position {
 }
 .tt-col-ride-result {
 	text-align: center;
-	width: 75px;
+	width: 90px;
 }
 td.tt-col-ride-result {
 	font-family: "Helvetica";
@@ -411,6 +422,13 @@ td.tt-col-event-distance {
 td.tt-col-rider-bib {
 	font-family: "Helvetica";
 }
+.tt-col-rider-start-time {
+	width: 60px;
+}
+td.tt-col-rider-start-time {
+	font-family: "Helvetica";
+	text-align: center;
+}
 .tt-rider-name-container {
 	display: flex;
 	overflow: hidden;
@@ -458,7 +476,8 @@ td.tt-col-ride-predicted-position {
 td.tt-col-predicted-time-at-finish {
 	font-family: "Helvetica";
 }
-th.tt-col-predicted-time-at-finish, th.tt-col-ride-predicted-position, th.tt-col-ride-predicted-result {
+th.tt-col-rider-start-time, th.tt-col-predicted-time-at-finish, th.tt-col-ride-predicted-position, th.tt-col-ride-predicted-result {
+	line-height: 20px;
 	text-align: center;
 	white-space: normal;
 }
@@ -1080,7 +1099,7 @@ div.tt-pages-counter, div.tt-results-counter {
 	background-color: #fff;
 	border-color: #998345;
 	border-right: 1px solid;
-	border-bottom: none;
+	border-bottom-color: #fff;
 	color: #998345;
 }
 .tabs nav li.tab-current button:hover {
