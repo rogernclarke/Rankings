@@ -2,7 +2,7 @@
 /**
  * Rankings Component for Joomla 3.x
  * 
- * @version    1.6
+ * @version    1.6.1
  * @package    Rankings
  * @subpackage Component
  * @copyright  Copyright (C) Spindata. All rights reserved.
@@ -20,28 +20,38 @@ defined('_JEXEC') or die('Restricted access');
     </div>
 
     <div class="tt-event-details">
-        <div class="tt-event-date">
-            <p><?php echo date('jS F Y', strtotime($this->event->event_date)); ?></p>
-        </div>
-        <?php if ($this->event->distance !== 'Other')
-        { ?>
-            <div class="tt-distance">
-                <p><?php if($this->event->duration_event_ind)
-                {
-                    echo abs($this->event->distance) . ' hours';
-                } else {
-                    echo (float) $this->event->distance . ' miles';
-                } ?></p>
+        <div class="tt-event">
+            <div class="tt-event-date">
+                <p><?php echo date('jS F Y', strtotime($this->event->event_date)); ?></p>
             </div>
-        <?php
-        } ?>
-        <div class="tt-course">
-            <span class="tt-label"><?php echo JText::_('COM_RANKINGS_COURSE'); ?></span>
-            <span class="tt-text"><?php echo $this->event->course_code; ?></span>
+            <?php if ($this->event->distance !== 'Other')
+            { ?>
+                <div class="tt-distance">
+                    <p><?php if($this->event->duration_event_ind)
+                    {
+                        echo abs($this->event->distance) . ' hours';
+                    } else {
+                        echo (float) $this->event->distance . ' miles';
+                    } ?></p>
+                </div>
+            <?php
+            } ?>
+            <div class="tt-course">
+                <span class="tt-label"><?php echo JText::_('COM_RANKINGS_COURSE'); ?></span>
+                <span class="tt-text"><?php echo $this->event->course_code; ?></span>
+            </div>
+            <div class="tt-buttons">
+                <input class="btn btn-info btn-small tt-btn-back" type="button" value="< Back" onClick="history.go(-1);return true;">
+            </div>
+        </div>
+        <div class="tt-event-external">
+            <div class="tt-ctt-link">
+                <a href="https://www.cyclingtimetrials.org.uk/race-details/<?php echo $this->event->event_id; ?>" target="_blank">CTT website event page <i class="fas fa-external-link-alt"></i></a>
+            </div>
         </div>
     </div>
 
-    <input class="btn btn-info btn-small tt-btn-back" type="button" value="< Back" onClick="history.go(-1);return true;">
+    
 
     <?php if (count($this->event->entries) + count($this->event->rides) > 0)
     { ?>
@@ -114,7 +124,11 @@ defined('_JEXEC') or die('Restricted access');
                             <nav>
                                 <ul>
                                     <li id="tt-start-order"><button type="button" onclick="sort_bib();"><i class="far fa-clock-o" aria-hidden="true"></i><p><?php echo JText::_('COM_RANKINGS_EVENT_STARTING_ORDER'); ?></p></button></li>
-                                    <li id="tt-finish-order"><button type="button" onclick="sort_predicted_finish();"><i class="fa fa-flag-checkered" aria-hidden="true"></i><p><?php echo JText::_('COM_RANKINGS_EVENT_PREDICTED_FINISHING_ORDER'); ?></p></button></li>
+                                    <?php if(!$this->event->duration_event_ind && $this->event->predicted_results_ind)
+                                    { ?>
+                                        <li id="tt-finish-order"><button type="button" onclick="sort_predicted_finish();"><i class="fa fa-flag-checkered" aria-hidden="true"></i><p><?php echo JText::_('COM_RANKINGS_EVENT_PREDICTED_FINISHING_ORDER'); ?></p></button></li>
+                                    <?php
+                                    } ?>
                                     <li class="tab-current" id="tt-result-order"><button type="button" onclick="sort_predicted_position();"><i class="fa fa-sort-amount-asc" aria-hidden="true"></i><p><?php echo JText::_('COM_RANKINGS_EVENT_PREDICTED_FINISHING_POSITION'); ?></p></button></li>
                                 </ul>
                             </nav>
@@ -123,6 +137,7 @@ defined('_JEXEC') or die('Restricted access');
                                     <thead>
                                         <tr>
                                             <th class="tt-col-rider-bib" rowspan="2"><?php echo JText::_('COM_RANKINGS_RIDE_BIB'); ?></th>
+                                            <th class="tt-col-rider-start-time hidden-phone" rowspan="2"><?php echo JText::_('COM_RANKINGS_RIDE_START_TIME'); ?></th>
                                             <th class="tt-col-rider-name" rowspan="2"><?php echo JText::_('COM_RANKINGS_RIDER_NAME'); ?></th>
                                             <th class="tt-col-club-name hidden-phone" rowspan="2"><?php echo JText::_('COM_RANKINGS_CLUB_NAME'); ?></th>
                                             <th class="tt-col-age-gender-category hidden-tablet hidden-phone" rowspan="2"><?php echo JText::_('COM_RANKINGS_RIDER_CATEGORY'); ?></th>
@@ -140,7 +155,7 @@ defined('_JEXEC') or die('Restricted access');
                                             <th class="tt-col-ride-predicted-position hidden-desktop" rowspan="1"><?php echo JText::_('COM_RANKINGS_EVENT_POSITION_SHORT'); ?></th>
                                             <th class="tt-col-ride-predicted-result hidden-desktop" rowspan="1"><?php if($this->event->duration_event_ind)
                                                 {
-                                                    echo JText::_('COM_RANKINGS_RIDE_DISTANCE');
+                                                    echo JText::_('COM_RANKINGS_RIDE_DISTANCE_SHORT');
                                                 } else {
                                                     echo JText::_('COM_RANKINGS_RIDE_TIME');
                                                 } ?></th>
@@ -152,6 +167,7 @@ defined('_JEXEC') or die('Restricted access');
                                             $this->_eventListView->entry = $this->event->entries[$i]; ?>
                                             <tr class="row<?php echo $i % 2; ?>">
                                                 <td class="tt-col-rider-bib"><?php echo $this->_eventListView->entry->bib; ?></td>
+                                                <td class="tt-col-rider-start-time hidden-phone"><?php echo $this->_eventListView->entry->start_time; ?></td>
                                                 <td class="tt-table-rider-link tt-col-rider-name">
                                                     <div class="tt-rider-name-container">
                                                         <?php if(!$this->_eventListView->entry->blacklist_ind && $this->_eventListView->entry->form > 0)
@@ -287,9 +303,15 @@ defined('_JEXEC') or die('Restricted access');
                                             } else {
                                                 echo JText::_('COM_RANKINGS_RIDE_PREDICTED_TIME');
                                             } ?></th>
-                                            <th class="tt-col-ride-result"><?php if($this->event->duration_event_ind)
+                                            <th class="tt-col-ride-result hidden-tablet hidden-phone"><?php if($this->event->duration_event_ind)
                                             {
                                                 echo JText::_('COM_RANKINGS_RIDE_DISTANCE');
+                                            } else {
+                                                echo JText::_('COM_RANKINGS_RIDE_TIME');
+                                            } ?></th>
+                                            <th class="tt-col-ride-result hidden-desktop"><?php if($this->event->duration_event_ind)
+                                            {
+                                                echo JText::_('COM_RANKINGS_RIDE_DISTANCE_SHORT');
                                             } else {
                                                 echo JText::_('COM_RANKINGS_RIDE_TIME');
                                             } ?></th>
