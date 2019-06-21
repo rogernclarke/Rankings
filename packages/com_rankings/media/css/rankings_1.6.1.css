@@ -423,6 +423,7 @@ td.tt-col-rider-bib {
 	font-family: "Helvetica";
 }
 .tt-col-rider-start-time {
+	display: none;
 	width: 60px;
 }
 td.tt-col-rider-start-time {
