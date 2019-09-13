@@ -2,7 +2,7 @@
 /**
  * Rankings Component for Joomla 3.x
  * 
- * @version    1.5
+ * @version    1.7
  * @package    Rankings
  * @subpackage Component
  * @copyright  Copyright (C) Spindata. All rights reserved.
@@ -30,13 +30,18 @@ defined('_JEXEC') or die('Restricted access');
 class RankingsModelsRankings extends RankingsModelsDefault
 {
     /**
+    * Public fields
+    **/
+
+    /**
     * Protected fields
     **/
-    protected $_age_category_search   = FALSE;
-    protected $_club_name_search      = FALSE;
-    protected $_district_code_search  = FALSE;
-    protected $_name_search           = FALSE;
-    protected $_ranking_status_search = array();
+    protected $_age_category_search     = FALSE;
+    protected $_club_name_search        = FALSE;
+    protected $_district_code_search    = FALSE;
+    protected $_name_search             = FALSE;
+    protected $_pfx                     = '';
+    protected $_ranking_status_search   = array();
 
     /**
      * Constructor
@@ -46,11 +51,17 @@ class RankingsModelsRankings extends RankingsModelsDefault
         parent::__construct();
 
         // Specify filter fields for model
-        $this->_filter_fields = array('gender', 'name', 'club_name', 'district_code', 'age_category');
+        $this->_filter_fields = array('year','gender', 'name', 'club_name', 'district_code', 'age_category');
         $this->_check_fields = array('status');
 
         // Determine which filters are set
         $this->_determineFilters();
+
+        // Set column name prefix (hc_ for hill climbs or blank for time trials)
+        if ($this->_id)
+        {
+            $this->_pfx = 'hc_';
+        }
     }
 
     /**
@@ -62,6 +73,15 @@ class RankingsModelsRankings extends RankingsModelsDefault
      **/
     public function listItems()
     {
+        //JFactory::getApplication()->enqueueMessage($this->getTotal(), 'debug');
+        //JFactory::getApplication()->enqueueMessage($this->_id, 'debug');
+        if ($this->_id  && $this->getTotal() < 20)
+        {
+            //JFactory::getApplication()->enqueueMessage("Set Status", 'debug');
+            //$app = JFactory::getApplication();
+            //$this->state->set('check.status', 1);
+        }
+
         $rankings = parent::listItems();
 
         $rideModel = new RankingsModelsRide();
@@ -75,7 +95,11 @@ class RankingsModelsRankings extends RankingsModelsDefault
             $rideModel->set('_rider_id', $rider->rider_id);
             $rideModel->set('_ranking_status', $rider->status);
             $rideModel->set('_list_type', "rankings");
-            
+            $rideModel->set('_hill_climb_ind', $this->_id);
+
+            // For hill climbs only list rides for the year requested
+            $rideModel->set('_year', str_replace(' ', '%',   $this->_db->escape(trim($this->getState('filter.year')), true)));
+
             $rider->rides = $rideModel->listItems(0,1000);
         }
 
@@ -92,11 +116,12 @@ class RankingsModelsRankings extends RankingsModelsDefault
     protected function _buildQuery()
     {
         $query = $this->_db->getQuery(TRUE);
-        
+
         $query
-            ->select($this->_db->qn(array('rider_id', 'name', 'gender', 'age', 'age_category', 'club_name', 'score', 'overall_rank', 'gender_rank', )))
+            ->select($this->_db->qn(array('rider_id', 'name', 'gender', 'age', 'age_category', 'club_name')))
+            ->select($this->_db->qn(array($this->_pfx . 'score', $this->_pfx . 'overall_rank', $this->_pfx . 'gender_rank'), array('score', 'overall_rank', 'gender_rank')))
             ->select('CONCAT(' . $this->_db->qn('age_category') . ' , " ", ' . $this->_db->qn('gender') . ') AS age_gender_category')
-            ->select('CASE ' . $this->_db->qn('ranking_status') .  
+            ->select('CASE ' . $this->_db->qn($this->_pfx . 'ranking_status') .  
                 ' WHEN "F" THEN "Frequent rider"' . 
                 ' WHEN "C" THEN "Complete"' . 
                 ' WHEN "P" THEN "Provisional"' . 
@@ -104,30 +129,39 @@ class RankingsModelsRankings extends RankingsModelsDefault
                 ' ELSE ""' . 
                 ' END' .
                 ' AS status')
-            ->select('CASE SIGN(' . $this->_db->qn('change_in_overall_rank') . ')' . 
+            ->select('CASE SIGN(' . $this->_db->qn($this->_pfx . 'change_in_overall_rank') . ')' . 
                 ' WHEN -1 THEN "arrow-down"' . 
                 ' WHEN 1 THEN "arrow-up"' . 
-                ' ELSE IF (' . $this->_db->qn('newly_complete_ind') . ' = FALSE, "arrow-left", "circle")' . 
+                ' ELSE IF (' . $this->_db->qn($this->_pfx . 'newly_complete_ind') . ' = FALSE, "arrow-left", "circle")' . 
                 ' END' .
                 ' AS change_in_overall_rank_ind')
-            ->select('ABS(' . $this->_db->qn('change_in_overall_rank') . ')' .  
+            ->select('ABS(' . $this->_db->qn($this->_pfx . 'change_in_overall_rank') . ')' .  
                     ' AS change_in_overall_rank_value')
-            ->select('CASE SIGN(' . $this->_db->qn('change_in_gender_rank') . ')' . 
+            ->select('CASE SIGN(' . $this->_db->qn($this->_pfx . 'change_in_gender_rank') . ')' . 
                 ' WHEN -1 THEN "arrow-down"' . 
                 ' WHEN 1 THEN "arrow-up"' . 
-                ' ELSE IF (' . $this->_db->qn('newly_complete_ind') . ' = FALSE, "arrow-left", "circle")' . 
+                ' ELSE IF (' . $this->_db->qn($this->_pfx . 'newly_complete_ind') . ' = FALSE, "arrow-left", "circle")' . 
                 ' END' .
                 ' AS change_in_gender_rank_ind')
-            ->select('ABS(' . $this->_db->qn('change_in_gender_rank') . ')' .  
+            ->select('ABS(' . $this->_db->qn($this->_pfx . 'change_in_gender_rank') . ')' .  
                     ' AS change_in_gender_rank_value');
+
+            if ($this->_id)
+            {
+                $query
+                    -> select('"hc"' . ' AS rankings_type');
+            } else {
+                $query
+                    -> select('"tt"' . ' AS rankings_type');
+            }
         
         // Calculate position in list only if certain filters are applied
         if ($this->_age_category_search || $this->_district_code_search || $this->_name_search || $this->_club_name_search)
         {
             $query
                 ->select('CASE' .
-                    ' WHEN @prev_value = ' . $this->_db->qn('overall_rank') . ' THEN @position_count' . 
-                    ' WHEN @prev_value := ' . $this->_db->qn('overall_rank') . ' THEN @position_count := @sequence' . 
+                    ' WHEN @prev_value = ' . $this->_db->qn($this->_pfx . 'overall_rank') . ' THEN @position_count' . 
+                    ' WHEN @prev_value := ' . $this->_db->qn($this->_pfx . 'overall_rank') . ' THEN @position_count := @sequence' . 
                     ' END' .
                     ' AS position, @sequence:=@sequence + 1')
                 ->from('(' . $this->_buildSubqueryRiders() . ') AS T1')
@@ -164,9 +198,9 @@ class RankingsModelsRankings extends RankingsModelsDefault
         $subquery
             ->select('*')
             ->from  ($this->_db->qn('#__rider_current'))
-            ->where ($this->_db->qn('ranking_status') . ' IN ("' . implode('","', $statuses) . '")')
-            ->order ($this->_db->qn('overall_rank'));
-
+            ->where ($this->_db->qn($this->_pfx . 'ranking_status') . ' IN ("' . implode('","', $statuses) . '")')
+            ->order ($this->_db->qn($this->_pfx . 'overall_rank'));
+//JFactory::getApplication()->enqueueMessage(JText::_($subquery), 'debug');
         return $subquery;
     }
 
@@ -257,12 +291,12 @@ class RankingsModelsRankings extends RankingsModelsDefault
         if ($search == 1)
         {
             $query
-                ->where($this->_db->qn('ranking_status') . ' IN ("C", "F", "P")');
+                ->where($this->_db->qn($this->_pfx . 'ranking_status') . ' IN ("C", "F", "P")');
         } else {
             $query
-                ->where($this->_db->qn('ranking_status') . ' IN ("C", "F")');
+                ->where($this->_db->qn($this->_pfx . 'ranking_status') . ' IN ("C", "F")');
         }
-        
+//JFactory::getApplication()->enqueueMessage(JText::_($query), 'debug');       
         // Don't retrieve blacklisted riders
         $query
             ->where($this->_db->qn('blacklist_ind') . ' = 0');
@@ -280,7 +314,7 @@ class RankingsModelsRankings extends RankingsModelsDefault
     protected function _buildOrder($query)
     {
         $query
-            ->order($this->_db->qn('overall_rank') . ' ASC, ' . $this->_db->qn('score') . ' ASC, ' . $this->_db->qn('ranking_status') . ' ASC');
+            ->order($this->_db->qn($this->_pfx . 'overall_rank') . ' ASC, ' . $this->_db->qn($this->_pfx . 'score') . ' ASC, ' . $this->_db->qn($this->_pfx . 'ranking_status') . ' ASC');
 
         return $query;
     }

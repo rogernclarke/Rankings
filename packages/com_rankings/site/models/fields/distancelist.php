@@ -2,7 +2,7 @@
 /**
  * Rankings Component for Joomla 3.x
  * 
- * @version    1.1
+ * @version    1.7
  * @package    Rankings
  * @subpackage Form
  * @copyright  Copyright (C) Spindata. All rights reserved.
@@ -35,7 +35,7 @@ class JFormFieldDistanceList extends JFormFieldList
 	{
 		$options = array();
 		
-		$values = array('10', '25', '50', '100', '12', '24', 'Other');
+		$values = array('10', '25', '50', '100', '12', '24', 'Other', 'Hill Climb');
 
 		foreach ($values as $value)
 		{

@@ -2,7 +2,7 @@
 /**
  * Rankings Component for Joomla 3.x
  * 
- * @version    1.0
+ * @version    1.7
  * @package    Rankings
  * @subpackage Component
  * @copyright  Copyright (C) Spindata. All rights reserved.
@@ -54,6 +54,7 @@ class RankingsModelsDefault extends JModelBase
     protected $_check_fields = array(); // Valid checkbox fields
     protected $_filter_fields = array(); // Valid filter fields or ordering
     protected $_pagination = null;  // JPagination object
+    protected $_params = null;      // Menu item parameters
     protected $_query = array();    // JDatabaseQuery object - internal cache for the last query used
     protected $_table_name = null;  // Table name for model
     protected $_total = null;       // Total of items in list
@@ -256,7 +257,7 @@ class RankingsModelsDefault extends JModelBase
 
         catch (Exception $e)
         {
-            $this->_app->enqueueMessage($e->getMessage(), 'error');
+            JFactory::getApplication()->enqueueMessage($e->getMessage(), 'error');
             return false;
         }
 
@@ -350,7 +351,7 @@ class RankingsModelsDefault extends JModelBase
         // Build query
         $query = $this->_buildQuery();
         $query = $this->_buildWhere($query);
-        
+//JFactory::getApplication()->enqueueMessage(JText::_($query), 'debug');        
         // Execute query
         $this->_db->setQuery($query);
         $item = $this->_db->loadObject();
@@ -485,6 +486,21 @@ class RankingsModelsDefault extends JModelBase
         }
         
         return $this->_pagination;
+    }
+
+    /**
+     * Get menu item parameters
+     **/
+    public function getParams()
+    {
+        // Load the parameters if they don't already exist
+        if (empty($this->_params))
+        {
+            $app = JFactory::getApplication();
+            $this->_params = $app->getMenu()->getActive()->getParams();
+        }
+        
+        return $this->_params;
     }
     
     /**

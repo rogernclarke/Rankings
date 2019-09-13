@@ -2,7 +2,7 @@
 /**
  * Rankings Component for Joomla 3.x
  * 
- * @version    1.1
+ * @version    1.7
  * @package    Rankings
  * @subpackage Component
  * @copyright  Copyright (C) Spindata. All rights reserved.
@@ -47,6 +47,9 @@ class RankingsViewsRankingsHtml extends JViewHtml
 
                 // Handle pagination
                 $this->pagination = $this->model->getPagination();
+
+                // Get parameters
+                $this->params = $this->model->getParams();
                 
                 // Get the list state
                 $this->state = $this->model->getState();

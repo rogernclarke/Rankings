@@ -2,7 +2,7 @@
 /**
  * Rankings Component for Joomla 3.x
  * 
- * @version    1.6
+ * @version    1.7
  * @package    Rankings
  * @subpackage Component
  * @copyright  Copyright (C) Spindata. All rights reserved.
@@ -52,11 +52,16 @@ class RankingsModelsRider extends RankingsModelsDefault
     {
         $rider = parent::getItem();
 
-        // Get rides for the rider
+        // Get time trial rides for the rider
         $rideModel    = new RankingsModelsRide();
         $rideModel->set('_rider_id', $rider->rider_id);
         $rideModel->set('_list_type', "rider");
-        $rider->rides = $rideModel->listItems(0,1000);
+        $rideModel->set('_hill_climb_ind', 0);
+        $rider->tt_rides = $rideModel->listItems(0,1000);
+
+        // Get hill climb rides for the rider
+        $rideModel->set('_hill_climb_ind', true);
+        $rider->hc_rides = $rideModel->listItems(0,1000);
 
         // Get awards for the rider
         $awardModel    = new RankingsModelsAward();
@@ -71,7 +76,7 @@ class RankingsModelsRider extends RankingsModelsDefault
 
         // Assign awards to rides
         $_ride_count = 0;
-        foreach ($rider->rides as $_ride)
+        foreach ($rider->tt_rides as $_ride)
         {
             $_award_count = 0;
             foreach ($rider->awards as $_award)
@@ -79,7 +84,7 @@ class RankingsModelsRider extends RankingsModelsDefault
             {
                 if ($_ride->event_id === $_award->event_id)
                 {
-                    $rider->rides[$_ride_count]->awards[$_award_count] = $_award;
+                    $rider->tt_rides[$_ride_count]->awards[$_award_count] = $_award;
                     $_award_count++;
                 }
             }
@@ -104,7 +109,7 @@ class RankingsModelsRider extends RankingsModelsDefault
         $query = $this->_db->getQuery(TRUE);
 
         $query
-            ->select($this->_db->qn(array('rc.rider_id', 'rc.name', 'rc.gender', 'rc.age', 'rc.age_category', 'rc.club_name', 'rc.blacklist_ind', 'rc.score', 'rc.overall_rank', 'rc.gender_rank', 'rc.category', 'rc.district_rank', 'rc.age_category_rank', 'd.district_name')))
+            ->select($this->_db->qn(array('rc.rider_id', 'rc.name', 'rc.gender', 'rc.age', 'rc.age_category', 'rc.club_name', 'rc.blacklist_ind', 'rc.score', 'rc.overall_rank', 'rc.gender_rank', 'rc.category', 'rc.district_rank', 'rc.age_category_rank', 'rc.hc_score', 'rc.hc_overall_rank', 'rc.hc_gender_rank', 'rc.hc_category', 'rc.hc_district_rank', 'rc.hc_age_category_rank', 'd.district_name')))
             ->select('CONCAT(' . $this->_db->qn('age_category') . ' , " ", ' . $this->_db->qn('gender') . ') AS age_gender_category')
             ->select('CASE ' . $this->_db->qn('rc.gender') . 
                         ' WHEN "Male" THEN "mars"' . 
@@ -120,6 +125,14 @@ class RankingsModelsRider extends RankingsModelsDefault
                 ' ELSE ""' . 
                 ' END' .
                 ' AS status')
+            ->select('CASE ' . $this->_db->qn('rc.hc_ranking_status') . 
+                ' WHEN "F" THEN "Frequent rider"' . 
+                ' WHEN "C" THEN "Qualified"' . 
+                ' WHEN "P" THEN "Provisional"' . 
+                ' WHEN "L" THEN "Lapsed"' . 
+                ' ELSE ""' . 
+                ' END' .
+                ' AS hc_status')
             ->from($this->_db->qn('#__rider_current', 'rc'))
             ->join('LEFT', $this->_db->qn('#__districts', 'd') . ' ON (' . $this->_db->qn('rc.district_code') . ' = ' . $this->_db->qn('d.district_code') . ')');
 

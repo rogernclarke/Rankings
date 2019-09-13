@@ -2,7 +2,7 @@
 /**
  * Rankings Component for Joomla 3.x
  * 
- * @version    1.6
+ * @version    1.7
  * @package    Rankings
  * @subpackage Component
  * @copyright  Copyright (C) Spindata. All rights reserved.
@@ -92,7 +92,12 @@ defined('_JEXEC') or die('Restricted access');
                         {
                             echo abs($this->_eventsListView->distance) . ' hours';
                         } else {
-                            echo round($this->_eventsListView->distance, 1) . ' miles';
+                            if ($this->_eventsListView->distance > 0)
+                            {
+                                echo round($this->_eventsListView->distance, 1) . ' miles';
+                            } else {
+                                echo '-';
+                            }
                         } ?></td>
 					<td class="tt-col-event-distance visible-phone"><?php echo round($this->_eventsListView->distance, 1); ?></td>
 				</tr>

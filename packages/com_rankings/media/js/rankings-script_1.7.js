@@ -1,12 +1,34 @@
 /**
  * Rankings Component for Joomla 3.x
  * 
- * @version    1.6.1
+ * @version    1.7
  * @package    Rankings
  * @subpackage Component
  * @copyright  Copyright (C) Spindata. All rights reserved.
  * @license    GNU General Public License version 3 or later; see LICENSE.txt
  */
+
+function set_tab($context) {
+	var $key = $context + "_tab"
+	if (sessionStorage.getItem($key) !== null) {
+		var $href = sessionStorage.getItem($key);
+		var $clss = $href.substring(1);
+		var $curr = $(".tt-nav-tabs a[href='" + $href + "']").parent();
+
+		$('.tt-nav-tabs li').removeClass("active");
+		$('.tab-pane').removeClass("active");
+
+		$('.tt-rider-category').removeClass("active");
+    	$('.tt-rider-category.' + $clss).addClass("active");
+
+    	$('.tt-rider-rank').removeClass("active");
+    	$('.tt-rider-rank.' + $clss).addClass("active");
+
+	    $curr.addClass("active");
+	    $($href).addClass("active");
+	}
+}
+
 function ttToggleRides(rankingID) {
     var element = document.getElementById("tt-rankings-" + rankingID + "-rides");
     if (element.style.display === "none") {
@@ -19,17 +41,26 @@ function ttToggleRides(rankingID) {
     element.classList.toggle("fa-angle-down");
 }
 
-// script for event tab steps
-    $('a[data-toggle="tab"]').on('shown.bs.tab', function (e) {
+// script for tab steps
+$(document).on('shown.bs.tab', 'a[data-toggle="tab"]', function (e) {
+    var $key = $(e.target).attr('data-context') + "_tab";
+    var $href = $(e.target).attr('href');
+    var $clss = $href.substring(1);
+    var $curr = $(".tt-nav-tabs a[href='" + $href + "']").parent();
 
-        var href = $(e.target).attr('href');
-        var $curr = $(".tt-nav-tabs a[href='" + href + "']").parent();
+    $('.tt-nav-tabs li').removeClass("active");
 
-        $('.tt-nav-tabs li').removeClass();
+    $('.tt-rider-category').removeClass("active");
+    $('.tt-rider-category.' + $clss).addClass("active");
 
-        $curr.addClass("active");
-        $curr.prevAll().addClass("visited");
-    });
+    $('.tt-rider-rank').removeClass("active");
+    $('.tt-rider-rank.' + $clss).addClass("active");
+
+    $curr.addClass("active");
+    $curr.prevAll().addClass("visited");
+
+	sessionStorage.setItem($key, $href);
+});
 // end  script for tab steps
 
 // scripts for sorting startsheet table

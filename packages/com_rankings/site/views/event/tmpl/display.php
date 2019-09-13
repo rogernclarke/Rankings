@@ -2,7 +2,7 @@
 /**
  * Rankings Component for Joomla 3.x
  * 
- * @version    1.6.1
+ * @version    1.7
  * @package    Rankings
  * @subpackage Component
  * @copyright  Copyright (C) Spindata. All rights reserved.
@@ -24,18 +24,23 @@ defined('_JEXEC') or die('Restricted access');
             <div class="tt-event-date">
                 <p><?php echo date('jS F Y', strtotime($this->event->event_date)); ?></p>
             </div>
-            <?php if ($this->event->distance !== 'Other')
-            { ?>
-                <div class="tt-distance">
-                    <p><?php if($this->event->duration_event_ind)
+            <div class="tt-distance">
+                <p><?php if($this->event->duration_event_ind)
+                {
+                    echo abs($this->event->distance) . ' hours';
+                } else {
+                    if ($this->event->hill_climb_ind)
                     {
-                        echo abs($this->event->distance) . ' hours';
+                        echo JText::_('COM_RANKINGS_HILL_CLIMB');
+                        if ($this->event->distance > 0)
+                        {
+                            echo ' - ' . (float) $this->event->distance . ' miles';
+                        }
                     } else {
                         echo (float) $this->event->distance . ' miles';
-                    } ?></p>
-                </div>
-            <?php
-            } ?>
+                    }
+                } ?></p>
+            </div>
             <div class="tt-course">
                 <span class="tt-label"><?php echo JText::_('COM_RANKINGS_COURSE'); ?></span>
                 <span class="tt-text"><?php echo $this->event->course_code; ?></span>
@@ -61,7 +66,7 @@ defined('_JEXEC') or die('Restricted access');
                 <li role="presentation" class="<?php if (!$this->event->startsheet_ind) { echo "disabled"; } else if (!$this->event->results_ind) { echo "active"; } ?>">
                     <?php if ($this->event->startsheet_ind)
                     { ?>
-                        <a href="#startsheet" aria-controls="startsheet" role="tab" data-toggle="tab">
+                        <a href="#startsheet" aria-controls="startsheet" role="tab" data-toggle="tab" data-context="event">
                             <i class="fa fa-search" aria-hidden="true"></i>
                             <p>Start Sheet</p>
                         </a>
@@ -77,7 +82,7 @@ defined('_JEXEC') or die('Restricted access');
                 <li role="presentation" class="<?php if ($this->event->results_ind) { echo "active"; } else { echo "disabled"; } ?>">
                     <?php if ($this->event->results_ind)
                     { ?>
-                        <a href="#results" aria-controls="results" role="tab" data-toggle="tab">
+                        <a href="#results" aria-controls="results" role="tab" data-toggle="tab" data-context="event">
                             <i class="fas fa-paste" aria-hidden="true"></i>
                             <p>Results</p>
                         </a>
@@ -93,7 +98,7 @@ defined('_JEXEC') or die('Restricted access');
                 <li role="presentation" class="<?php if (!$this->event->results_ind) { echo "disabled"; } ?>">
                     <?php if ($this->event->results_ind)
                     { ?>
-                        <a href="#awards" aria-controls="awards" role="tab" data-toggle="tab">
+                        <a href="#awards" aria-controls="awards" role="tab" data-toggle="tab" data-context="event">
                             <i class="fas fa-award" aria-hidden="true"></i>
                             <p>Awards</p>
                         </a>
@@ -257,10 +262,10 @@ defined('_JEXEC') or die('Restricted access');
                         {
                             if(in_array(date('M', strtotime($this->event->event_date)), array("Nov", "Dec", "Jan")))
                             { ?>
-                                <p class="alert alert-warning"><i class="fa fa-exclamation-triangle"></i>Events in November, December or January are not awarded ranking points.</p>
+                                <p class="alert alert-warning"><i class="fa fa-exclamation-triangle"></i><?php echo JText::_('COM_RANKINGS_EVENT_OUT_OF_SEASON'); ?></p>
                             <?php
                             } else { ?>
-                                <p class="alert alert-warning"><i class="fa fa-exclamation-triangle"></i>Insufficient ranked riders to award ranking points.</p>
+                                <p class="alert alert-warning"><i class="fa fa-exclamation-triangle"></i><?php echo JText::_('COM_RANKINGS_EVENT_INSUFFICIENT_DATA'); ?></p>
                             <?php
                             }        
                         } ?>
@@ -607,3 +612,6 @@ defined('_JEXEC') or die('Restricted access');
     <input class="btn btn-info btn-small tt-btn-back" type="button" value="< Back" onClick="history.go(-1);return true;">
 <?php
 } ?>
+<script>
+    set_tab("event");
+</script>
