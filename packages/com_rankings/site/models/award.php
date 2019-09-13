@@ -2,7 +2,7 @@
 /**
  * Rankings Component for Joomla 3.x
  * 
- * @version    1.6
+ * @version    1.7
  * @package    Rankings
  * @subpackage Component
  * @copyright  Copyright (C) Spindata. All rights reserved.
@@ -30,10 +30,13 @@ class RankingsModelsAward extends RankingsModelsDefault
     /**
     * Protected fields
     **/
-    protected $_award_name     = null;
-    protected $_event_id       = null;
-    protected $_list_type      = null;
-    protected $_rider_id       = null;
+    protected $_award_name          = null;
+    protected $_event_id            = null;
+    protected $_hill_climb_ind      = 0;
+    protected $_list_type           = null;
+    protected $_rider_id            = null;
+    protected $_time_format         = null;
+    protected $_time_format_seconds = null;
 
     /**
      * listItems
@@ -113,6 +116,15 @@ class RankingsModelsAward extends RankingsModelsDefault
      **/
     protected function _buildQuery()
     {
+        if ($this->_hill_climb_ind)
+        {
+            $this->_time_format         = '%i:%s.%f';
+            $this->_time_format_seconds = '%s.%f';
+        } else {
+            $this->_time_format         = '%i:%s';
+            $this->_time_format_seconds = '%s';
+        }
+
         $query = $this->_db->getQuery(TRUE);
 
         $query
@@ -121,7 +133,7 @@ class RankingsModelsAward extends RankingsModelsDefault
             ->select($this->_db->qn(array('r.club_name', 'r.category_on_day')))
             ->select($this->_db->qn('r.distance') . ' AS ride_distance')
             ->select('CASE TIME_FORMAT(' . $this->_db->qn('r.time') . ', "%k")' . 
-                ' WHEN 0 THEN TIME_FORMAT(' . $this->_db->qn('r.time') . ', "%i:%s")' . 
+                ' WHEN 0 THEN TRIM(TRAILING "00000" FROM(TRIM(LEADING "0" FROM TIME_FORMAT(' . $this->_db->qn('r.time') . ', "' . $this->_time_format . '"))))' . 
                 ' ELSE TIME_FORMAT(' . $this->_db->qn('r.time') . ', "%k:%i:%s")' . 
                 ' END' . 
                 ' AS ride_time')
@@ -134,8 +146,9 @@ class RankingsModelsAward extends RankingsModelsDefault
                 ' AS vets_standard_result')
             ->select('IF (' . $this->_db->qn('r.time') . ' IN ("12:00:00", "24:00:00"), ' .
                 $this->_db->qn('r.distance') . ' - ' . $this->_db->qn('r.predicted_distance') . ',' .
-                ' CASE TIME_FORMAT(SUBTIME(' . $this->_db->qn('r.predicted_time') . ', ' . $this->_db->qn('r.time') . '), "%k")' . 
-                ' WHEN 0 THEN TIME_FORMAT(SUBTIME(' . $this->_db->qn('r.predicted_time') . ', ' . $this->_db->qn('r.time') . '), "%i:%s")' . 
+                ' CASE TIME_FORMAT(SUBTIME(' . $this->_db->qn('r.predicted_time') . ', ' . $this->_db->qn('r.time') . '), "%k")' .
+                ' WHEN 0 THEN IF(TIME_FORMAT(SUBTIME(' . $this->_db->qn('r.predicted_time') . ', ' . $this->_db->qn('r.time') . '), "%i") = 0, TRIM(TRAILING "00000" FROM(TIME_FORMAT(SUBTIME(' . $this->_db->qn('r.predicted_time') . ', ' . $this->_db->qn('r.time') . '), "' . $this->_time_format_seconds . '"))), TRIM(TRAILING "00000" FROM(TRIM(LEADING "0" FROM TIME_FORMAT(SUBTIME(' . $this->_db->qn('r.predicted_time') . ', ' . $this->_db->qn('r.time') . '), "' . $this->_time_format . '")))))' .
+                //' WHEN 0 THEN TRIM(TRAILING "00000" FROM(TRIM(LEADING "0" FROM TIME_FORMAT(SUBTIME(' . $this->_db->qn('r.predicted_time') . ', ' . $this->_db->qn('r.time') . '), "' . $this->_time_format . '"))))' .
                 ' ELSE TIME_FORMAT(SUBTIME(' . $this->_db->qn('r.predicted_time') . ', ' . $this->_db->qn('r.time') . '), "%k:%i:%s")' .
                 ' END)' .
                 ' AS handicap_result')
@@ -176,11 +189,11 @@ class RankingsModelsAward extends RankingsModelsDefault
                 ' WHEN 1 THEN IF (' . $this->_db->qn('at.award_basis') . ' = "Aggregate", SUM(' . $this->_db->qn('r.distance') . '), MIN(' . $this->_db->qn('r.distance') . '))' .
                 ' ELSE IF (' . $this->_db->qn('at.award_basis') . ' = "Aggregate", ' . 
                     ' CASE TIME_FORMAT(SEC_TO_TIME(SUM(TIME_TO_SEC(' . $this->_db->qn('r.time') . '))), "%k")' . 
-                    ' WHEN 0 THEN TIME_FORMAT(SEC_TO_TIME(SUM(TIME_TO_SEC(' . $this->_db->qn('r.time') . '))), "%i:%s")' . 
+                    ' WHEN 0 THEN TRIM(TRAILING "00000" FROM(TRIM(LEADING "0" FROM TIME_FORMAT(SEC_TO_TIME(SUM(TIME_TO_SEC(' . $this->_db->qn('r.time') . ')) + SUM(MICROSECOND(' . $this->_db->qn('r.time') . '))/1000000), "' . $this->_time_format . '"))))' . 
                     ' ELSE TIME_FORMAT(SEC_TO_TIME(SUM(TIME_TO_SEC(' . $this->_db->qn('r.time') . '))), "%k:%i:%s")' .
                     ' END' . ', ' .
                     ' CASE TIME_FORMAT(MAX(' . $this->_db->qn('r.time') . '), "%k")' . 
-                    ' WHEN 0 THEN TIME_FORMAT(MAX(' . $this->_db->qn('r.time') . '), "%i:%s")' . 
+                    ' WHEN 0 THEN TRIM(TRAILING "00000" FROM(TRIM(LEADING "0" FROM TIME_FORMAT(MAX(' . $this->_db->qn('r.time') . '), "' . $this->_time_format . '"))))' . 
                     ' ELSE TIME_FORMAT(MAX(' . $this->_db->qn('r.time') . '), "%k:%i:%s")' .
                     ' END)' .
                 ' END' .

@@ -2,7 +2,7 @@
 /**
  * Rankings Component for Joomla 3.x
  * 
- * @version    1.6.1
+ * @version    1.7
  * @package    Rankings
  * @subpackage Component
  * @copyright  Copyright (C) Spindata. All rights reserved.
@@ -77,6 +77,7 @@ class RankingsModelsEvent extends RankingsModelsDefault
         $rideModel    = new RankingsModelsRide();
         $rideModel->set('_event_id', $event->event_id);
         $rideModel->set('_list_type', "event_results");
+        $rideModel->set('_hill_climb_ind', $event->hill_climb_ind);
 
         $event->rides = $rideModel->listItems(0,1000);
 
@@ -84,6 +85,7 @@ class RankingsModelsEvent extends RankingsModelsDefault
         $awardModel    = new RankingsModelsAward();
         $awardModel->set('_event_id', $event->event_id);
         $awardModel->set('_list_type', "event");
+        $awardModel->set('_hill_climb_ind', $event->hill_climb_ind);
 
         $event->awards = $awardModel->listItems(0,1000);
 
@@ -166,12 +168,7 @@ class RankingsModelsEvent extends RankingsModelsDefault
         $query = $this->_db->getQuery(TRUE);
 
         $query
-            ->select($this->_db->qn(array('e.event_id', 'e.event_date', 'e.event_name', 'e.course_code', 'e.processed_date', 'e.duration_event_ind')))
-            ->select('CASE ' . $this->_db->qn('e.distance') . 
-                ' WHEN 0 THEN "Other"' . 
-                ' ELSE ' . $this->_db->qn('e.distance') . 
-                ' END' . 
-                ' AS distance')
+            ->select($this->_db->qn(array('e.event_id', 'e.event_date', 'e.event_name', 'e.course_code', 'e.distance', 'e.processed_date', 'e.duration_event_ind', 'e.hill_climb_ind')))
             ->select('IF (' . $this->_db->qn('e.event_date') . 
                 ' < "2019-02-01", false, true)' .
                 ' AS startsheet_ind')
@@ -326,10 +323,17 @@ class RankingsModelsEvent extends RankingsModelsDefault
             {
                 switch ($search) 
                 {
+                    case 'Hill Climb':
+                        $search = $this->_db->q(str_replace(' ', '%', $this->_db->escape(trim($search), true)));
+                        $query
+                            ->where($this->_db->qn('e.hill_climb_ind') . ' = TRUE');
+                        break;
+
                     case 'Other':
                         $search = $this->_db->q(str_replace(' ', '%', $this->_db->escape(trim($search), true)));
                         $query
-                            ->where($this->_db->qn('e.distance') . ' NOT IN(10, 25, 50, 100)');
+                            ->where($this->_db->qn('e.distance') . ' NOT IN(10, 25, 50, 100)')
+                            ->where($this->_db->qn('e.duration_event_ind') . ' = FALSE');
                         break;
 
                     case '12':
@@ -346,7 +350,8 @@ class RankingsModelsEvent extends RankingsModelsDefault
                     case '100':
                         $search = $this->_db->q(str_replace(' ', '%', $this->_db->escape(trim($search), true)));
                         $query
-                            ->where($this->_db->qn('e.distance') . ' = ' . $search);
+                            ->where($this->_db->qn('e.distance') . ' = ' . $search)
+                            ->where($this->_db->qn('e.hill_climb_ind') . ' = FALSE');;
                         break;
 
                     case 'All':

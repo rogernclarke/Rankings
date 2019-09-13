@@ -2,7 +2,7 @@
 /**
  * Rankings Component for Joomla 3.x
  * 
- * @version    1.4
+ * @version    1.7
  * @package    Rankings
  * @subpackage Component
  * @copyright  Copyright (C) Spindata. All rights reserved.
@@ -13,7 +13,7 @@
 defined('_JEXEC') or die('Restricted access');
 ?>
 
-<h1><?php echo JText::_('COM_RANKINGS_RANKINGS'); ?></h1>
+<h1><?php echo $this->escape($this->params->get('page_title')); ?></h1>
 
 <form action="<?php echo JRoute::_('index.php?option=com_rankings'); ?>" method="post" name="AdminForm" id="AdminForm">
 	<div class="tt-list-form">
@@ -21,6 +21,8 @@ defined('_JEXEC') or die('Restricted access');
 			<fieldset class="adminform">
 				<div>
 					<?php
+						$this->form->setValue('rankings_type', null, $this->rankings[0]->rankings_type);
+						$this->form->setValue('filter_year', null, $this->escape($this->state->get('filter.year')));
 						$this->form->setValue('filter_gender', null, $this->escape($this->state->get('filter.gender')));
 						$this->form->setValue('filter_age_category', null, $this->escape($this->state->get('filter.age_category')));
 						$this->form->setValue('filter_district_code', null, $this->escape($this->state->get('filter.district_code')));
@@ -158,11 +160,16 @@ defined('_JEXEC') or die('Restricted access');
 										<tr id="tt-rankings-<?php echo $i+1; ?>-rides-<?php echo $j+1; ?>" class="tt-rankings-<?php if ($this->_ridesListView->ride->counting_ride_ind) { echo "counting-ride";} else { echo "non-counting-ride";} ?>">
 											<td class="tt-col-event-date"><?php echo date('d M', strtotime($this->_ridesListView->ride->event_date)); ?></td>
 											<td class="tt-col-event-name tt-table-event-link"><a href="<?php echo JRoute::_('index.php?Itemid=454&option=com_rankings&task=event.display&cid=' . $this->_ridesListView->ride->event_id); ?>" rel="nofollow"><?php echo $this->_ridesListView->ride->event_name; ?></a></td>
-											<td class="tt-col-event-distance hidden-phone"><?php if(!empty($this->_ridesListView->ride->ride_distance))
+											<td class="tt-col-event-distance hidden-phone"><?php if($this->_ridesListView->ride->duration_event_ind)
     						                    {
                             						echo abs($this->_ridesListView->ride->distance) . ' hours';
                         						} else {
-                            						echo abs($this->_ridesListView->ride->distance) . ' miles';
+                        							if($this->_ridesListView->ride->distance > 0)
+                        							{
+                            							echo abs($this->_ridesListView->ride->distance) . ' miles';
+                            						} else {
+                            							echo '-';
+                            						}
                         						} ?></td>
 											<td class="tt-col-event-distance visible-phone"><?php echo round($this->_ridesListView->ride->distance); ?></td>
 											<td class="tt-col-ranking-ride-points"><?php echo $this->_ridesListView->ride->ranking_points; ?></td>

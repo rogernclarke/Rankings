@@ -2,7 +2,7 @@
 /**
  * Rankings Component for Joomla 3.x
  * 
- * @version    1.6.1
+ * @version    1.7
  * @package    Rankings
  * @subpackage Component
  * @copyright  Copyright (C) Spindata. All rights reserved.
@@ -30,12 +30,15 @@ class RankingsModelsRide extends RankingsModelsDefault
     /**
     * Protected fields
     **/
-    protected $_event_duration = null;
-    protected $_event_id       = null;
-    protected $_last_run_date  = null;
-    protected $_list_type      = null;
-    protected $_ranking_status = null;
-    protected $_rider_id       = null;
+    protected $_event_duration      = null;
+    protected $_hill_climb_ind      = 0;
+    protected $_history_table_name  = null;
+    protected $_last_run_date       = null;
+    protected $_list_type           = null;
+    protected $_ranking_status      = null;
+    protected $_rider_id            = null;
+    protected $_time_format         = null;
+    protected $_year                = null;
 
     /**
      * Constructor
@@ -143,6 +146,15 @@ class RankingsModelsRide extends RankingsModelsDefault
      **/
     protected function _buildQuery()
     {
+        if ($this->_hill_climb_ind)
+        {
+            $this->_history_table_name  = '#__hc_rider_history';
+            $this->_time_format         = '%i:%s.%f';
+        } else {
+            $this->_history_table_name  = '#__rider_history';
+            $this->_time_format         = '%i:%s';
+        }
+
         $query = $this->_db->getQuery(TRUE);
 
         $query
@@ -162,7 +174,8 @@ class RankingsModelsRide extends RankingsModelsDefault
             ->select('CONCAT(' . $this->_db->qn('rr.first_name') . ', " ", ' . $this->_db->qn('rr.last_name') . ')' . 
                 ' AS name')
             ->select('CONCAT(' . $this->_db->qn('r.age_category_on_day') . ', " ", ' . $this->_db->qn('rr.gender') . ')' . 
-                ' AS age_gender_category');
+                ' AS age_gender_category')
+            ->select($this->_db->qn(array('e.duration_event_ind')));
 
         switch ($this->_list_type)
         {
@@ -205,14 +218,14 @@ class RankingsModelsRide extends RankingsModelsDefault
 
                 $query
                     ->select($this->_db->qn(array('T1.rider_id', 'T1.event_id', 'club_name', 'age_on_day', 'position', 'ranking_points', 'counting_ride_ind', 'category_on_day', 'predicted_position', 'predicted_time', 'bib', 'start_time', 'predicted_distance', 'ride_distance', 'blacklist_ind', 'name', 'age_gender_category', 'position_variance_ind', 'position_variance_value', 'rider_club_name', 'form', 'vets_standard_time', 'vets_standard_distance', 'vets_position', 'gender_position', 'gender')))
-                    ->select('CASE DATE_FORMAT(' . $this->_db->qn('complete_time') . ', "%k")' . 
-                        ' WHEN 0 THEN DATE_FORMAT(' . $this->_db->qn('complete_time') . ', "%i:%s")' . 
-                        ' ELSE DATE_FORMAT(' . $this->_db->qn('complete_time') . ', "%k:%i:%s")' . 
+                    ->select('CASE TIME_FORMAT(' . $this->_db->qn('complete_time') . ', "%k")' . 
+                        ' WHEN 0 THEN TRIM(TRAILING "00000" FROM(TRIM(LEADING "0" FROM TIME_FORMAT(' . $this->_db->qn('complete_time') . ', "' . $this->_time_format . '"))))' . 
+                        ' ELSE TIME_FORMAT(' . $this->_db->qn('complete_time') . ', "%k:%i:%s")' . 
                         ' END' . 
                         ' AS time')
                     ->select('CASE DATE_FORMAT(' . $this->_db->qn('vets_standard_time') . ', "%k")' . 
-                        ' WHEN 0 THEN DATE_FORMAT(' . $this->_db->qn('vets_standard_time') . ', "%i:%s")' . 
-                        ' ELSE DATE_FORMAT(' . $this->_db->qn('vets_standard_time') . ', "%k:%i:%s")' . 
+                        ' WHEN 0 THEN TRIM(TRAILING "00000" FROM(TRIM(LEADING "0" FROM TIME_FORMAT(' . $this->_db->qn('vets_standard_time') . ', "' . $this->_time_format . '"))))' . 
+                        ' ELSE TIME_FORMAT(' . $this->_db->qn('vets_standard_time') . ', "%k:%i:%s")' . 
                         ' END' . 
                         ' AS vets_standard_time')
                     ->select('IF (' . $this->_db->qn('complete_time') . ' IN ("12:00:00", "24:00:00"), ' . 
@@ -239,9 +252,9 @@ class RankingsModelsRide extends RankingsModelsDefault
                         ' END' . 
                         ' AS improved_ride')
                 
-                    ->select('CASE DATE_FORMAT(' . $this->_db->qn('r.time') . ', "%k")' . 
-                        ' WHEN 0 THEN DATE_FORMAT(' . $this->_db->qn('r.time') . ', "%i:%s")' . 
-                        ' ELSE DATE_FORMAT(' . $this->_db->qn('r.time') . ', "%k:%i:%s")' . 
+                    ->select('CASE TIME_FORMAT(' . $this->_db->qn('r.time') . ', "%k")' . 
+                        ' WHEN 0 THEN TRIM(TRAILING "00000" FROM(TRIM(LEADING "0" FROM TIME_FORMAT(' . $this->_db->qn('r.time') . ', "' . $this->_time_format . '"))))' . 
+                        ' ELSE TIME_FORMAT(' . $this->_db->qn('r.time') . ', "%k:%i:%s")' . 
                         ' END' . 
                         ' AS time')
 
@@ -250,7 +263,7 @@ class RankingsModelsRide extends RankingsModelsDefault
 
                 // Rider category after event is only applicable for rides displayed for a rider
                     ->select($this->_db->qn('rh.category') . ' AS category_after_day')
-                    ->from  ($this->_db->qn('#__rider_history', 'rh'));
+                    ->from  ($this->_db->qn($this->_history_table_name, 'rh'));
 
                 // Event details are applicable for rides displayed for a rider or rankings
                 $query
@@ -317,20 +330,26 @@ class RankingsModelsRide extends RankingsModelsDefault
             ->where($this->_db->qn('r.rider_id') . ' = ' . $this->_db->qn('rr.rider_id'))
             ->where($this->_db->qn('r.event_id') . ' = ' . $this->_db->qn('e.event_id'))
             ->where($this->_db->qn('r.ranking_points') . ' > 0')
+            ->where($this->_db->qn('e.hill_climb_ind') . ' = ' . $this->_hill_climb_ind)
             ->order($this->_db->qn('e.event_date') . ' DESC');
 
-        if ($this->_ranking_status === "Complete")
+        if ($this->_hill_climb_ind)
         {
-            // For riders with Complete status a maximum of 8 rides are displayed, otherwise retrieve all the rides that match the criteria
-            $query
-                ->setlimit(8);
+
+        } else {
+            if ($this->_ranking_status === "Complete")
+            {
+                // For riders with Complete status a maximum of 8 rides are displayed, otherwise retrieve all the rides that match the criteria
+                $query
+                    ->setlimit(8);
+            }
         }
 
         return $query;
     }
 
     /**
-     * _buildSubqueryRides
+     * _buildSubqueryEventRides
      *
      * Builds the subquery used to return the set of rides for which position is to be calculated
      * 
@@ -528,18 +547,25 @@ class RankingsModelsRide extends RankingsModelsDefault
                     ->where($this->_db->qn('r.event_id') . ' = ' . $this->_db->qn('e.event_id'))
                     ->where($this->_db->qn('r.rider_id') . ' = ' . $this->_db->qn('rh.rider_id'))
                     ->where($this->_db->qn('r.time') . ' > "00:00:00"')
-                    ->where($this->_db->qn('rh.effective_date') . ' = (' . $this->_buildSubqueryNextHistory() . ')');
+                    ->where($this->_db->qn('rh.effective_date') . ' = (' . $this->_buildSubqueryNextHistory() . ')')
+                    ->where($this->_db->qn('e.hill_climb_ind') . ' = ' . $this->_hill_climb_ind);
                 break;
             case "rankings":
-                if ($this->_ranking_status === "Frequent rider")
+                if ($this->_hill_climb_ind)
                 {
                     $query
-                        ->where($this->_db->qn('event_date') . ' >= DATE_SUB("' . $this->_last_run_date . '", INTERVAL 4 MONTH)');
-                }
-                else
-                {
-                    $query
-                        ->where($this->_db->qn('event_date') . ' >= DATE_SUB("' . $this->_last_run_date . '", INTERVAL 1 YEAR)');
+                        ->where($this->_db->qn('event_date') . ' >= "2019-01-01"');
+                } else {
+                    if ($this->_ranking_status === "Frequent rider")
+                    {
+                        $query
+                            ->where($this->_db->qn('event_date') . ' >= DATE_SUB("' . $this->_last_run_date . '", INTERVAL 4 MONTH)');
+                    }
+                    else
+                    {
+                        $query
+                            ->where($this->_db->qn('event_date') . ' >= DATE_SUB("' . $this->_last_run_date . '", INTERVAL 1 YEAR)');
+                    }
                 }
                 break;
         }
@@ -560,7 +586,7 @@ class RankingsModelsRide extends RankingsModelsDefault
 
         $subQuery
             ->select('MIN(' . $this->_db->qn('rh2.effective_date') . ')')
-            ->from  ($this->_db->qn('#__rider_history', 'rh2'))
+            ->from  ($this->_db->qn($this->_history_table_name, 'rh2'))
             ->where ($this->_db->qn('rh2.rider_id') . ' = ' . $this->_db->qn('r.rider_id'))
             ->where ($this->_db->qn('rh2.effective_date') . ' >= e.event_date');
 

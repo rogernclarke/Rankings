@@ -1,7 +1,7 @@
 /**
  * Rankings Component for Joomla 3.x
  * 
- * @version    1.6.1
+ * @version    1.7
  * @package    Rankings
  * @subpackage Component
  * @copyright  Copyright (C) Spindata. All rights reserved.
@@ -167,16 +167,20 @@ div.tt-pagination {
 	margin: auto 0;
 }
 .tt-rider-heading .tt-rider-category {
+	display: none;
 	min-width: 131px;
 	position: relative;
+}
+.tt-rider-heading .tt-rider-category.active {
+	display: inline-block;
 }
 .tt-rider-heading .tt-rider-status {
 	bottom: 0px;
 	display: block;
-	position: absolute;
 	right: 0px;
+	width: 100%;
 }
-.tt-rider-name, .tt-rider-category, .tt-rider, .tt-rider-rank {
+.tt-rider-name, .tt-rider {
 	display: inline-block;
 }
 .tt-rider {
@@ -194,9 +198,15 @@ div.tt-pagination {
 	margin-left: -2px;
 }
 .tt-rider-category {
-	display: inline-block;
 	font-size: 2.2rem;
-	padding: 0.5rem 0 0 0;
+	padding: 0.2rem 0 0 0;
+}
+.tt-rider-category i {
+	float: right;
+	margin: 0.375rem 0.25rem 0.25rem;
+}
+.tt-rider-category .tt-tag-large {
+	margin: 4px 0 2px 0;
 }
 .tt-rider-status {
 	display: flex;
@@ -204,8 +214,12 @@ div.tt-pagination {
 	padding: 4px 0 0 0;
 }
 .tt-rider-rank {
+	display: none;
 	font-size: 1.5rem;
 	text-align: right;
+}
+.tt-rider-rank.active {
+	display: inline-block;
 }
 .tt-rider-rank .tt-overall {
 	color: #aaaaaa;
@@ -740,9 +754,13 @@ div.tt-pages-counter, div.tt-results-counter {
 .tt-rider-status .tt-tag {
 	background-color: #cccccc;
 	color: #4f4e53;
+	text-align: center;
 }
 .tt-rider-status .tt-tag::before {
 	border-right-color: #cccccc;
+}
+.tt-rider-heading .tt-rider-status .tt-tag {
+	width: 100%;
 }
 .tt-tag-category-suffix {
 	font-size: 1.65rem;
@@ -804,7 +822,7 @@ div.tt-pages-counter, div.tt-results-counter {
 	border-radius: 0 2px 2px 0;
 	font-size: 1rem;
 	height: 20px;
-	line-height: 20px;
+	line-height: 22px;
 	padding: 0 8px 0 16px;
 	margin: 2px 0 2px 0;
 }
@@ -898,10 +916,10 @@ div.tt-pages-counter, div.tt-results-counter {
     width: 80%;
     z-index: -1;
 }
-#tt-rider-tabs .tt-nav-tabs li::before {
+/*#tt-rider-tabs .tt-nav-tabs li::before {
 	left: -70%;
 	width: 100%;
-}
+}*/
 .tt-nav-tabs li.active::before {
     background: #222845;
 }
@@ -911,9 +929,9 @@ div.tt-pages-counter, div.tt-results-counter {
 .tt-nav-tabs li:first-child::before {
     width: 0;
 }
-#tt-rider-tabs li:first-child::before {
+/*#tt-rider-tabs li:first-child::before {
     width: 0;
-}
+}*/
 .tt-nav-tabs li {
     display: inline-flex;
     float: none;
@@ -983,24 +1001,24 @@ div.tt-pages-counter, div.tt-results-counter {
 }
 
 @media only all and (max-width: 34.938rem) {
-	#tt-event-tabs .tt-nav-tabs li {
+	.tt-nav-tabs li {
 		min-width: 65px;
 	}
-	#tt-event-tabs .tt-nav-tabs li::before {
+	.tt-nav-tabs li::before {
 	    left: -120%;
 	    top: 30px;
 	    width: 150%;
 	}
-	#tt-event-tabs .tt-nav-tabs li:first-child::before {
+	.tt-nav-tabs li:first-child::before {
 	    width: 0;
 	}
-	#tt-event-tabs .tt-nav-tabs li i {
+	.tt-nav-tabs li i {
 		font-size: 24px;
     	height: 48px;
     	line-height: 44px;
     	width: 48px;
 	}
-	#tt-event-tabs .tt-nav-tabs li p {
+	.tt-nav-tabs li p {
     	font-size: 1rem;
     	line-height: 1.25rem;
     }
