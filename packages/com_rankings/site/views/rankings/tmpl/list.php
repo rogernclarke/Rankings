@@ -2,7 +2,7 @@
 /**
  * Rankings Component for Joomla 3.x
  * 
- * @version    1.7
+ * @version    1.8
  * @package    Rankings
  * @subpackage Component
  * @copyright  Copyright (C) Spindata. All rights reserved.
@@ -132,8 +132,14 @@ defined('_JEXEC') or die('Restricted access');
     					</div>
     				</td>
 					<td class="tt-col-rider-name tt-table-rider-link">
-						<a href="<?php echo JRoute::_('index.php?Itemid=816&option=com_rankings&task=rider.display&cid='.$this->_rankingsListView->rider->rider_id); ?>"><?php echo $this->_rankingsListView->rider->name; ?>
-						</a>
+						<div class="tt-rider-name-container">
+                            <div class="tt-rider-name">
+                                <a href="<?php echo JRoute::_('index.php?Itemid=816&option=com_rankings&task=rider.display&cid='.$this->_rankingsListView->rider->rider_id); ?>"><?php echo $this->_rankingsListView->rider->name; ?></a>
+                            </div>
+                            <div class="tt-rider-category hidden-small-phone">
+                                <div class="tt-tag tt-tag-very-small tt-rider-category-<?php echo substr($this->_rankingsListView->rider->category, 0, 1) ;?>"><?php echo $this->_rankingsListView->rider->category; ?></div>
+                            </div>
+                        </div>
 					</td>
 					<td class="tt-col-club-name hidden-phone"><?php echo $this->_rankingsListView->rider->club_name; ?></td>
 					<td class="tt-col-age-gender-category hidden-tablet hidden-phone"><?php echo $this->_rankingsListView->rider->age_gender_category; ?></td>
