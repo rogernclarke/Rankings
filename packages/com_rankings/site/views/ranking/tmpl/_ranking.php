@@ -1,0 +1,81 @@
+<?php
+/**
+ * Rankings Component for Joomla 3.x
+ * 
+ * @version    1.8
+ * @package    Rankings
+ * @subpackage Component
+ * @copyright  Copyright (C) Spindata. All rights reserved.
+ * @license    GNU General Public License version 3 or later; see LICENSE.txt
+ */
+ 
+// No direct access
+defined('_JEXEC') or die('Restricted access');
+?>
+
+<tr>
+	<?php 
+	if ($this->display_position_ind)
+	{ ?>
+		<td class="tt-col-position"><?php echo $this->ranking->position; ?></td>
+	<?php 
+	} ?>
+	<td class="tt-col-selector">
+		<button type="button" onclick="ttToggleRides(<?php echo $this->row_number; ?>)" class="btn tt-btn-selector">
+			<i id="tt-rankings-row-<?php echo $this->row_number; ?>-icon" class="fa fa-angle-right fa-lg"></i>
+		</button>
+	</td>
+	<td class="tt-col-rank-status">
+		<div class="tt-rank-status">
+			<div class="tt-rank"><?php switch ($this->state->get('filter.gender'))
+				{
+					case "Female":
+					case "Male":
+						echo $this->ranking->gender_rank;
+						break;
+					default:
+						echo $this->ranking->overall_rank;
+				} ?></div>
+			<?php if ($this->ranking->status === 'Provisional')
+			{ ?>
+				<div class="tt-rider-status">
+					<div class="tt-tag tt-tag-very-small hidden-phone"><?php echo JText::_('COM_RANKINGS_STATUS_PROVISIONAL'); ?></div>
+					<div class="tt-tag tt-tag-very-small hidden-desktop hidden-tablet"><?php echo JText::_('COM_RANKINGS_STATUS_PROVISIONAL_SHORT'); ?></div>
+				</div>
+			<?php
+			} else { ?>
+				<div class="tt-rank-change"><?php switch ($this->state->get('filter.gender'))
+				{
+					case "Female":
+					case "Male": ?>
+						<i class="fa fa-<?php echo $this->ranking->change_in_gender_rank_ind; ?>"></i>
+						<?php if (!$this->ranking->change_in_gender_rank_value == 0)
+                		{
+                    		echo $this->ranking->change_in_gender_rank_value;
+                		}
+						break;
+					default: ?>
+						<i class="fa fa-<?php echo $this->ranking->change_in_overall_rank_ind; ?>"></i>
+						<?php if (!$this->ranking->change_in_overall_rank_value == 0)
+                		{
+                    		echo $this->ranking->change_in_overall_rank_value;
+                		}
+				} ?></div>
+			<?php
+			} ?>
+		</div>
+	</td>
+	<td class="tt-col-rider-name tt-table-rider-link">
+		<div class="tt-rider-name-container">
+            <div class="tt-rider-name">
+                <a href="<?php echo JRoute::_('index.php?Itemid=816&option=com_rankings&task=rider.display&cid='.$this->ranking->ranking_id); ?>"><?php echo $this->ranking->name; ?></a>
+            </div>
+            <div class="tt-rider-category hidden-small-phone">
+                <div class="tt-tag tt-tag-very-small tt-rider-category-<?php echo substr($this->ranking->category, 0, 1) ;?>"><?php echo $this->ranking->category; ?></div>
+            </div>
+        </div>
+	</td>
+	<td class="tt-col-club-name hidden-phone"><?php echo $this->ranking->club_name; ?></td>
+	<td class="tt-col-age-gender-category hidden-tablet hidden-phone"><?php echo $this->ranking->age_gender_category; ?></td>
+	<td class="tt-col-score"><?php echo $this->ranking->score; ?></td>
+</tr>

@@ -25,9 +25,9 @@
 defined('_JEXEC') or die('Restricted access');
 
 /**
- * Rankings Component Rankings Model
+ * Rankings Component Ranking Model
  */
-class RankingsModelsRankings extends RankingsModelsDefault
+class RankingsModelsRanking extends RankingsModelsDefault
 {
     /**
     * Public fields
