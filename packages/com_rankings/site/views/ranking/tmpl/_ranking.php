@@ -68,7 +68,7 @@ defined('_JEXEC') or die('Restricted access');
 	<td class="tt-col-rider-name tt-table-rider-link">
 		<div class="tt-rider-name-container">
             <div class="tt-rider-name">
-                <a href="<?php echo JRoute::_('index.php?Itemid=816&option=com_rankings&task=rider.display&cid='.$this->ranking->ranking_id); ?>"><?php echo $this->ranking->name; ?></a>
+                <a href="<?php echo JRoute::_('index.php?Itemid=816&option=com_rankings&task=rider.display&cid='.$this->ranking->rider_id); ?>"><?php echo $this->ranking->name; ?></a>
             </div>
             <div class="tt-rider-category hidden-small-phone">
                 <div class="tt-tag tt-tag-very-small tt-rider-category-<?php echo substr($this->ranking->category, 0, 1) ;?>"><?php echo $this->ranking->category; ?></div>

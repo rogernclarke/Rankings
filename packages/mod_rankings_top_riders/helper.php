@@ -2,7 +2,7 @@
 /**
  * Rankings Top Riders Module for Joomla 3.x
  * 
- * @version    1.2
+ * @version    2.0
  * @package    Rankings
  * @subpackage Modules
  * @copyright  Copyright (C) Spindata. All rights reserved.
@@ -33,7 +33,7 @@ class ModRankingsTopRidersHelper
         $query = $db->getQuery(TRUE);
 
         $query
-            ->select($db->qn(array('rider_id', 'name', 'club_name', 'gender_rank')))
+            ->select($db->qn(array('rider_id', 'name', 'club_name', 'gender_rank', 'score')))
             ->from($db->qn('#__rider_current'))
             ->where('ranking_status in ("C", "F")');
 
