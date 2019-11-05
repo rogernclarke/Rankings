@@ -2,7 +2,7 @@
 /**
  * Rankings Component for Joomla 3.x
  * 
- * @version    1.7
+ * @version    1.8
  * @package    Rankings
  * @subpackage Component
  * @copyright  Copyright (C) Spindata. All rights reserved.
@@ -25,9 +25,9 @@
 defined('_JEXEC') or die('Restricted access');
 
 /**
- * Rankings Component Rankings Model
+ * Rankings Component Ranking Model
  */
-class RankingsModelsRankings extends RankingsModelsDefault
+class RankingsModelsRanking extends RankingsModelsDefault
 {
     /**
     * Public fields
@@ -149,10 +149,12 @@ class RankingsModelsRankings extends RankingsModelsDefault
             if ($this->_id)
             {
                 $query
-                    -> select('"hc"' . ' AS rankings_type');
+                    ->select($this->_db->qn('hc_category') . ' AS category')
+                    ->select('"hc"' . ' AS rankings_type');
             } else {
                 $query
-                    -> select('"tt"' . ' AS rankings_type');
+                    ->select($this->_db->qn('category') . ' AS category')
+                    ->select('"tt"' . ' AS rankings_type');
             }
         
         // Calculate position in list only if certain filters are applied

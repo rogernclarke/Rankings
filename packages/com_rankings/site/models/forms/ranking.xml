@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <form>
     <fieldset
-		name="rankings_list_toolbar"
+		name="ranking_list_toolbar"
 		label="COM_RANKINGS_DETAILS"
 		addfieldpath="/components/com_rankings/models/fields"
 		>

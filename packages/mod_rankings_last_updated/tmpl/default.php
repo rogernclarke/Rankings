@@ -2,7 +2,7 @@
 /**
  * Rankings Last Updated Module for Joomla 3.x
  * 
- * @version    1.0
+ * @version    2.0
  * @package    Rankings
  * @subpackage Modules
  * @copyright  Copyright (C) Spindata. All rights reserved.
@@ -13,9 +13,7 @@
 defined('_JEXEC') or die;
 ?>
 
-<div id="tt-last-updated">
-    <h3><?php echo JText::_('COM_RANKINGS_LAST_UPDATED'); ?></h3>
-    <div id="tt-last-updated-date">
-        <?php echo date('jS F Y', strtotime($date)); ?>
-    </div>
+<h3 class="tt-last-updated-title"><?php echo JText::_('COM_RANKINGS_LAST_UPDATED'); ?></h3>
+<div id="tt-last-updated-date">
+	<?php echo date('jS F Y', strtotime($date)); ?>
 </div>

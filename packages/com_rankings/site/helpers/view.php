@@ -60,6 +60,6 @@ class RankingsHelpersView
             }
         }
 
-    return $view;
+        return $view;
     }
 }

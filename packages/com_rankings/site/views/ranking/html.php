@@ -2,7 +2,7 @@
 /**
  * Rankings Component for Joomla 3.x
  * 
- * @version    1.7
+ * @version    1.8
  * @package    Rankings
  * @subpackage Component
  * @copyright  Copyright (C) Spindata. All rights reserved.
@@ -13,16 +13,14 @@
 defined('_JEXEC') or die('Restricted access');
 
 /**
- * HTML View class for the Rankings Component
+ * HTML View class for the Rankings Component - Ranking
  */
-class RankingsViewsRankingsHtml extends JViewHtml
+class RankingsViewsRankingHtml extends JViewHtml
 {
 	/**
-	 * Display the Rankings view
+	 * Display the Ranking view
 	 *
-	 * @param   string  $tpl  The name of the template file to parse; automatically searches through the template paths.
-	 *
-	 * @return  void
+	 * @return void
 	 */
 	function render()
 	{
@@ -35,15 +33,12 @@ class RankingsViewsRankingsHtml extends JViewHtml
         switch($this->layout)
         {
             case "display":
-                // Get the rider
-                $this->rider = $this->model->getItem();
             break;
 
             case "list":
             default:
                 // List the rankings
                 $this->rankings = $this->model->listItems();
-                $this->_rankingsListView = $viewHelper->load('Rankings');
 
                 // Handle pagination
                 $this->pagination = $this->model->getPagination();
@@ -54,7 +49,9 @@ class RankingsViewsRankingsHtml extends JViewHtml
                 // Get the list state
                 $this->state = $this->model->getState();
                 
-                //$this->_rankingsListView = $viewHelper->load('Rankings','_entry','phtml');
+                // Load the part html views
+                $this->_rankingView = $viewHelper->load('ranking','_ranking','phtml');
+                $this->_rideView = $viewHelper->load('ranking','_ride','phtml');
 
                 // Get the total number of rankings
                 $this->totalRankings = $this->model->getTotal();

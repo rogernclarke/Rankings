@@ -1,7 +1,7 @@
 /**
  * Rankings Component for Joomla 3.x
  * 
- * @version    1.7
+ * @version    1.8
  * @package    Rankings
  * @subpackage Component
  * @copyright  Copyright (C) Spindata. All rights reserved.
@@ -103,7 +103,6 @@ div.tt-pagination {
 	background: -webkit-linear-gradient(top, #4f5374 0%, #2b3158 66%, #141A46 100%);
 	background: linear-gradient(to bottom, #4f5374 0%, #2b3158 66%, #141A46 100%);
 	border-bottom: 2px solid #6e748f;
-	border-left: 1px solid #d0e4f5;
 	color: #fff;
 	letter-spacing: 1px;
 }
@@ -145,6 +144,78 @@ div.tt-pagination {
 	.tt-table td, .tt-table th {
 		padding: 0.25rem;
 	}
+}
+
+/* Tables - slider */
+.owl-theme .tt-table {
+	border: none !important;
+}
+.owl-theme .tt-table thead {
+	background: #222845;
+	border-left: none;
+}
+.moduletable .tt-table tbody {
+	line-height: 1.2;
+}
+
+/* Tabs Module */
+.moduletable .tt-tabs-stage .nav {
+	display: flex;
+	flex-direction: row;
+}
+.moduletable .tt-tabs-stage .nav li {
+	margin-bottom: 0;
+}
+.moduletable .tt-tabs-stage .nav li:first-child a {
+	border-left: 0;
+	border-top-left-radius: 0px;
+}
+.moduletable .tt-tabs-stage .nav li:last-child a {
+	border-right: 0;
+	border-top-right-radius: 0px;
+	margin-right: 1px;
+}
+.moduletable .tt-tabs-stage .nav li a {
+	background-color: #494e6b;
+	border-bottom: 2px solid #fff;
+	color: #fff;
+	height: 100%;
+}
+.moduletable .tt-tabs-stage .nav li a:before {
+	content: '';
+	display: inline-block;
+	height: 100%;
+	margin-right: -0.25em;
+	vertical-align: middle;
+}
+.moduletable .tt-tabs-stage .nav li a:hover {
+	background: #222845;
+	color: #998345;
+}
+.moduletable .tt-tabs-stage .nav li.active a {
+	background: linear-gradient(to bottom, #4f5374 0%, #2b3158 66%, #141a46 100%);
+	border-bottom: 2px solid #998345;
+	color: #fff;
+}
+.moduletable .tt-tabs-stage .nav li a h3 {
+	display: inline-block;
+	line-height: 1.1;
+	margin: 0;
+	vertical-align: middle;
+}
+@media only all and (max-width: 37.938rem) {
+	.moduletable .tt-tabs-stage {
+		margin: 0;
+	}
+	.moduletable .tt-tabs-stage .nav li a {
+		padding: 4px 12px;
+	}
+}
+.moduletable .tt-tabs-stage .tt-table {
+	border-top: none;
+}
+.moduletable .tt-tabs-stage .tt-table thead {
+	background: #222845;
 }
 
 /* Lists */
@@ -421,6 +492,9 @@ td.tt-col-event-distance {
 	.tt-col-event-course {
 		width: 80px;
 	}
+	.tt-col-event-distance {
+		width: 85px;
+	}
 }
 @media only all and (max-width: 34.938rem) {
 	.tt-col-event-distance {
@@ -676,18 +750,41 @@ td.tt-col-score {
 	}
 }
 
+/* Last Updated Module */
+.tt-last-updated-title {
+	margin: 0;
+	padding: 0;
+}
+
+
 /* Top Riders Module */
 .tt-modtr-col-rank {
 	text-align: center;
 	width: 65px;
 }
-@media only all and (max-width: 55.938rem) {
-	.tt-modtr-col-rank {
-		width: 50px;
-	}
+td.tt-modtr-col-rank {
+	font-family: "Helvetica";
 }
 .tt-modtr-col-rider-name {
-	width: 40%;
+	width: 35%;
+}
+.tt-modtr-col-score {
+	text-align: center;
+	width: 65px;
+}
+td.tt-modtr-col-score {
+	font-family: "Helvetica";
+}
+@media only all and (max-width: 34.938rem) {
+	.tt-modtr-col-rank {
+		width: 55px;
+	}
+	.tt-modtr-col-rider-name {
+		width: auto;
+	}
+	.tt-modtr-col-score {
+		width: 60px;
+	}
 }
 
 /* Top Teams Module */
@@ -695,14 +792,31 @@ td.tt-col-score {
 	text-align: center;
 	width: 65px;
 }
+.tt-modtt-col-club-name {
+	width: 30%;
+}
+.tt-modtt-col-score {
+	text-align: center;
+	width: 80px;
+}
 @media only all and (max-width: 55.938rem) {
 	.tt-modtt-col-rank {
 		width: 50px;
 	}
+	.tt-modtt-col-score {
+		width: 60px;
+	}
 }
-.tt-modtt-col-total-score {
-	text-align: center;
-	width: 80px;
+@media only all and (max-width: 34.938rem) {
+	.tt-modtt-col-rank {
+		width: 50px;
+	}
+	.tt-modtt-col-club-name {
+		width: inherit;
+	}
+	.tt-modtt-col-score {
+		width: 60px;
+	}
 }
 
 .tt-table tr.tt-table-year-row {
@@ -889,6 +1003,16 @@ div.tt-pages-counter, div.tt-results-counter {
 		margin: 0;
 		padding: 0 8px 0 24px;
 	}
+}
+
+/* Tabs */
+.nav-tabs.tt-tabs {
+	border-bottom: none;
+	margin-bottom: 0;
+	margin-top: 0.75rem;
+}
+.tt-tabs li {
+	text-align: center;
 }
 
 /* Nav Tabs */
