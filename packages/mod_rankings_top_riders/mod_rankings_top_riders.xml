@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
-<extension type="module" version="1.8" client="site" method="upgrade">
+<extension type="module" version="1.4" client="site" method="upgrade">
     <name>Rankings Top Riders</name>
     <author>Spindata</author>
-    <version>1.8</version>
+    <version>1.4</version>
     <description>A module to display the top ranked riders.</description>
     <files>
         <filename>mod_rankings_top_riders.xml</filename>
