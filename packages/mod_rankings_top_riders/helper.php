@@ -1,64 +1,78 @@
 <?php
 /**
  * Rankings Top Riders Module for Joomla 3.x
- * 
- * @version    1.2
+ *
+ * @version    2.0
  * @package    Rankings
  * @subpackage Modules
- * @copyright  Copyright (C) Spindata. All rights reserved.
+ * @copyright  Copyright (C) 2019 Spindata. All rights reserved.
  * @license    GNU General Public License version 3 or later; see LICENSE.txt
  */
 
 // No direct access
 defined('_JEXEC') or die;
 
+/**
+ * Rankings Component Top Riders Module Helper
+ *
+ * @since   2.0
+ */
 class ModRankingsTopRidersHelper
 {
-    /**
-     * Retrieves the top ranked rider
-     *
-     * @param   array  $params An object containing the module parameters
-     *
-     * @access public
-     */    
-    public static function getRiders($params)
-    {
-        // Obtain a database connection
-        $app = JFactory::getApplication();
-        $component_params = $app->getParams('com_rankings');
-        
-        $db = JDatabaseDriver::getInstance($component_params);
-                
-        // Get the latest events
-        $query = $db->getQuery(TRUE);
+	/**
+	 * Retrieves the top ranked riders
+	 *
+	 * @param   array  $params An object containing the module parameters
+	 *
+	 * @return 	object 	List of riders
+	 *
+	 * @since 2.0
+	 */
+	public static function getRiders($params)
+	{
+		// Obtain a database connection
+		$app = JFactory::getApplication();
+		$componentParams = $app->getParams('com_rankings');
 
-        $query
-            ->select($db->qn(array('rider_id', 'name', 'club_name', 'gender_rank')))
-            ->from($db->qn('#__rider_current'))
-            ->where('ranking_status in ("C", "F")');
+		$db = JDatabaseDriver::getInstance($componentParams);
 
-        // Apply filters
-        $gender = $db->q(str_replace(' ', '%', $db->escape(trim($params['gender']), TRUE)));
-        $query->where('gender = ' . $gender);
+		// Get the latest events
+		$query = $db->getQuery(true);
 
-        if ($params['age_category'] !== "All")
-        {
-            $age_category = $db->q(str_replace(' ', '%', $db->escape(trim($params['age_category']), TRUE)));
-            $query->where('age_category = ' . $age_category);
-        }
+		$query
+			->select($db->qn(array('rider_id', 'name', 'club_name', 'gender_rank')))
+			->from($db->qn('#__rider_current'))
+			->where('ranking_status in ("C", "F")');
 
-        $query->order('gender_rank ASC');
-        
-        $limit = (int) $params['riders_count'];
-        $query->setLimit($limit);
+		// Apply filters
+		$gender = $db->q(str_replace(' ', '%', $db->escape(trim($params['gender']), true)));
+		$query->where('gender = ' . $gender);
 
-        // Prepare the query
-        $db->setQuery($query);
+		if ($params['age_category'] !== "All")
+		{
+			$ageCategory = $db->q(str_replace(' ', '%', $db->escape(trim($params['age_category']), true)));
+			$query->where('age_category = ' . $ageCategory);
+		}
 
-        // Load the riders
-        $riders = $db->loadObjectList();
+		$query->order('gender_rank ASC');
 
-        // Return the set of riders
-        return $riders;
-    }
+		$limit = (int) $params['riders_count'];
+		$query->setLimit($limit);
+
+		// Prepare the query
+		$db->setQuery($query);
+
+		// Load the riders
+		$riders = $db->loadObjectList();
+
+		// Prepare the data.
+		// Compute the rider link url.
+		foreach ($riders as $rider)
+		{
+			$rider->link = JRoute::_(RankingsHelperRoute::getRiderRoute($rider->rider_id));
+		}
+
+		// Return the set of riders
+		return $riders;
+	}
 }

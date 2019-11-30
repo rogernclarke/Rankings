@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<extension type="module" version="2.0" client="site" method="upgrade">
+    <name>Rankings Latest Events</name>
+    <author>Spindata</author>
+    <version>2.0</version>
+    <description>A module to display the latest events.</description>
+    <files>
+        <filename>mod_rankings_latest_events.xml</filename>
+        <filename module="mod_rankings_latest_events">mod_rankings_latest_events.php</filename>
+        <filename>index.html</filename>
+        <filename>helper.php</filename>
+        <filename>tmpl/default.php</filename>
+        <filename>tmpl/index.html</filename>
+    </files>
+    <languages folder="language">
+        <language tag="en-GB">en-GB/en-GB.mod_rankings_latest_events.ini</language>
+        <language tag="en-GB">en-GB/en-GB.mod_rankings_latest_events.sys.ini</language>
+    </languages>
+    <config>
+        <fields name="params">
+            <fieldset name="basic">
+                <field
+                    name="event_status"
+                    type="list"
+                    id="event_status"
+                    extension="com_rankings"
+                    label="MOD_RANKINGS_EVENT_STATUS"
+                    >
+                    <option value="All">All</option>
+                    <option value="Startsheets">Startsheets</option>
+                    <option value="Results">Results</option>
+                </field>
+                <field
+                    name="item_count"
+                    type="integer"
+                    id="item_count"
+                    extension="com_rankings"
+                    label="MOD_RANKINGS_ITEM_COUNT"
+                    first="1"
+                    last="10"
+                    step="1"
+                />
+                <field
+                    name="item_row_count"
+                    type="integer"
+                    id="item_row_count"
+                    extension="com_rankings"
+                    label="MOD_RANKINGS_ITEM_ROW_COUNT"
+                    first="1"
+                    last="10"
+                    step="1"
+                />
+            </fieldset>
+        </fields>
+    </config>
+</extension>

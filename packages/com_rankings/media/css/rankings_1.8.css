@@ -819,6 +819,16 @@ td.tt-modtr-col-score {
 	}
 }
 
+/* Latest Events module */
+.moduletable .tt-table-events .tt-flex-container {
+	display: flex;
+	justify-content: left;
+}
+.moduletable .tt-table-events .tt-event-name {
+	overflow: hidden;
+	text-overflow: ellipsis;
+}
+
 .tt-table tr.tt-table-year-row {
   background-color: #d0e4f5;
   border-top: 2px solid #6E748F;
@@ -924,6 +934,14 @@ div.tt-pages-counter, div.tt-results-counter {
 .tt-tag.tt-results::before {
 	border-right-color: #006600;
 }
+.tt-tag.tt-new {
+	background-color: #494e6b;
+	font-weight: 400;
+}
+.tt-tag.tt-new::before {
+	border-right-color: #494e6b;
+}
+
 
 .tt-tag-large {
 	border-radius: 0 4px 4px 0;
