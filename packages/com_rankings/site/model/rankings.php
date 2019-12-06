@@ -49,7 +49,7 @@ class RankingsModelRankings extends RankingsModelList
 	 * @var    integer
 	 * @since  2.0
 	 */
-	protected $year = null;
+	public $year = null;
 
 	/**
 	 * Constructor.
@@ -74,7 +74,7 @@ class RankingsModelRankings extends RankingsModelList
 			);
 		}
 
-		// Specify filter fields for model
+		// Specify check fields for model
 		if (empty($config['check_fields']))
 		{
 			$config['check_fields'] = array(
@@ -88,28 +88,30 @@ class RankingsModelRankings extends RankingsModelList
 		$jinput = JFactory::getApplication()->input;
 		$array = $jinput->get('type', array(), 'ARRAY');
 
-		// Store the year from the request, set to year of last run date if not set
-		$this->year 		= (int) $this->getState('filter.year');
-		$lastRunDateYear 	= date("Y", strtotime($this->getLastRunDate()));
-
-		if (empty($this->year))
-		{
-			$this->year = $lastRunDateYear;
-		}
-
-		if ($this->year != $lastRunDateYear)
-		{
-			$this->history = true;
-		}
-
 		// If a ranking type of hc has been specified then set the prefix (for current rankings only)
 		if (!empty($array))
 		{
 			$this->rankingType = $array[0];
 
-			if ($this->rankingType == 'hc' && $this->history == false)
+			if ($this->rankingType == 'hc')
 			{
-				$this->prefix = 'hc_';
+				// Store the year from the request, set to year of last run date if not set
+				$this->year 		= (int) $this->getState('filter.year');
+				$lastRunDateYear 	= date("Y", strtotime($this->getLastRunDate()));
+
+				if (empty($this->year))
+				{
+					$this->year = $lastRunDateYear;
+				}
+
+				if ($this->year != $lastRunDateYear)
+				{
+					$this->history = true;
+				}
+				else
+				{
+					$this->prefix = 'hc_';
+				}
 			}
 		}
 	}
@@ -125,47 +127,7 @@ class RankingsModelRankings extends RankingsModelList
 	 */
 	public function getForm()
 	{
-		return parent::getForm($this->rankingType);
-	}
-
-	/**
-	 * getItems
-	 *
-	 * Gets a list of rankings.
-	 *
-	 * @return 	model 	The requested rankings
-	 *
-	 * @since 2.0
-	 */
-	public function getItems()
-	{
-		$rankings = parent::getItems();
-
-		// Set state for rides models
-		$config = array();
-		$state 	= new \Jobject;
-		$state->set('list.limit', 0);
-
-		$config['state'] 			= $state;
-		$config['ignore_request'] 	= true;
-		$config['subcontext'] 		= $this->getName() . '.' . $this->rankingType;
-
-		// For each rider retrieve the list of rides to be shown on the rankings list
-		foreach ($rankings as $rider)
-		{
-			$ridesModel = new RankingsModelRides($config);
-			$ridesModel->set('riderId', $rider->rider_id);
-			$ridesModel->set('rankingStatus', $rider->status);
-
-			if ($this->rankingType == 'hc')
-			{
-				$ridesModel->set('year', $this->year);
-			}
-
-			$rider->rides = $ridesModel->getItems();
-		}
-
-		return $rankings;
+		return parent::getForm($this->rankingType . 'rankings');
 	}
 
 	/**
@@ -291,7 +253,7 @@ class RankingsModelRankings extends RankingsModelList
 		}
 		else
 		{
-			if ($rankingType == 'tt')
+			if ($this->rankingType == 'tt')
 			{
 				$query
 					->from($db->qn('#__rider_current') . 'AS rkg');
@@ -469,7 +431,7 @@ class RankingsModelRankings extends RankingsModelList
 			$statuses = array("F", "C");
 		}
 
-		if ($rankingType == 'tt')
+		if ($this->rankingType == 'tt')
 		{
 			$query
 				->select('*')

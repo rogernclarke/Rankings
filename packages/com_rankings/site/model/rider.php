@@ -20,96 +20,6 @@ defined('_JEXEC') or die('Restricted access');
 class RankingsModelRider extends RankingsModelItem
 {
 	/**
-	 * getItem
-	 *
-	 * Gets a specific rider.
-	 *
-	 * @param 	integer $id 	Id of requested rider
-	 *
-	 * @return  model 	The requested rider
-	 *
-	 * @since 2.0
-	 */
-	public function getItem($id = null)
-	{
-		$rider = parent::getItem($id);
-
-		// Set state for rides models
-		$config = array();
-		$state 	= new \Jobject;
-		$state->set('list.limit', 0);
-
-		$config['state'] 			= $state;
-		$config['ignore_request'] 	= true;
-
-		// Get time trial rides for the rider
-		$config['subcontext'] 	= $this->getName() . '.tt';
-		$ridesModel 			= new RankingsModelRides($config);
-		$ridesModel->set('riderId', $this->id);
-
-		$rider->ttRides = $ridesModel->getItems();
-
-		// Get hill climb rides for the rider
-		$config['subcontext'] 	= $this->getName() . '.hc';
-		$ridesModel 			= new RankingsModelRides($config);
-		$ridesModel->set('riderId', $this->id);
-
-		$rider->hcRides = $ridesModel->getItems();
-
-		// Get awards for the rider
-		$config['subcontext'] 	= $this->getName();
-		$awardsModel 			= new RankingsModelAwards($config);
-		$awardsModel->set('riderId', $this->id);
-
-		$rider->awards = $awardsModel->getItems();
-
-		// Assign awards to rides
-		$rideCount = 0;
-
-		foreach ($rider->ttRides as $ride)
-		{
-			$awardCount = 0;
-
-			foreach ($rider->awards as $award)
-			{
-				if ($ride->event_id === $award->event_id)
-				{
-					$rider->ttRides[$rideCount]->awards[$awardCount] = $award;
-					$awardCount++;
-				}
-			}
-
-			$rideCount++;
-		}
-
-		$rideCount = 0;	
-
-		foreach ($rider->hcRides as $ride)
-		{
-			$awardCount = 0;
-
-			foreach ($rider->awards as $award)
-			{
-				if ($ride->event_id === $award->event_id)
-				{
-					$rider->hcRides[$rideCount]->awards[$awardCount] = $award;
-					$awardCount++;
-				}
-			}
-
-			$rideCount++;
-		}
-
-		// Get rider history for the rider
-		$riderhistoriesModel = new RankingsModelRiderhistories;
-		$riderhistoriesModel->set('riderId', $this->id);
-
-		$rider->riderhistories = $riderhistoriesModel->getItems();
-
-		return $rider;
-	}
-
-	/**
 	 * getQuerySelect
 	 *
 	 * Builds the query select to be used by the rider model
@@ -229,5 +139,33 @@ class RankingsModelRider extends RankingsModelItem
 		$db->setQuery($query);
 
 		return $db->execute();
+	}
+
+	/**
+	 * Method to auto-populate the model state.
+	 *
+	 * Note. Calling getState in this method will result in recursion.
+	 *
+	 * @return 	void
+	 *
+	 * @since 2.0
+	 */
+	protected function populateState()
+	{
+		parent::populateState();
+
+		$app 	= JFactory::getApplication('site');
+		$jinput = $app->input;
+		$list 	= $jinput->getVar('list');
+
+		if (empty($list))
+		{
+			$this->state->set('.ttrides.list.start', 0);
+			$app->setUserState($this->context . '.ttrides.list.start', 0);
+			$this->state->set('.hcrides.list.start', 0);
+			$app->setUserState($this->context . '.hcrides.list.start', 0);
+			$this->state->set('.awards.list.start', 0);
+			$app->setUserState($this->context . '.awards.list.start', 0);
+		}
 	}
 }

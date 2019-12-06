@@ -28,27 +28,8 @@ class RankingsViewEvents extends JViewLegacy
 	 */
 	public function display($tpl = null)
 	{
-		$app    = \JFactory::getApplication();
-		$user   = \JFactory::getUser();
-		$params = $app->getParams();
-
-		// Get some data from the model
-		$model      = $this->getModel();
-		$params 	= $model->getState('params');
-
-		$this->events = $model->getItems();
-
-		// Get the form
-		$this->form = $model->getForm();
-
-		// Get the total number of riders
-		$totalEvents = $model->getTotal();
-
-		// Get pagination
-		$this->pagination = $this->get('Pagination');
-
-		// Get the list state
-		$this->state = $this->get('State');
+		// Load the models
+		$this->loadModels();
 
 		// Check for errors.
 		if (count($errors = $this->get('Errors')))
@@ -58,14 +39,58 @@ class RankingsViewEvents extends JViewLegacy
 			return false;
 		}
 
-		// Prepare the data.
-		// Compute the rider slug & link url.
-		foreach ($this->events as $event)
-		{
-			$event->link = JRoute::_(RankingsHelperRoute::getEventRoute($event->event_id));
-		}
+		$this->prepareData();
+
+		// Prepare the document
+		$this->setDocumentTitle($this->params->get('page_title'));
 
 		return parent::display($tpl);
 	}
 
+	/**
+	 * Load the models
+	 *
+	 * @return  void
+	 *
+	 * @since 2.0
+	 */
+	protected function loadModels()
+	{
+		// Get the model
+		$model = $this->getModel();
+
+		// Get the parameters
+		$this->params = $model->getState('params');
+
+		// Get some data from the model
+		$this->events = $this->get('items');
+
+		// Get the form
+		$this->form = $this->getForm();
+
+		// Get the total number of riders
+		$totalEvents = $this->get('total');
+
+		// Get pagination
+		$this->pagination = $this->get('Pagination');
+
+		// Get the list state
+		$this->state = $this->get('State');
+	}
+
+	/**
+	 * Prepare the data
+	 *
+	 * @return  void
+	 *
+	 * @since 2.0
+	 */
+	protected function prepareData()
+	{
+		// Compute the event link url
+		foreach ($this->events as $event)
+		{
+			$event->link = JRoute::_(RankingsHelperRoute::getEventRoute($event->event_id));
+		}
+	}
 }

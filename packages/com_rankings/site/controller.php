@@ -17,7 +17,7 @@ defined('_JEXEC') or die('Restricted access');
  *
  * @since 2.0
  */
-class RankingsController extends JControllerLegacy
+class RankingsController extends RankingsControllerDefault
 {
 	/**
 	 * Method to display an item view.
@@ -28,16 +28,7 @@ class RankingsController extends JControllerLegacy
 	 */
 	public function display()
 	{
-		$viewName = $this->input->get('view', 'list');
-		$this->input->set('view', $viewName);
-
-		if ($this->input->getMethod() == 'POST')
-		{
-			$cacheable = false;
-
-			$this->setRedirect(JRoute::_('index.php?option=com_rankings&view=' . $viewName), false);
-		}
-
+		$cacheable = false;
 		$safeurlparams = array(
 			'id'               => 'INT',
 			'limit'            => 'UINT',
@@ -47,6 +38,14 @@ class RankingsController extends JControllerLegacy
 			'lang'             => 'CMD'
 		);
 
-		return parent::display($cacheable, $safeurlparams);
+		$viewName 	= $this->input->get('view', $this->default_view);
+
+		// Set redirect if POST
+		if ($this->input->getMethod() == 'POST')
+		{
+			$this->setRedirect(JRoute::_('index.php?option=com_rankings&view=' . $viewName), false);
+		}
+
+		return parent::display($viewName, array(), $cacheable, $safeurlparams);
 	}
 }

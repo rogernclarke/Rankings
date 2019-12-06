@@ -11,45 +11,9 @@
 
 // No direct access
 defined('_JEXEC') or die('Restricted access');
-
-foreach ($this->rider->riderhistories as $riderhistory)
-{
-	$effectiveDate 	= strtotime($riderhistory->effective_date) * 1000;
-	$score 			= $riderhistory->score;
-	$data[] 		= "[$effectiveDate, $score]";
-}
-
 ?>
-<script>document.addEventListener('DOMContentLoaded', function () {
-		var myChart = Highcharts.chart('container', {
-			/*chart: {
-				type: 'bar'
-			},*/
-			title: {
-				text: 'TT Score'
-			},
-			xAxis: {
-				type: 'datetime',
-				dateTimeLabelFormats: {day: '%b'}
-				//categories: ['Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov']
-			},
-			yAxis: {
-				title: {
-					text: 'Score'
-				}
-			},
-			series: [{
-				data: [<?php echo join($data, ','); ?>]
-			}]
-			/*series: [{
-				name: '2018',
-				data: [2166, 2140, 2066, 1498, 1419, 1286, 1147, 1094, 1107, 1105]
-			}, {
-				name: '2019',
-				data: [1101, 1119, 1107, 1091, 1149, 1148, 1196, 1199, 1093, 1083]
-			}]*/
-		});
-	});</script>
+
+<?php echo $this->loadTemplate('chart'); ?>
 
 <?php if(!$this->rider->blacklist_ind && !empty($this->rider->name)) : ?>
 	<div class="tt-rider-heading">
@@ -149,7 +113,7 @@ foreach ($this->rider->riderhistories as $riderhistory)
 		<?php endif; ?>
 	</div>
 
-	<?php if(count($this->rider->ttRides + $this->rider->hcRides) > 0) : ?>
+	<?php if(count($this->ttRides + $this->hcRides) > 0) : ?>
 		<section class="tt-rides-section" id="tt-rider-tabs">
 			<!-- Nav tabs -->
 			<ul class="tt-nav-tabs" role="tablist">
@@ -174,148 +138,9 @@ foreach ($this->rider->riderhistories as $riderhistory)
 			</ul>
 			<!-- Tab panes -->
 			<div class="tab-content">
-				<div role="tabpanel" class="tab-pane active" id="timetrials">
-					<div class="tt-nav-tab-content">
-						<?php if (count($this->rider->ttRides) == 0) : ?>
-							<div class="tt-list-heading">
-								<div class="tt-list-title">
-									<h2><?php echo "No results since 1st January 2017"; ?></h2>
-								</div>
-							</div>
-						<?php else : ?>
-							<!-- Charts -->
-							<div id="container" style="width:100%; height:400px;"></div>
-							<!-- List content -->
-							<div class="tt-list-heading">
-								<div class="tt-list-title">
-									<h2><?php echo JText::_('COM_RANKINGS_RIDER_RESULTS'); ?></h2>
-								</div>
-							</div>
-							<div class="tt-tab-panel">
-								<! -- Display Rides table -->
-								<table class="table-hover tt-table tt-rides">
-								<thead>
-									<tr>
-										<th class="tt-col-event-date"><?php echo JText::_('COM_RANKINGS_EVENT_DATE'); ?></th>
-										<th class="tt-col-event-name"><?php echo JText::_('COM_RANKINGS_EVENT_NAME'); ?></th>
-										<th class="tt-col-ride-distance visible-desktop"><?php echo JText::_('COM_RANKINGS_EVENT_DISTANCE'); ?></th>
-										<th class="tt-col-ride-distance hidden-desktop"><?php echo JText::_('COM_RANKINGS_EVENT_DISTANCE_SHORT'); ?></th>
-										<th class="tt-col-ride-position visible-desktop"><?php echo JText::_('COM_RANKINGS_EVENT_POSITION'); ?></th>
-										<th class="tt-col-ride-position hidden-desktop hidden-phone"><?php echo JText::_('COM_RANKINGS_EVENT_POSITION_SHORT'); ?></th>
-										<th class="tt-col-ride-result hidden-phone"><?php echo JText::_('COM_RANKINGS_RIDE_RESULT'); ?></th>
-										<th class="tt-col-rider-ride-points"><?php echo JText::_('COM_RANKINGS_RIDE_RANKING_POINTS'); ?></th>
-									</tr>
-								</thead>
-								<tbody>
-									<! -- Display Ride row -->
-									<?php foreach($this->rider->ttRides as $i => $ride) : ?>
-										<?php if(($i == 0) or ($i > 0 && date('Y', strtotime($ride->event_date)) != date('Y', strtotime($this->rider->ttRides[$i-1]->event_date)))) : ?>
-											<tr class="tt-table-year-row">
-												<td colspan="6"><?php echo date('Y', strtotime($ride->event_date)); ?></td>
-											</tr>
-										<?php endif; ?>
-										<?php $this->ride = $ride; ?>
-										<?php echo $this->loadTemplate('ride'); ?>
-									<?php endforeach; ?>
-								</tbody>       
-								</table>
-							</div>
-						<?php endif; ?>
-					</div>
-				</div>
-				<div role="tabpanel" class="tab-pane" id="hillclimbs">
-					<div class="tt-nav-tab-content">
-						<?php if (count($this->rider->hcRides) == 0) : ?>
-							<div class="tt-list-heading">
-								<div class="tt-list-title">
-									<h2><?php echo "No results since 1st January 2017"; ?></h2>
-								</div>
-							</div>
-						<?php else : ?>
-							<div class="tt-list-heading">
-								<div class="tt-list-title">
-									<h2><?php echo JText::_('COM_RANKINGS_RIDER_RESULTS'); ?></h2>
-								</div>
-							</div>
-							<div class="tt-tab-panel">
-								<table class="table-hover tt-table tt-rides">
-								<thead>
-									<tr>
-										<th class="tt-col-event-date"><?php echo JText::_('COM_RANKINGS_EVENT_DATE'); ?></th>
-										<th class="tt-col-event-name"><?php echo JText::_('COM_RANKINGS_EVENT_NAME'); ?></th>
-										<th class="tt-col-ride-distance visible-desktop"><?php echo JText::_('COM_RANKINGS_EVENT_DISTANCE'); ?></th>
-										<th class="tt-col-ride-distance hidden-desktop"><?php echo JText::_('COM_RANKINGS_EVENT_DISTANCE_SHORT'); ?></th>
-										<th class="tt-col-ride-position visible-desktop"><?php echo JText::_('COM_RANKINGS_EVENT_POSITION'); ?></th>
-										<th class="tt-col-ride-position hidden-desktop hidden-phone"><?php echo JText::_('COM_RANKINGS_EVENT_POSITION_SHORT'); ?></th>
-										<th class="tt-col-ride-result hidden-phone"><?php echo JText::_('COM_RANKINGS_RIDE_RESULT'); ?></th>
-										<th class="tt-col-rider-ride-points"><?php echo JText::_('COM_RANKINGS_RIDE_RANKING_POINTS'); ?></th>
-									</tr>
-								</thead>
-								<tbody>
-									<?php foreach($this->rider->hcRides as $i => $ride) : ?> 
-										<?php if(($i == 0) or ($i > 0 && date('Y', strtotime($ride->event_date)) != date('Y', strtotime($this->rider->hcRides[$i-1]->event_date)))) : ?>
-											<tr class="tt-table-year-row">
-												<td colspan="6"><?php echo date('Y', strtotime($ride->event_date)); ?></td>
-											</tr>
-										<?php endif; ?>
-										<?php $this->ride = $ride; ?>
-										<?php echo $this->loadTemplate('ride'); ?>
-									<?php endforeach; ?>
-								</tbody>       
-								</table>
-							</div>
-						<?php endif; ?>
-					</div>
-				</div>
-				<div role="tabpanel" class="tab-pane" id="awards">
-					<div class="tt-nav-tab-content">
-						<div class="tt-list-heading">
-							<div class="tt-list-title">
-								<h2><?php echo JText::_('COM_RANKINGS_EVENT_AWARDS'); ?></h2>
-							</div>
-						</div>
-						<?php if (count($this->rider->awards) > 0) : ?>
-							<table class="table-hover tt-table tt-rider-awards-list">
-								<thead>
-									<tr>
-										<th class="tt-col-event-date"><?php echo JText::_('COM_RANKINGS_EVENT_DATE'); ?></th>
-										<th class="tt-col-event-name"><?php echo JText::_('COM_RANKINGS_EVENT_NAME'); ?></th>
-										<th class="tt-col-ride-distance visible-desktop"><?php echo JText::_('COM_RANKINGS_EVENT_DISTANCE'); ?></th>
-										<th class="tt-col-ride-distance hidden-desktop"><?php echo JText::_('COM_RANKINGS_EVENT_DISTANCE_SHORT'); ?></th>
-										<th class="tt-col-award-name"><?php echo JText::_('COM_RANKINGS_AWARD_NAME'); ?></th>
-										<th class="tt-col-award-result"><?php echo JText::_('COM_RANKINGS_AWARD_RESULT'); ?></th>
-									</tr>
-								</thead>
-								<tbody>
-									<?php $previousEventId = null; ?>
-									<?php foreach($this->rider->awards as $i => $award) : ?>
-										<?php if($previousEventId !== $award->event_id) : ?>
-											<?php $newEvent      	= true; ?>
-											<?php $eventAwardCount  = 0; ?>
-											<?php $previousEventId  = $award->event_id; ?>
-											<?php for($j = $i; $j < count($this->rider->awards) && $award->event_id === $this->rider->awards[$j]->event_id; $j++) : ?>
-												<?php $eventAwardCount++; ?>
-											<?php endfor; ?>
-										<?php else : ?>
-											<?php $newEvent = false; ?>
-										<?php endif; ?>
-										<?php if (($i == 0) or ($i > 0 && date('Y', strtotime($award->event_date)) != date('Y', strtotime($this->rider->awards[$i-1]->event_date)))): ?>
-											<tr class="tt-table-year-row">
-												<td colspan="7"><?php echo date('Y', strtotime($award->event_date)); ?></td>
-											</tr>
-										<?php endif; ?>
-										<?php $this->award            = $award; ?>
-										<?php $this->newEvent         = $newEvent; ?>
-										<?php $this->eventAwardCount  = $eventAwardCount; ?>
-										<?php echo $this->loadTemplate('award'); ?>
-									<?php endforeach; ?>
-								</tbody>
-							</table>
-						<?php else : ?>
-							<h3><?php echo "No awards to date..."; ?></h3>
-						<?php endif; ?>
-					</div>
-				</div>
+				<?php echo $this->loadTemplate('ttrides'); ?>
+				<?php echo $this->loadTemplate('hcrides'); ?>
+				<?php echo $this->loadTemplate('awards'); ?>
 			</div>
 		</section>
 	<?php else : ?>

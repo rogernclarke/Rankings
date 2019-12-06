@@ -55,7 +55,7 @@ defined('_JEXEC') or die('Restricted access');
 
 	
 
-	<?php if (count($this->event->entries) + count($this->event->results) > 0) : ?>
+	<?php if (count($this->entries) + count($this->results) > 0) : ?>
 		<section class="tt-rides-section" id="tt-event-tabs">
 			<!-- Nav tabs -->
 			<ul class="tt-nav-tabs" role="tablist">
@@ -108,7 +108,7 @@ defined('_JEXEC') or die('Restricted access');
 								<h2><?php echo JText::_('COM_RANKINGS_EVENT_STARTSHEET'); ?></h2>
 							</div>
 							<div class="tt-rider-count">
-								<p><?php echo count($this->event->entries) . ' entries'; ?></p>
+								<p><?php echo count($this->entries) . ' entries'; ?></p>
 							</div>
 						</div>                        
 						<div class="tabs tabs-style-topline tt-tabs-startsheet">
@@ -153,7 +153,7 @@ defined('_JEXEC') or die('Restricted access');
 										</tr>
 									</thead>
 									<tbody id="tt-event-startsheet-body">
-										<?php foreach($this->event->entries as $entry) : ?>
+										<?php foreach($this->entries as $entry) : ?>
 											<?php $this->entry = $entry; ?>
 											<?php echo $this->loadTemplate('entry'); ?>
 										<?php endforeach; ?>
@@ -170,7 +170,7 @@ defined('_JEXEC') or die('Restricted access');
 								<h2><?php echo JText::_('COM_RANKINGS_EVENT_RESULTS'); ?></h2>
 							</div>
 							<div class="tt-rider-count">
-								<p><?php echo count($this->event->results) . ' riders'; ?></p>
+								<p><?php echo count($this->results) . ' riders'; ?></p>
 							</div>
 						</div>
 
@@ -237,7 +237,7 @@ defined('_JEXEC') or die('Restricted access');
 										</tr>
 									</thead>
 									<tbody id="tt-event-results-body">
-										<?php foreach($this->event->results as $result) : ?>
+										<?php foreach($this->results as $result) : ?>
 											<?php $this->result = $result; ?>
 											<?php echo $this->loadTemplate('result'); ?>
 										<?php endforeach; ?>
@@ -258,8 +258,7 @@ defined('_JEXEC') or die('Restricted access');
 							</div>
 						</div>
 						<?php $previousAwardName = null;
-
-						foreach ($this->event->awards as $award) : ?>
+						foreach ($this->awards as $award) : ?>
 							<?php if ($previousAwardName !== $award->awardName) : ?>
 								<?php if (isset($previousAwardName)) : ?>
 									</tbody>

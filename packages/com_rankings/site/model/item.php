@@ -57,12 +57,37 @@ class RankingsModelItem extends JModelItem
 		{
 			$this->context = strtolower($this->option . '.' . $this->getName());
 		}
+	}
 
-		// Auto-populate the model state.
-		$this->populateState();
+	/**
+	 * Method to get the form
+	 *
+	 * @param 	string 	$name 	Form name
+	 *
+	 * @return  form object
+	 */
+	public function getForm($name = null)
+	{
+		$name = $name ?? $this->getName();
 
-		// Set the model state set flag to true.
-		$this->__state_set = true;
+		// Get the form
+		JForm::addFormPath(JPATH_COMPONENT . '/model/forms');
+		JForm::addFieldPath(JPATH_COMPONENT . '/model/fields');
+		JForm::addRulePath(JPATH_COMPONENT . '/model/rules');
+
+		// Create the form
+		try
+		{
+			$form = JForm::getInstance('jform', $name, array('control' => 'jform'));
+		}
+		catch (Exception $e)
+		{
+			JFactory::getApplication()->enqueueMessage($e->getMessage(), 'error');
+
+			return false;
+		}
+
+		return $form;
 	}
 
 	/**
@@ -78,7 +103,7 @@ class RankingsModelItem extends JModelItem
 	{
 		// Use the id if specified, otherwise read it from the model state
 		$this->id = (!empty($id)) ? $id : (int) $this->getState($this->getName() . '.id');
-
+		
 		if ($this->_item === null)
 		{
 			$this->_item = array();
@@ -116,7 +141,7 @@ class RankingsModelItem extends JModelItem
 			}
 		}
 
-		return $this->_item[$id];
+		return $this->_item[$this->id];
 	}
 
 	/**
@@ -137,8 +162,8 @@ class RankingsModelItem extends JModelItem
 		$this->setState($this->getName() . '.id', $id);
 
 		// Load the parameters.
-		//$params = $app->getParams();
-		//$this->setState('params', $params);
+		$params = $app->getParams();
+		$this->setState('params', $params);
 	}
 
 	/**

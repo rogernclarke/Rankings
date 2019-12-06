@@ -28,28 +28,129 @@ class RankingsViewRider extends JViewLegacy
 	 */
 	public function display($tpl = null)
 	{
-		$this->rider = $this->get('Item');
+		// Load the models
+		$this->loadModels();
 
-		// Prepare the data.
-		// Compute the tt ride event link url.
-		foreach ($this->rider->ttRides as $ride)
+		// Check for errors.
+		if (count($errors = $this->get('Errors')))
 		{
-			$ride->link = JRoute::_(RankingsHelperRoute::getEventRoute($ride->event_id));
+			\JError::raiseError(500, implode("\n", $errors));
+
+			return false;
 		}
 
-		// Compute the hc ride event link url.
-		foreach ($this->rider->hcRides as $ride)
-		{
-			$ride->link = JRoute::_(RankingsHelperRoute::getEventRoute($ride->event_id));
-		}
+		$this->prepareData();
 
-		// Compute the award event link url.
-		foreach ($this->rider->awards as $award)
-		{
-			$award->link = JRoute::_(RankingsHelperRoute::getEventRoute($award->event_id));
-		}
+		// Prepare the document
+		$this->setDocumentTitle($this->rider->name);
 
 		// Display
 		return parent::display($tpl);
+	}
+
+	/**
+	 * Load the models
+	 *
+	 * @return  void
+	 *
+	 * @since 2.0
+	 */
+	protected function loadModels()
+	{
+		// Get the model
+		$model = $this->getModel();
+
+		// Get the parameters
+		$this->params = $model->getState('params');
+
+		// Get some data from the model
+		$this->rider = $this->get('item');
+
+		// Get tt data from the model
+		$this->ttRides = $this->get('items', 'ttrides');
+
+		// Get tt rides pagination
+		$this->ttRidesPagination = $this->get('pagination', 'ttrides');
+		$this->ttRidesPagination->setAdditionalUrlParam('list', 'ttrides');
+
+		// Get hc data from the model
+		$this->hcRides = $this->get('items', 'hcrides');
+
+		// Get hc rides pagination
+		$this->hcRidesPagination = $this->get('pagination', 'hcrides');
+		$this->hcRidesPagination->setAdditionalUrlParam('list', 'hcrides');
+
+		// Get some data from the model
+		$this->awards = $this->get('items', 'awards');
+
+		// Get awards pagination
+		$this->awardsPagination = $this->get('pagination', 'awards');
+		$this->awardsPagination->setAdditionalUrlParam('list', 'awards');
+
+		// Get some data from the model
+		$this->riderhistories = $this->get('items', 'riderhistories');
+	}
+
+	/**
+	 * Prepare the data
+	 *
+	 * @return  void
+	 *
+	 * @since 2.0
+	 */
+	protected function prepareData()
+	{
+		// TT Rides data
+		$rideCount = 0;
+
+		foreach ($this->ttRides as $ride)
+		{
+			// Assign awards to rides
+			$awardCount = 0;
+
+			foreach ($this->awards as $award)
+			{
+				if ($ride->event_id === $award->event_id)
+				{
+					$this->ttRides[$rideCount]->awards[$awardCount] = $award;
+					$awardCount++;
+				}
+			}
+
+			$rideCount++;
+
+			// Compute the event link url
+			$ride->link = JRoute::_(RankingsHelperRoute::getEventRoute($ride->event_id));
+		}
+
+		// HC Rides data
+		$rideCount = 0;	
+
+		foreach ($this->hcRides as $ride)
+		{
+			// Assign awards to rides
+			$awardCount = 0;
+
+			foreach ($this->awards as $award)
+			{
+				if ($ride->event_id === $award->event_id)
+				{
+					$this->hcRides[$rideCount]->awards[$awardCount] = $award;
+					$awardCount++;
+				}
+			}
+
+			$rideCount++;
+
+			// Compute the hc ride event link url.
+			$ride->link = JRoute::_(RankingsHelperRoute::getEventRoute($ride->event_id));
+		}
+
+		// Awards data
+		foreach ($this->awards as $award)
+		{
+			// Compute the event link url
+			$award->link = JRoute::_(RankingsHelperRoute::getEventRoute($award->event_id));
+		}
 	}
 }

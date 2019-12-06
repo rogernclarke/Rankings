@@ -60,12 +60,14 @@ class RankingsModelList extends JModelList
 	/**
 	 * Method to get the form
 	 *
-	 * @param 	string 	$prefix 	Form prefix
+	 * @param 	string 	$name 	Form name
 	 *
 	 * @return  form object
 	 */
-	public function getForm($prefix = null)
+	public function getForm($name = null)
 	{
+		$name = $name ?? $this->getName();
+
 		// Get the form
 		JForm::addFormPath(JPATH_COMPONENT . '/model/forms');
 		JForm::addFieldPath(JPATH_COMPONENT . '/model/fields');
@@ -74,7 +76,7 @@ class RankingsModelList extends JModelList
 		// Create the form
 		try
 		{
-			$form = JForm::getInstance('jform', $prefix . $this->getName(), array('control' => 'jform'));
+			$form = JForm::getInstance('jform', $name, array('control' => 'jform'));
 		}
 		catch (Exception $e)
 		{
@@ -154,6 +156,7 @@ class RankingsModelList extends JModelList
 		$app    = \JFactory::getApplication();
 		$jinput = $app->input;
 		$jform  = $jinput->get('jform', array(), 'array');
+		$list 	= $jinput->getVar('list');
 
 		// Get the old, current and new states
 		$oldState = $app->getUserState($key);
@@ -195,7 +198,19 @@ class RankingsModelList extends JModelList
 		// Save the new value only if it is set in this request.
 		if ($newState !== null)
 		{
-			$app->setUserState($key, $newState);
+			if (empty($list))
+			{
+				$app->setUserState($key, $newState);
+			}
+			elseif (strpos($key, $list))
+			{
+				$app->setUserState($key, $newState);
+			}
+			else
+			{
+				// List value posted is not for this list key
+				$newState = $curState;
+			}
 		}
 		else
 		{
@@ -248,8 +263,7 @@ class RankingsModelList extends JModelList
 		// Receive & set list options
 		$this->state->set('list.limit', $this->getUserStateFromRequest($this->context . '.list.limit', 'limit', $app->getCfg('list_limit'), 'int'));
 		$this->state->set('list.start', $this->getUserStateFromRequest($this->context . '.list.start', 'limitstart', 0));
-
-		if ($list = $app->getUserStateFromRequest($this->context . '.list', 'list', array(), 'array'))
+		/*if ($list = $app->getUserStateFromRequest($this->context . '.list', 'list', array(), 'array'))
 		{
 			foreach ($list as $name => $value)
 			{
@@ -270,7 +284,11 @@ class RankingsModelList extends JModelList
 
 			// Set the list option
 			$this->state->set('list.' . $name, $value);
-		}
+		}*/
+
+		// Load the parameters.
+		$params = $app->getParams();
+		$this->setState('params', $params);
 	}
 
 	/**

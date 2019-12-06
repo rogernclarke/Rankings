@@ -28,27 +28,8 @@ class RankingsViewRankings extends JViewLegacy
 	 */
 	public function display($tpl = null)
 	{
-		$app    = \JFactory::getApplication();
-		$user   = \JFactory::getUser();
-		$this->params = $app->getParams();
-
-		// Get some data from the model
-		$model      = $this->getModel();
-		//$params     = $model->getState('params');
-
-		$this->rankings = $model->getItems();
-
-		// Get the form
-		$this->form = $model->getForm();
-
-		// Get the total number of riders
-		$totalEvents = $model->getTotal();
-
-		// Get pagination
-		$this->pagination = $this->get('Pagination');
-
-		// Get the list state
-		$this->state = $this->get('State');
+		// Load the models
+		$this->loadModels();
 
 		// Check for errors.
 		if (count($errors = $this->get('Errors')))
@@ -58,8 +39,76 @@ class RankingsViewRankings extends JViewLegacy
 			return false;
 		}
 
-		// Prepare the data.
-		// Compute the link urls.
+		$app = \JFactory::getApplication();
+
+		if ($app->input->getMethod() == 'POST')
+		{
+			return false;
+		}
+
+		$this->prepareData();
+
+		// Prepare the document
+		$this->setDocumentTitle($this->params->get('page_title'));
+
+		return parent::display($tpl);
+	}
+
+	/**
+	 * Load the models
+	 *
+	 * @return  void
+	 *
+	 * @since 2.0
+	 */
+	protected function loadModels()
+	{
+		// Get the model
+		$model = $this->getModel();
+
+		// Get the parameters
+		$this->params = $model->getState('params');
+
+		// Get some data from the model
+		$this->rankings = $this->get('items');
+
+		// Get the form
+		$this->form = $this->getForm();
+
+		// Get the total number of riders
+		$totalEvents = $this->get('total');
+
+		// Get pagination
+		$this->pagination = $this->get('pagination');
+
+		// Get the list state
+		$this->state = $this->get('state');
+
+		// Get the rides for each ranking
+		foreach ($this->rankings as $ranking)
+		{
+			// Get the rides model
+			$ridesModel = $this->getModel('rides');
+
+			$ridesModel->set('riderId', $ranking->rider_id);
+			$ridesModel->set('rankingStatus', $ranking->status);
+			$ridesModel->set('year', $rankingsModel->year);
+
+			// Get some data from the model
+			$ranking->rides = $this->get('items', 'rides');		
+		}
+	}
+
+	/**
+	 * Prepare the data
+	 *
+	 * @return  void
+	 *
+	 * @since 2.0
+	 */
+	protected function prepareData()
+	{
+		// Compute the link urls
 		foreach ($this->rankings as $ranking)
 		{
 			$ranking->link = JRoute::_(RankingsHelperRoute::getRiderRoute($ranking->rider_id));
@@ -68,9 +117,6 @@ class RankingsViewRankings extends JViewLegacy
 			{
 				$ride->link = JRoute::_(RankingsHelperRoute::getEventRoute($ride->event_id));
 			}
-
 		}
-
-		return parent::display($tpl);
 	}
 }

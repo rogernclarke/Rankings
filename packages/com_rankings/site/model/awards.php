@@ -41,7 +41,7 @@ class RankingsModelAwards extends RankingsModelList
 	 * @var    string
 	 * @since  2.0
 	 */
-	protected $listType = null;
+	protected $listContext = null;
 
 	/**
 	 * Rider ID
@@ -55,17 +55,16 @@ class RankingsModelAwards extends RankingsModelList
 	 * Constructor.
 	 *
 	 * @param   array  	$config  	An optional associative array of configuration settings.
-	 * @param 	string 	$listType 	Type of list to return riders for (event entries, event results, ranking, rider)
 	 *
 	 * @see     \JModelList
 	 * @since   2.0
 	 */
-	public function __construct($config = array(), $listType = 'rider')
+	public function __construct($config = array())
 	{
 		parent::__construct($config);
 
 		// Set list type
-		$this->listType = $listType;
+		$this->listContext = substr($this->context, strpos($this->context, ".") + 1);
 	}
 
 	/**
@@ -158,8 +157,11 @@ class RankingsModelAwards extends RankingsModelList
 	 **/
 	protected function getQuerySelect($db, $query)
 	{
-		// Get all awards
-		$this->state->set('list.limit', 0);
+		if ($this->listContext == 'event.awards')
+		{
+			// Get all awards for an event
+			$this->setState('list.limit', 0);
+		}
 
 		// Select required fields from awards
 		$query
@@ -281,14 +283,14 @@ class RankingsModelAwards extends RankingsModelList
 	 */
 	protected function getQueryFilters($db, $query)
 	{
-		switch ($this->listType)
+		switch ($this->listContext)
 		{
-			case "event":
+			case "event.awards":
 				$query
 					->where($db->qn('a.event_id') . ' = ' . (int) $this->eventId);
 				break;
 
-			case "rider":
+			case "rider.awards":
 				$query
 					->where($db->qn('a.rider_id') . ' = ' . (int) $this->riderId);
 				break;
@@ -311,16 +313,16 @@ class RankingsModelAwards extends RankingsModelList
 	 */
 	protected function getQueryOrder($db, $query)
 	{
-		switch ($this->listType)
+		switch ($this->listContext)
 		{
-			case "event":
+			case "event.awards":
 				$query
 					->order($db->qn('at.order') . ' ASC')
 					->order($db->qn('a.position') . ' ASC')
 					->order($db->qn('team_counter') . ' ASC');
 				break;
 
-			case "rider":
+			case "rider.awards":
 				$query
 					->order($db->qn('e.event_date') . ' DESC')
 					->order($db->qn('e.event_id') . ' ASC')

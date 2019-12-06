@@ -13,7 +13,7 @@
 defined('_JEXEC') or die('Restricted access');
 
 /**
- * Rankings Component Rankings Model
+ * Rankings Component Rides Model
  *
  * @since 2.0
  */
@@ -71,7 +71,6 @@ class RankingsModelRides extends RankingsModelList
 	 * Constructor.
 	 *
 	 * @param   array  	$config  	An optional associative array of configuration settings.
-	 * @param 	string 	$listContext 	Type of list to return riders for (event entries, event results, ranking, rider)
 	 *
 	 * @see     \JModelList
 	 * @since   2.0
@@ -110,7 +109,7 @@ class RankingsModelRides extends RankingsModelList
 		{
 			switch ($this->listContext)
 			{
-				case "event.entries.rides":
+				case "event.entries":
 					// Set the ordinal for predicted position
 					if (!empty($ride->predicted_position))
 					{
@@ -118,15 +117,15 @@ class RankingsModelRides extends RankingsModelList
 					}
 					break;
 
-				case "event.results.rides":
+				case "event.results":
 					// Set the ordinal for vets position
 					if (isset($ride->vets_position))
 					{
 						$ride->vets_position = $this->setOrdinal($ride->vets_position);
 					}
 
-				case "rider.tt.rides":
-				case "rider.hc.rides":
+				case "rider.ttrides":
+				case "rider.hcrides":
 					// Set the ordinal for position
 					$ride->position = $this->setOrdinal($ride->position);
 					$ride->gender_position = $this->setOrdinal($ride->gender_position);
@@ -154,7 +153,10 @@ class RankingsModelRides extends RankingsModelList
 		// Data elements specific to rides list types
 		switch ($this->listContext)
 		{
-			case "event.entries.rides":
+			case "event.entries":
+				// Get all entries for an event
+				$this->setState('list.limit', 0);
+
 				// Data elements from rides table
 				$query
 					->select($db->qn(array('r.rider_id', 'r.club_name', 'r.category_on_day', 'r.predicted_position')))
@@ -194,7 +196,10 @@ class RankingsModelRides extends RankingsModelList
 					);
 				break;
 
-			case "event.results.rides":
+			case "event.results":
+				// Get all results for an event
+				$this->setState('list.limit', 0);
+
 				// Data elements from rides table
 				$query
 					->select($db->qn(array('er.rider_id', 'club_name', 'category_on_day', 'position', 'ranking_points')))
@@ -292,8 +297,8 @@ class RankingsModelRides extends RankingsModelList
 					);
 				break;
 
-			case "rider.tt.rides":
-			case "rider.hc.rides":
+			case "rider.ttrides":
+			case "rider.hcrides":
 				// Data elements from rides table
 				$query
 					->select($db->qn(array('r.rider_id', 'e.event_id', 'position', 'ranking_points', 'counting_ride_ind')))
@@ -362,7 +367,7 @@ class RankingsModelRides extends RankingsModelList
 	{
 		switch ($this->listContext)
 		{
-			case "event.entries.rides":
+			case "event.entries":
 				$query
 					->from($db->qn('#__rides') . ' AS r')
 
@@ -372,7 +377,7 @@ class RankingsModelRides extends RankingsModelList
 					);
 				break;
 
-			case "event.results.rides":
+			case "event.results":
 				$query
 					->from('(' . $this->getSubqueryEventRides() . ') AS er')
 
@@ -398,8 +403,8 @@ class RankingsModelRides extends RankingsModelList
 					->from('(' . $this->getSubqueryCountingRides() . ') as cr');
 				break;
 
-			case "rider.tt.rides":
-			case "rider.hc.rides":
+			case "rider.ttrides":
+			case "rider.hcrides":
 				$query
 					->from($db->qn('#__rides') . ' AS r')
 
@@ -430,15 +435,15 @@ class RankingsModelRides extends RankingsModelList
 	{
 		switch ($this->listContext)
 		{
-			case "event.entries.rides":
+			case "event.entries":
 				$query
 					->where($db->qn('r.event_id') . ' = ' . (int) $this->eventId);
 				break;
 
-			case "event.results.rides":
+			case "event.results":
 				break;
 
-			case "rider.hc.rides":
+			case "rider.hcrides":
 				$query
 					->where($db->qn('r.rider_id') . ' = ' . (int) $this->riderId)
 					->where($db->qn('r.time') . ' > "00:00:00"')
@@ -446,7 +451,7 @@ class RankingsModelRides extends RankingsModelList
 					->where($db->qn('e.hill_climb_ind') . ' = TRUE');
 				break;
 
-			case "rider.tt.rides":
+			case "rider.ttrides":
 				$query
 					->where($db->qn('r.rider_id') . ' = ' . (int) $this->riderId)
 					->where($db->qn('r.time') . ' > "00:00:00"')
@@ -493,18 +498,18 @@ class RankingsModelRides extends RankingsModelList
 	{
 		switch ($this->listContext)
 		{
-			case "event.entries.rides":
+			case "event.entries":
 				$query
 					->order('-' . $db->qn('r.predicted_position') . ' DESC');
 				break;
 
-			case "event.results.rides":
+			case "event.results":
 				$query
 					->order($db->qn('position') . ' ASC');
 				break;
 
-			case "rider.tt.rides":
-			case "rider.hc.rides":
+			case "rider.ttrides":
+			case "rider.hcrides":
 				$query
 					->order($db->qn('e.event_date') . ' DESC');
 				break;
@@ -516,9 +521,45 @@ class RankingsModelRides extends RankingsModelList
 					->order($db->qn('event_date') . ' DESC');
 				break;
 		}
-//\JError::raiseError(500, $this->getName() . ': ' . $query);
-			//return false;
+
 		return $query;
+	}
+
+	/**
+	 * Method to get a store id based on the model configuration state.
+	 *
+	 * This is necessary because the model is used by the component and
+	 * different modules that might need different sets of data or different
+	 * ordering requirements.
+	 *
+	 * @param   string  $id  An identifier string to generate the store id.
+	 *
+	 * @return  string  A store id.
+	 *
+	 * @since   2.0
+	 */
+	protected function getStoreId($id = '')
+	{
+		// Add the rider or event id to the store id
+		switch ($this->listContext)
+		{
+			case "event.entries":
+			case "event.results":
+				$id .= ':' . $this->eventId;
+				break;
+
+			default:
+				$id .= ':' . $this->riderId;
+				break;
+		}
+
+		// Add the list state to the store id.
+		$id .= ':' . $this->getState('list.start');
+		$id .= ':' . $this->getState('list.limit');
+		$id .= ':' . $this->getState('list.ordering');
+		$id .= ':' . $this->getState('list.direction');
+
+		return md5($this->context . ':' . $id);
 	}
 
 	/**
