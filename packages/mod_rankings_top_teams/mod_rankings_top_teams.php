@@ -14,10 +14,13 @@ defined('_JEXEC') or die;
 
 // Include stylesheets
 $document = JFactory::getDocument();
-$document->addStyleSheet(JUri::base() . 'media/com_rankings/css/rankings_1.7.css');
+$document->addStyleSheet(JUri::base() . 'media/com_rankings/css/rankings_1.8.css');
 
 // Include the syndicate functions only once
 require_once dirname(__FILE__) . '/helper.php';
+
+// Register the component helpers needed
+JLoader::register('RankingsHelperRoute', JPATH_ROOT . '/components/com_rankings/helpers/route.php');
 
 $params['teams_count'] 	= $params->get('count_teams', '5');
 $params['gender'] 		= $params->get('gender', 'Female');

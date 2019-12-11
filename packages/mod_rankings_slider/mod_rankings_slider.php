@@ -14,7 +14,7 @@ defined('_JEXEC') or die;
 
 // Include stylesheets
 $document = JFactory::getDocument();
-$document->addStyleSheet(JUri::base() . 'media/com_rankings/css/rankings_1.7.css');
+$document->addStyleSheet(JUri::base() . 'media/com_rankings/css/rankings_1.8.css');
 
 // Get the repeatable field value and decode it
 $listItems = json_decode($params->get('list_modules'), true);

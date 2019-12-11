@@ -14,7 +14,6 @@
     </files>
     <languages folder="language">
         <language tag="en-GB">en-GB/en-GB.mod_rankings_latest_events.ini</language>
-        <language tag="en-GB">en-GB/en-GB.mod_rankings_latest_events.sys.ini</language>
     </languages>
     <config>
         <fields name="params">

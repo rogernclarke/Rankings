@@ -25,7 +25,7 @@ defined('_JEXEC') or die;
 		<?php foreach($riders as $rider) : ?>
 			<tr class="row<?php echo $i % 2; ?>">
 				<td class="tt-modtr-col-rank"><?php echo $rider->gender_rank; ?></td>
-				<td class="tt-modtr-col-rider-name tt-table-rider-link"><a href="<?php echo $riders[$i]->link); ?>"><?php echo $rider->name; ?></a></td>
+				<td class="tt-modtr-col-rider-name tt-table-rider-link"><a href="<?php echo $riders[$i]->link; ?>"><?php echo $rider->name; ?></a></td>
 				<td class="tt-modtr-col-club-name"><?php echo $rider->club_name; ?></td>
 			</tr>
 		<?php endforeach; ?>
