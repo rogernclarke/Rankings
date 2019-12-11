@@ -87,7 +87,7 @@ class RankingsViewRiders extends JViewLegacy
 	 */
 	protected function prepareData()
 	{
-		// Compute the event link url
+		// Compute the rider link url
 		foreach ($this->riders as $rider)
 		{
 			$rider->link = JRoute::_(RankingsHelperRoute::getRiderRoute($rider->rider_id));

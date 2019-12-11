@@ -44,29 +44,7 @@ defined('_JEXEC') or die('Restricted access');
 	</td>
 	<td class="tt-col-club-name hidden-phone"><?php echo $this->entry->club_name; ?></td>
 	<td class="tt-col-age-gender-category hidden-tablet hidden-phone"><?php echo $this->entry->age_gender_category; ?></td>
-	<td class="tt-col-predicted-time-at-finish hidden-tablet hidden-phone">
-		<?php if(!$this->entry->blacklist_ind) : ?>
-			<?php echo $this->entry->predicted_time_at_finish; ?>
-		<?php endif; ?>
-	</td>
-	<td class="tt-col-ride-predicted-position">
-		<?php if(!$this->entry->blacklist_ind) : ?>
-			<?php if (!empty($this->entry->predicted_position)) : ?>
-				<?php echo trim($this->entry->predicted_position); ?>
-			<?php else : ?>
-				<?php echo "-"; ?>
-			<?php endif; ?>
-		<?php endif; ?>
-	</td>
-	<td class="tt-col-ride-result">
-		<?php if(!$this->entry->blacklist_ind) : ?>
-			<?php if($this->event->duration_event_ind) : ?>
-				<?php echo $this->entry->predicted_distance; ?>
-			<?php elseif (!empty($this->entry->predicted_time)) : ?>
-				<?php echo $this->entry->predicted_time; ?>
-			<?php else : ?>
-				<?php echo "-"; ?>
-			<?php endif; ?>
-		<?php endif; ?>
-	</td>
+	<td class="tt-col-predicted-time-at-finish hidden-tablet hidden-phone"><?php if(!$this->entry->blacklist_ind) : echo $this->entry->predicted_time_at_finish; endif; ?></td>
+	<td class="tt-col-ride-predicted-position"><?php if(!$this->entry->blacklist_ind) : if (!empty($this->entry->predicted_position)) : echo trim($this->entry->predicted_position); else :  echo "-"; endif; endif; ?></td>
+	<td class="tt-col-ride-result"><?php if(!$this->entry->blacklist_ind) : if($this->event->duration_event_ind) : echo $this->entry->predicted_distance; elseif (!empty($this->entry->predicted_time)) : echo $this->entry->predicted_time; else : echo "-"; endif; endif; ?></td>
 </tr>

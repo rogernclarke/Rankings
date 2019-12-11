@@ -66,7 +66,10 @@ class RankingsModelRider extends RankingsModelItem
 				' ELSE ""' .
 				' END' .
 				' AS hc_status'
-			);
+			)
+
+		// District details
+			->select($db->qn('district_name'));
 
 		return $query;
 	}

@@ -17,10 +17,10 @@ defined('_JEXEC') or die('Restricted access');
  *
  * @since 2.0
  */
-class RankingsViewEvents extends JViewLegacy
+class RankingsViewEventTotalsByDistrict extends JViewLegacy
 {
 	/**
-	 * Display the Events view
+	 * Display the Event Totals By District view
 	 *
 	 * @param   string  $tpl  The name of the template file to parse; automatically searches through the template paths.
 	 *
@@ -63,19 +63,10 @@ class RankingsViewEvents extends JViewLegacy
 		$this->params = $model->getState('params');
 
 		// Get some data from the model
-		$this->events = $this->get('items');
+		$this->districtCounts = $this->get('totalsbydistrict');
 
-		// Get the form
-		$this->form = $this->getForm();
-
-		// Get the total number of events
-		$totalEvents = $this->get('total');
-
-		// Get pagination
-		$this->pagination = $this->get('Pagination');
-
-		// Get the list state
-		$this->state = $this->get('State');
+		// Get the total number of riders
+		//$totalEvents = $this->get('total');		
 	}
 
 	/**
@@ -87,10 +78,6 @@ class RankingsViewEvents extends JViewLegacy
 	 */
 	protected function prepareData()
 	{
-		// Compute the event link url
-		foreach ($this->events as $event)
-		{
-			$event->link = JRoute::_(RankingsHelperRoute::getEventRoute($event->event_id));
-		}
+
 	}
 }

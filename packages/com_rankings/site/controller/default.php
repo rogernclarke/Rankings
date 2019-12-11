@@ -61,7 +61,17 @@ class RankingsControllerDefault extends JControllerLegacy
 			switch ($viewName)
 			{
 				case "dashboard":
+				case "ridersbydistance":
+				case "ridersbyridecount":
 					if ($model = $this->getModel('statistics'))
+					{
+						// Push the model into the view (as default)
+						$view->setModel($model, true);
+					}
+					break;
+
+				case "eventtotalsbydistrict":
+					if ($model = $this->getModel('events'))
 					{
 						// Push the model into the view (as default)
 						$view->setModel($model, true);

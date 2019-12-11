@@ -17,10 +17,10 @@ defined('_JEXEC') or die('Restricted access');
  *
  * @since 2.0
  */
-class RankingsViewEvents extends JViewLegacy
+class RankingsViewRidersByDistance extends JViewLegacy
 {
 	/**
-	 * Display the Events view
+	 * Display the Riders By Ride Count view
 	 *
 	 * @param   string  $tpl  The name of the template file to parse; automatically searches through the template paths.
 	 *
@@ -57,25 +57,19 @@ class RankingsViewEvents extends JViewLegacy
 	protected function loadModels()
 	{
 		// Get the model
-		$model = $this->getModel();
+		$model = $this->getModel('statistics');
 
 		// Get the parameters
 		$this->params = $model->getState('params');
 
-		// Get some data from the model
-		$this->events = $this->get('items');
-
 		// Get the form
-		$this->form = $this->getForm();
+		$this->form = $model->getForm('statistics');
 
-		// Get the total number of events
-		$totalEvents = $this->get('total');
-
-		// Get pagination
-		$this->pagination = $this->get('Pagination');
-
-		// Get the list state
+		// Get the model state
 		$this->state = $this->get('State');
+
+		// Get some data from the model
+		$this->riders = $this->get('ridersbydistance');
 	}
 
 	/**
@@ -88,9 +82,10 @@ class RankingsViewEvents extends JViewLegacy
 	protected function prepareData()
 	{
 		// Compute the event link url
-		foreach ($this->events as $event)
+		foreach ($this->riders as $rider)
 		{
-			$event->link = JRoute::_(RankingsHelperRoute::getEventRoute($event->event_id));
+			$rider->link = JRoute::_(RankingsHelperRoute::getRiderRoute($rider->rider_id));
 		}
+
 	}
 }

@@ -123,7 +123,6 @@ class RankingsModelList extends JModelList
 		$db 	= $this->getDbo();
 		$query 	= $db->getQuery(true);
 
-
 		$query = $this->getQuerySelect($db, $query);
 		$query = $this->getQueryFrom($db, $query);
 		$query = $this->getQueryFilters($db, $query);

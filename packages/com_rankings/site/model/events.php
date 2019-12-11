@@ -244,4 +244,59 @@ class RankingsModelEvents extends RankingsModelList
 
 		return $query;
 	}
+
+	/**
+	 * getTotalsByDistrict
+	 *
+	 * Gets counts of events by district
+	 *
+	 * @return  mixed  An array of district / event counts on success, false on failure.
+	 *
+	 * @since 2.0
+	 */
+	public function getTotalsByDistrict()
+	{
+		// Get a storage key.
+		$store = $this->getStoreId('getTotalsByDistrict');
+
+		// Try to load the data from internal storage.
+		if (isset($this->cache[$store]))
+		{
+			return $this->cache[$store];
+		}
+
+		try
+		{
+			// Load the total and add the total to the internal cache.
+			// Create a new query object.
+			$db 	= $this->getDbo();
+			$query 	= $db->getQuery(true);
+
+			$query
+				->select($db->qn(array('district_code', 'district_name')))
+				->select('YEAR(' . $db->qn('event_date') . ') AS year')
+				->select('COUNT(*) AS total');
+			$query = $this->getQueryFrom($db, $query);
+			$query
+				// Join over the district
+				->join('LEFT', $db->qn('#__districts', 'd') .
+					' ON (' . $db->qn('e.course_code') . ' LIKE CONCAT("%",' . $db->qn('d.district_code') . ',"%"))'
+				)
+				//->where('YEAR(' . $db->qn('event_date') . ') = 2019')
+				->group($db->qn(array('district_code', 'district_name', 'year')))
+				->order($db->qn('year') . 'ASC, ' . $db->qn('district_code') . 'ASC');
+
+			$db->setQuery($query);
+
+			$this->cache[$store] = $this->getDbo()->loadObjectList();
+		}
+		catch (\RuntimeException $e)
+		{
+			$this->setError($e->getMessage());
+
+			return false;
+		}
+
+		return $this->cache[$store];
+	}
 }

@@ -762,6 +762,16 @@ td.tt-col-score {
 	}
 }
 
+/* Statistics */
+.tt-col-ride-total {
+	text-align: center;
+	width: 100px;
+}
+td.tt-col-ride-total {
+	font-family: "Helvetica";
+	text-align: right;
+}
+
 /* Last Updated Module */
 .tt-last-updated-title {
 	margin: 0;
