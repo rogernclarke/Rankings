@@ -63,6 +63,7 @@ class RankingsControllerDefault extends JControllerLegacy
 				case "dashboard":
 				case "ridersbydistance":
 				case "ridersbyridecount":
+				case "ridersbytime":
 					if ($model = $this->getModel('statistics'))
 					{
 						// Push the model into the view (as default)
@@ -103,12 +104,17 @@ class RankingsControllerDefault extends JControllerLegacy
 
 		foreach ($modelNames as $modelName)
 		{
-			if ($model = $this->getModel($modelName, '', $config))
+			if ($additionalModel = $this->getModel($modelName, '', $config))
 			{
-				$model->set($viewName . 'Id', $id);
+				$additionalModel->set($viewName . 'Id', $id);
+
+				if ($year = $model->getState('filter.year'))
+				{
+					$additionalModel->set('year', $year);
+				}
 
 				// Push the model into the view
-				$view->setModel($model);
+				$view->setModel($additionalModel);
 			}
 		}
 

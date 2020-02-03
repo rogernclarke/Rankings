@@ -44,7 +44,7 @@ defined('_JEXEC') or die('Restricted access');
 		</div>
 	</div>
 	<! -- Display Events table -->
-	<table class="table-hover tt-table">
+	<table id="tt-table-events" class="table-hover tt-table">
 		<thead>
 			<tr>
 				<th class="tt-col-event-date"><?php echo JText::_('COM_RANKINGS_EVENT_DATE'); ?></th>

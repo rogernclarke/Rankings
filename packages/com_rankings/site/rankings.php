@@ -26,8 +26,8 @@ $document->addScript('media/com_rankings/js/rankings-script_1.7.js');
 // Register the component helpers needed
 require_once JPATH_COMPONENT . '/helpers/route.php';
 
-$config = array();
-$config['default_task'] = 'list';
+//$config = array();
+//$config['default_task'] = 'list';
 
 $controller	= JControllerLegacy::getInstance('Rankings');
 $controller->execute(JFactory::getApplication()->input->get('task'));

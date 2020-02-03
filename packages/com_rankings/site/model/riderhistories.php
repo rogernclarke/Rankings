@@ -20,12 +20,58 @@ defined('_JEXEC') or die('Restricted access');
 class RankingsModelRiderhistories extends RankingsModelList
 {
 	/**
+	 * List Context - model context less component name
+	 *
+	 * @var    string
+	 * @since  2.0
+	 */
+	protected $listContext = null;
+
+	/**
+	 * Column name prefix
+	 *
+	 * @var    string
+	 * @since  2.0
+	 */
+	protected $prefix = null;
+
+	/**
 	 * Rider ID
 	 *
 	 * @var    string
 	 * @since  2.0
 	 */
 	protected $riderId = null;
+
+	/**
+	 * Year
+	 *
+	 * @var    integer
+	 * @since  2.0
+	 */
+	protected $year = null;
+
+	/**
+	 * Constructor.
+	 *
+	 * @param   array  	$config  	An optional associative array of configuration settings.
+	 *
+	 * @see     \JModelList
+	 * @since   2.0
+	 */
+	public function __construct($config = array())
+	{
+		parent::__construct($config);
+
+		// Store the year from the request, set to year of last run date if not set
+		//$this->year 		= (int) $this->getState('filter.year');
+		//$lastRunDateYear 	= date("Y", strtotime($this->getLastRunDate()));
+		
+		//if (empty($this->year))
+		//{
+			$this->year = $lastRunDateYear;
+		//}
+	}
 
 	/**
 	 * getQuerySelect
@@ -46,7 +92,17 @@ class RankingsModelRiderhistories extends RankingsModelList
 
 		// Select required fields from rider_history
 		$query
-			->select($this->getState('list.select', '*'));
+			->select($this->getState('list.select', '*'))
+			->select(
+				'CASE ' . $db->qn('ranking_status') .
+				' WHEN "F" THEN "Frequent"' .
+				' WHEN "C" THEN "Qualified"' .
+				' WHEN "P" THEN "Provisional"' .
+				' WHEN "L" THEN "Lapsed"' .
+				' ELSE ""' .
+				' END' .
+				' AS status'
+			);
 
 		return $query;
 	}
@@ -66,7 +122,7 @@ class RankingsModelRiderhistories extends RankingsModelList
 	protected function getQueryFrom($db, $query)
 	{
 		$query
-			->from($db->qn('#__rider_history'));
+			->from($db->qn('#__' . $this->prefix . 'rider_history'));
 
 		return $query;
 	}
@@ -86,8 +142,13 @@ class RankingsModelRiderhistories extends RankingsModelList
 	protected function getQueryFilters($db, $query)
 	{
 		$query
-			->where($db->qn('rider_id') . ' = ' . $this->riderId)
-			->where($db->qn('effective_date') . ' > DATE_SUB(NOW(), INTERVAL 1 YEAR)');
+			->where($db->qn('rider_id') . ' = ' . $this->riderId);
+
+		if (!empty($this->year))
+		{
+			$query
+				->where('YEAR(' . $db->qn('effective_date') . ') = ' . $this->year);
+		}
 
 		return $query;
 	}

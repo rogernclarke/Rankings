@@ -57,6 +57,12 @@ class RankingsModelItem extends JModelItem
 		{
 			$this->context = strtolower($this->option . '.' . $this->getName());
 		}
+
+		// Add the filtering fields whitelist.
+		if (isset($config['filter_fields']))
+		{
+			$this->filter_fields = $config['filter_fields'];
+		}
 	}
 
 	/**
@@ -103,7 +109,7 @@ class RankingsModelItem extends JModelItem
 	{
 		// Use the id if specified, otherwise read it from the model state
 		$this->id = (!empty($id)) ? $id : (int) $this->getState($this->getName() . '.id');
-		
+
 		if ($this->_item === null)
 		{
 			$this->_item = array();
@@ -142,6 +148,104 @@ class RankingsModelItem extends JModelItem
 		}
 
 		return $this->_item[$this->id];
+	}
+
+	/**
+	 * Returns the last rankings calculation date
+	 *
+	 * @return date Date of last ranking calcuation
+	 *
+	 * @since 2.0
+	 */
+	public function getLastRunDate()
+	{
+		// Create a new query object.
+		$db 	= $this->getDbo();
+		$query 	= $db->getQuery(true);
+
+		$query
+			->select('MAX(effective_date)')
+			->from($db->qn('#__' . $this->prefix . 'rider_history'));
+
+		$db->setQuery($query);
+
+		return $db->loadResult();
+	}
+
+	/**
+	 * Gets the value of a user state variable and sets it in the session
+	 *
+	 * This is the same as the method in \JApplication except that this also can optionally
+	 * force you back to the first page when a filter has changed
+	 *
+	 * @param   string   $key        The key of the user state variable.
+	 * @param   string   $request    The name of the variable passed in a request.
+	 * @param   string   $default    The default value for the variable if not found. Optional.
+	 * @param   string   $type       Filter for the variable, for valid values see {@link \JFilterInput::clean()}. Optional.
+	 * @param   boolean  $resetPage  If true, the limitstart in request is set to zero
+	 *
+	 * @return  mixed  The request user state.
+	 *
+	 * @since   2.0
+	 */
+	public function getUserStateFromRequest($key, $request, $default = null, $type = 'none', $resetPage = true)
+	{
+		// Get the input
+		$app    = \JFactory::getApplication();
+		$jinput = $app->input;
+		$jform  = $jinput->get('jform', array(), 'array');
+		$list 	= $jinput->getVar('list');
+
+		// Get the old, current and new states
+		$oldState = $app->getUserState($key);
+		$curState = $oldState !== null ? $oldState : $default;
+		$newState = $jinput->get($request, null, $type);
+
+		// Handle filters
+		if ($newState === null && strpos($request, 'filter_') === 0)
+		{
+			$newState = $jform[$request];
+
+			if ($newState === null)
+			{
+				$newState = $jinput->getVar(substr($request,7));
+
+				if ($newState === null)
+				{
+					$newState = $default;
+				}
+			}
+
+			if ($curState != $newState && $newState !== null && $resetPage)
+			{
+				// Reset page
+				$jinput->set('limitstart', 0);
+			}
+		}
+
+		// Save the new value only if it is set in this request.
+		if ($newState !== null)
+		{
+			if (empty($list))
+			{
+				$app->setUserState($key, $newState);
+			}
+			elseif (strpos($key, $list))
+			{
+				$app->setUserState($key, $newState);
+			}
+			else
+			{
+				// List value posted is not for this list key
+				$newState = $curState;
+			}
+		}
+		else
+		{
+			$newState = $curState;
+		}
+
+		return $newState;
 	}
 
 	/**

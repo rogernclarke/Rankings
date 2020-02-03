@@ -179,6 +179,62 @@ class RankingsModelStatistics extends RankingsModelList
 	}
 
 	/**
+	 * getRidersByTime
+	 *
+	 * Gets the riders with greatest time raced
+	 *
+	 * @return  mixed  An array of riders on success, false on failure.
+	 *
+	 * @since 2.0
+	 */
+	public function getRidersByTime()
+	{
+		// Get a storage key.
+		$store = $this->getStoreId('getRidersByTime');
+
+		// Try to load the data from internal storage.
+		if (isset($this->cache[$store]))
+		{
+			return $this->cache[$store];
+		}
+
+		try
+		{
+			// Load the total and add the total to the internal cache.
+			// Create a new query object.
+			$db 	= $this->getDbo();
+			$query 	= $db->getQuery(true);
+
+			$query
+				->select($db->qn(array('rbt.rider_id', 'name', 'club_name')))
+				->select('SEC_TO_TIME(SUM(TIME_TO_SEC(' . $db->qn('total') . '))) as total')
+				->from('(' . $this->getSubqueryRidersByTime(false) . ' UNION ' . $this->getSubqueryRidersByTime(true) . ') AS rbt')
+
+			// Join over the last ride by year
+				->join('LEFT', '(' . $this->getSubqueryLastRideByYear() . ') AS lrby ON (' . $db->qn('rbt.rider_id') . ' = ' . $db->qn('lrby.rider_id') . ')')
+
+			// Group by rider
+				->group($db->qn('rider_id'))
+
+			// Order by total descending
+				->order($db->qn('total') . 'DESC, ' . $db->qn('name') . 'ASC')
+				->setLimit(20);
+
+			$db->setQuery($query);
+
+			$this->cache[$store] = $this->getDbo()->loadObjectList();
+		}
+		catch (\RuntimeException $e)
+		{
+			$this->setError($e->getMessage());
+
+			return false;
+		}
+
+		return $this->cache[$store];
+	}
+
+	/**
 	 * getSubqueryLastRideByYear
 	 *
 	 * Builds the subquery used to return details from a rider's last ride of the requested year (for e.g. year end club name)
@@ -238,6 +294,71 @@ class RankingsModelStatistics extends RankingsModelList
 		// Filter the events
 			->where('YEAR(' . $db->qn('event_date') . ') = ' . $this->year)
 			->where($db->qn('r2.rider_id') . ' = ' . $db->qn('r.rider_id'));
+
+		return $query;
+	}
+
+	/**
+	 * getSubqueryRidersByTime
+	 *
+	 * Builds the subquery used to return the rides to be summed for the requested year
+	 *
+	 * @param 	bool 	$durationEvent 	Indicates if subquery is for duration or distance events
+	 *
+	 * @return 	object 	Query object
+	 *
+	 * @since 2.0
+	 */
+	public function getSubqueryRidersByTime($durationEvent = false)
+	{
+		// Create a new query object.
+		$db 	= $this->getDbo();
+		$query 	= $db->getQuery(true);
+
+		$query
+			->select($db->qn(array('rc.rider_id', 'name')));
+
+		if ($durationEvent)
+		{
+			$query
+				->select('MAKETIME(SUM(' . $db->qn('e.distance') . '), 0, 0) AS total');
+		}
+		else
+		{
+			$query
+				->select('SEC_TO_TIME(SUM(TIME_TO_SEC(' . $db->qn('time') . '))) AS total');
+		}
+
+		// From
+		$query
+			->from($db->qn('#__rider_current', 'rc'))
+
+		// Join over the rides
+			->join('LEFT', $db->qn('#__rides', 'r') . ' ON (' . $db->qn('rc.rider_id') . ' = ' . $db->qn('r.rider_id') . ')')
+
+		// Join over the events
+			->join('LEFT', $db->qn('#__events', 'e') . ' ON (' . $db->qn('r.event_id') . ' = ' . $db->qn('e.event_id') . ')')
+
+		// Standard filters
+			->where($db->qn('r.time') . ' > "00:00:00"')
+			->where('YEAR(' . $db->qn('event_date') . ') = ' . $this->year)
+			->where($db->qn('blacklist_ind') . ' = 0');
+
+		// Additional filters
+		if ($durationEvent)
+		{
+			$query
+				->where($db->qn('duration_event_ind') . ' = 1');
+		}
+		else
+		{
+			$query
+				->where($db->qn('duration_event_ind') . ' = 0');
+		}
+
+		// Group by rider
+		$query
+			->group($db->qn('rider_id'));
 
 		return $query;
 	}

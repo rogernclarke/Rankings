@@ -1,7 +1,7 @@
 /**
  * Rankings Component for Joomla 3.x
  * 
- * @version    1.7
+ * @version    2.0
  * @package    Rankings
  * @subpackage Component
  * @copyright  Copyright (C) Spindata. All rights reserved.
@@ -50,11 +50,11 @@ $(document).on('shown.bs.tab', 'a[data-toggle="tab"]', function (e) {
 
     $('.tt-nav-tabs li').removeClass("active");
 
-    $('.tt-rider-category').removeClass("active");
-    $('.tt-rider-category.' + $clss).addClass("active");
+    //$('.tt-rider-category').removeClass("active");
+    //$('.tt-rider-category.' + $clss).addClass("active");
 
-    $('.tt-rider-rank').removeClass("active");
-    $('.tt-rider-rank.' + $clss).addClass("active");
+    //$('.tt-rider-rank').removeClass("active");
+    //$('.tt-rider-rank.' + $clss).addClass("active");
 
     $curr.addClass("active");
     $curr.prevAll().addClass("visited");
@@ -244,3 +244,68 @@ function filter_results_veterans()
 	$('.tt-col-ride-vets-standard-result').show();
 	$('.tt-tab-vets-footer').show();
 }
+
+jQuery(document).ready(function () {
+    jQuery('.tt-accordion-container').each(function(index) {
+        var mainContainer = jQuery(this);
+        function openFirstPanel() {
+            jQuery('> ul > li:first-child > .accordion-item-content', mainContainer).addClass('active').css('opacity', 0).slideDown("slow").animate({ opacity: 1 }, {
+                queue: false,
+                duration: 'slow'
+            });
+            jQuery('> ul > li:first-child', mainContainer).addClass('active').slideDown("slow").animate({ opacity: 1 }, {
+                queue: false,
+                duration: 'slow'
+            });
+            jQuery('> ul > li:first-child > .accordion-item-title > .indicator span', mainContainer).text('-');
+        }
+
+        var allPanels = jQuery('> ul > li .accordion-item-content', jQuery(this)).hide();
+        openFirstPanel();
+
+        jQuery('> ul > li', jQuery(this)).click(function() {
+            var selectedItem = jQuery(this);
+            var target = jQuery('> .accordion-item-content', jQuery(this));
+
+            if (target.hasClass('active')) {
+                target.removeClass('active').slideUp("slow").animate({ opacity: 0 }, {
+                    queue: false,
+                    duration: 'slow'
+                });
+            } else {
+                allPanels.removeClass('active').slideUp("slow").animate({ opacity: 0 }, {
+                    queue: false,
+                    duration: 'slow'
+                });
+                target.addClass('active').slideDown("slow").animate({ opacity: 1 }, {
+                    queue: false,
+                    duration: 'slow'
+                });
+            }
+            if (selectedItem.hasClass('active')) {
+                selectedItem.removeClass('active');
+                jQuery('> .accordion-item-title > .indicator span', jQuery(this)).text('+');
+            } else {
+                jQuery('> .tt-accordion > li', mainContainer).removeClass('active');
+                jQuery('> ul > li .indicator span', mainContainer).text('+');
+                selectedItem.addClass('active');
+                jQuery('> .accordion-item-title > .indicator span', jQuery(this)).text('-');
+            }
+            return false;
+        });
+    });
+
+    jQuery('.tt-tabs a[data-toggle="tab"]').click(function(e) {
+    	e.preventDefault();
+  		jQuery(this).tab('show');
+  		e.stopPropagation();
+    });
+
+    jQuery( ".accordion-item-title form" ).click(function( event ) {
+	    event.stopPropagation();
+	});
+
+	jQuery( ".accordion-item-content" ).click(function( event ) {
+	    event.stopPropagation();
+	});
+});

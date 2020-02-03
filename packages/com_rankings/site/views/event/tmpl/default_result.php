@@ -108,7 +108,7 @@ defined('_JEXEC') or die('Restricted access');
 			<?php echo $this->result->ranking_points; ?>
 		<?php endif; ?>
 	</td>
-	<td class="tt-col-ride-vets-standard-time">
+	<td class="tt-col-ride-vets-standard-time hidden-phone">
 		<?php if($this->event->duration_event_ind) : ?>
 			<?php echo $this->result->vets_standard_distance; ?>
 		<?php else : ?>

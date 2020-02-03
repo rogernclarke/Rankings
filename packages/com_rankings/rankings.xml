@@ -19,7 +19,9 @@
 		in this section are copied from /site/ in the package -->
 	<files folder="site">
 		<filename>index.html</filename>
+		<filename>controller.php</filename>
 		<filename>rankings.php</filename>
+		<filename>router.php</filename>
 		<folder>controllers</folder>
 		<folder>helpers</folder>
 		<folder>language</folder>

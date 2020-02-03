@@ -36,7 +36,7 @@ class RankingsModelAwards extends RankingsModelList
 	protected $eventId = null;
 
 	/**
-	 * List Type - ranking, event or rider
+	 * List Context - model context less component name
 	 *
 	 * @var    string
 	 * @since  2.0
@@ -50,6 +50,14 @@ class RankingsModelAwards extends RankingsModelList
 	 * @since  2.0
 	 */
 	protected $riderId = null;
+
+	/**
+	 * Year
+	 *
+	 * @var    integer
+	 * @since  2.0
+	 */
+	protected $year = null;
 
 	/**
 	 * Constructor.
@@ -88,10 +96,20 @@ class RankingsModelAwards extends RankingsModelList
 				$award->position = $this->setOrdinal($award->position);
 			}
 
+			if (strpos($award->ride_time, "0") === 0)
+			{
+				$award->ride_time = substr($award->ride_time, 1);
+			}
+
 			// Set the award name
 			if ($award->team_ind)
 			{
 				$award->awardName = 'Team (' . $award->award_basis . ')';
+
+				if (strpos($award->team_result, "00") === 0)
+				{
+					$award->team_result = substr($award->team_result, 1);
+				}
 			}
 			else
 			{
@@ -137,6 +155,11 @@ class RankingsModelAwards extends RankingsModelList
 						$award->awardName .= '+';
 					}
 				}
+
+				if (strpos($award->handicap_result, "0") === 0)
+				{
+					$award->handicap_result = substr($award->handicap_result, 1);
+				}
 			}
 		}
 
@@ -157,11 +180,8 @@ class RankingsModelAwards extends RankingsModelList
 	 **/
 	protected function getQuerySelect($db, $query)
 	{
-		if ($this->listContext == 'event.awards')
-		{
-			// Get all awards for an event
-			$this->setState('list.limit', 0);
-		}
+		// Get all awards
+		$this->setState('list.limit', 0);
 
 		// Select required fields from awards
 		$query
@@ -174,11 +194,12 @@ class RankingsModelAwards extends RankingsModelList
 			->select($db->qn(array('r.club_name', 'r.category_on_day')))
 			->select($db->qn('r.distance') . ' AS ride_distance')
 			->select('CASE TIME_FORMAT(' . $db->qn('r.time') . ', "%k")' .
-				' WHEN 0 THEN TRIM(TRAILING "00000" FROM(TRIM(LEADING "0" FROM TIME_FORMAT(' . $db->qn('r.time') . ', IF(' . $db->qn('e.hill_climb_ind') . ' = TRUE, "%i:%s.%f", "%i:%s")))))' .
+				' WHEN 0 THEN IF(TIME_FORMAT(' . $db->qn('r.time') . ', "%i") = 0, TRIM(TRAILING "00000" FROM(TIME_FORMAT(' . $db->qn('r.time') . ', IF(' . $db->qn('e.hill_climb_ind') . ' = TRUE, "%i:%s.%f", "%i:%s")))), TRIM(TRAILING "00000" FROM(TRIM(LEADING "0" FROM TIME_FORMAT(' . $db->qn('r.time') . ', IF(' . $db->qn('e.hill_climb_ind') . ' = TRUE, "%i:%s.%f", "%i:%s"))))))' .
 				' ELSE TIME_FORMAT(' . $db->qn('r.time') . ', "%k:%i:%s")' .
 				' END' .
 				' AS ride_time'
 			)
+
 			->select('IF (' . $db->qn('r.time') . ' IN ("12:00:00", "24:00:00"), ' .
 				$db->qn('r.distance') . ' - ' . $db->qn('r.vets_standard_distance') . ',' .
 				' CASE TIME_FORMAT(SUBTIME(' . $db->qn('r.vets_standard_time') . ', ' . $db->qn('r.time') . '), "%k")' .
@@ -190,7 +211,7 @@ class RankingsModelAwards extends RankingsModelList
 			->select('IF (' . $db->qn('r.time') . ' IN ("12:00:00", "24:00:00"), ' .
 				$db->qn('r.distance') . ' - ' . $db->qn('r.predicted_distance') . ',' .
 				' CASE TIME_FORMAT(SUBTIME(' . $db->qn('r.predicted_time') . ', ' . $db->qn('r.time') . '), "%k")' .
-				' WHEN 0 THEN IF(TIME_FORMAT(SUBTIME(' . $db->qn('r.predicted_time') . ', ' . $db->qn('r.time') . '), "%i") = 0, TRIM(TRAILING "00000" FROM(TIME_FORMAT(SUBTIME(' . $db->qn('r.predicted_time') . ', ' . $db->qn('r.time') . '), IF(' . $db->qn('e.hill_climb_ind') . ' = TRUE, "%s.%f", "%s")))), TRIM(TRAILING "00000" FROM(TRIM(LEADING "0" FROM TIME_FORMAT(SUBTIME(' . $db->qn('r.predicted_time') . ', ' . $db->qn('r.time') . '), IF(' . $db->qn('e.hill_climb_ind') . ' = TRUE, "%i:%s.%f", "%i:%s"))))))' .
+				' WHEN 0 THEN IF(TIME_FORMAT(SUBTIME(' . $db->qn('r.predicted_time') . ', ' . $db->qn('r.time') . '), "%i") = 0, TRIM(TRAILING "00000" FROM(TIME_FORMAT(SUBTIME(' . $db->qn('r.predicted_time') . ', ' . $db->qn('r.time') . '), IF(' . $db->qn('e.hill_climb_ind') . ' = TRUE, "%i:%s.%f", "%i:%s")))), TRIM(TRAILING "00000" FROM(TRIM(LEADING "0" FROM TIME_FORMAT(SUBTIME(' . $db->qn('r.predicted_time') . ', ' . $db->qn('r.time') . '), IF(' . $db->qn('e.hill_climb_ind') . ' = TRUE, "%i:%s.%f", "%i:%s"))))))' .
 				' ELSE TIME_FORMAT(SUBTIME(' . $db->qn('r.predicted_time') . ', ' . $db->qn('r.time') . '), "%k:%i:%s")' .
 				' END)' .
 				' AS handicap_result'
@@ -208,10 +229,10 @@ class RankingsModelAwards extends RankingsModelList
 				' ELSE ' . $db->qn('e.distance') .
 				' END' .
 				' AS distance'
-			)
+			);
 
 		// Team result details
-			->select($db->qn('team_result'));
+			//->select($db->qn('team_result'));
 
 		return $query;
 	}
@@ -256,7 +277,7 @@ class RankingsModelAwards extends RankingsModelList
 			);
 
 		// Join over the team results
-		if ($joinTeam)
+		/*if ($joinTeam)
 		{
 			$query
 				->join('LEFT', '(' . $this->getSubqueryTeamResults() . ') AS tr' .
@@ -264,7 +285,7 @@ class RankingsModelAwards extends RankingsModelList
 					' AND ' . $db->qn('a.award_type_id') . ' = ' . $db->qn('tr.award_type_id') .
 					' AND ' . $db->qn('a.position') . ' = ' . $db->qn('tr.position') . ')'
 				);
-		}
+		}*/
 
 		return $query;
 	}
@@ -290,9 +311,27 @@ class RankingsModelAwards extends RankingsModelList
 					->where($db->qn('a.event_id') . ' = ' . (int) $this->eventId);
 				break;
 
-			case "rider.awards":
+			case "rider.hcawards":
+			case "rider.ttawards":
 				$query
 					->where($db->qn('a.rider_id') . ' = ' . (int) $this->riderId);
+
+				if (!empty($this->year))
+				{
+					$query
+						->where('YEAR(' . $db->qn('event_date') . ') = ' . $this->year);
+				}
+
+				if ($this->listContext == "rider.hcawards")
+				{
+					$query
+						->where($db->qn('e.hill_climb_ind') . ' = TRUE');
+				}
+				else
+				{
+					$query
+						->where($db->qn('e.hill_climb_ind') . ' = FALSE');
+				}
 				break;
 		}
 
@@ -322,7 +361,8 @@ class RankingsModelAwards extends RankingsModelList
 					->order($db->qn('team_counter') . ' ASC');
 				break;
 
-			case "rider.awards":
+			case "rider.hcawards":
+			case "rider.ttawards":
 				$query
 					->order($db->qn('e.event_date') . ' DESC')
 					->order($db->qn('e.event_id') . ' ASC')

@@ -60,7 +60,7 @@ class RankingsModelRides extends RankingsModelList
 	protected $riderId = null;
 
 	/**
-	 * Year - used for hill climb rankings
+	 * Year
 	 *
 	 * @var    integer
 	 * @since  2.0
@@ -90,6 +90,15 @@ class RankingsModelRides extends RankingsModelList
 				$this->prefix = 'hc_';
 			}
 		}
+
+		// Store the year from the request, set to year of last run date if not set
+		$this->year 		= (int) $this->getState('filter.year');
+		$lastRunDateYear 	= date("Y", strtotime($this->getLastRunDate()));
+
+		if (empty($this->year))
+		{
+			$this->year = $lastRunDateYear;
+		}
 	}
 
 	/**
@@ -115,6 +124,11 @@ class RankingsModelRides extends RankingsModelList
 					{
 						$ride->predicted_position = $this->setOrdinal($ride->predicted_position);
 					}
+
+					if (strpos($ride->predicted_time, "0") === 0)
+					{
+						$ride->predicted_time = substr($ride->predicted_time, 1);
+					}
 					break;
 
 				case "event.results":
@@ -123,12 +137,21 @@ class RankingsModelRides extends RankingsModelList
 					{
 						$ride->vets_position = $this->setOrdinal($ride->vets_position);
 					}
+					if (strpos($ride->predicted_time, "0") === 0)
+					{
+						$ride->predicted_time = substr($ride->predicted_time, 1);
+					}
 
 				case "rider.ttrides":
 				case "rider.hcrides":
 					// Set the ordinal for position
 					$ride->position = $this->setOrdinal($ride->position);
 					$ride->gender_position = $this->setOrdinal($ride->gender_position);
+
+					if (strpos($ride->time, "0") === 0)
+					{
+						$ride->time = substr($ride->time, 1);
+					}
 					break;
 			}
 		}
@@ -223,7 +246,7 @@ class RankingsModelRides extends RankingsModelList
 						'AS predicted_distance'
 					)
 					->select('CASE TIME_FORMAT(' . $db->qn('time') . ', "%k")' .
-						' WHEN 0 THEN TRIM(TRAILING "00000" FROM(TRIM(LEADING "0" FROM TIME_FORMAT(' . $db->qn('time') . ', IF(' . $db->qn('hill_climb_ind') . ' = TRUE, "%i:%s.%f", "%i:%s")))))' .
+						' WHEN 0 THEN TRIM(TRAILING "00000" FROM(TIME_FORMAT(' . $db->qn('time') . ', IF(' . $db->qn('hill_climb_ind') . ' = TRUE, "%i:%s.%f", "%i:%s"))))' .
 						' ELSE TIME_FORMAT(' . $db->qn('time') . ', "%k:%i:%s")' .
 						' END' .
 						' AS time'
@@ -253,14 +276,8 @@ class RankingsModelRides extends RankingsModelList
 
 				// Gender and Vets details
 					->select($db->qn(array('gender_position', 'vets_position')))
-					->select('CASE TIME_FORMAT(' . $db->qn('time') . ', "%k")' .
-						' WHEN 0 THEN TRIM(TRAILING "00000" FROM(TRIM(LEADING "0" FROM TIME_FORMAT(' . $db->qn('time') . ', IF(' . $db->qn('hill_climb_ind') . ' = TRUE, "%i:%s.%f", "%i:%s")))))' .
-						' ELSE TIME_FORMAT(' . $db->qn('time') . ', "%k:%i:%s")' .
-						' END' .
-						' AS time'
-					)
 					->select('CASE TIME_FORMAT(' . $db->qn('vets_standard_time') . ', "%k")' .
-						' WHEN 0 THEN TRIM(TRAILING "00000" FROM(TRIM(LEADING "0" FROM TIME_FORMAT(' . $db->qn('vets_standard_time') . ', IF(' . $db->qn('hill_climb_ind') . ' = TRUE, "%i:%s.%f", "%i:%s")))))' .
+						' WHEN 0 THEN TRIM(TRAILING "00000" FROM(TIME_FORMAT(' . $db->qn('vets_standard_time') . ', IF(' . $db->qn('hill_climb_ind') . ' = TRUE, "%i:%s.%f", "%i:%s"))))' .
 						' ELSE TIME_FORMAT(' . $db->qn('vets_standard_time') . ', "%k:%i:%s")' .
 						' END' .
 						' AS vets_standard_time'
@@ -297,8 +314,30 @@ class RankingsModelRides extends RankingsModelList
 					);
 				break;
 
+			case "rider.entries":
+			case "rider.resultspending":
+				// Get all entries for a rider
+				$this->setState('list.limit', 0);
+
+				// Data elements from rides table
+				$query
+					->select($db->qn(array('r.rider_id', 'e.event_id')))
+
+				// Event details are applicable for entries
+					->select($db->qn(array('event_date','event_name', 'duration_event_ind','hill_climb_ind')))
+					->select('CASE ' . $db->qn('e.distance') .
+						' WHEN 0 THEN "Other"' .
+						' ELSE ' . $db->qn('e.distance') .
+						' END' .
+						' AS event_distance'
+					);
+				break;
+
 			case "rider.ttrides":
 			case "rider.hcrides":
+				// Get all rides for a rider
+				$this->setState('list.limit', 0);
+
 				// Data elements from rides table
 				$query
 					->select($db->qn(array('r.rider_id', 'e.event_id', 'position', 'ranking_points', 'counting_ride_ind')))
@@ -320,7 +359,7 @@ class RankingsModelRides extends RankingsModelList
 						' AS improved_ride'
 					)
 					->select('CASE TIME_FORMAT(' . $db->qn('r.time') . ', "%k")' .
-						' WHEN 0 THEN TRIM(TRAILING "00000" FROM(TRIM(LEADING "0" FROM TIME_FORMAT(' . $db->qn('r.time') . ', IF(' . $db->qn('e.hill_climb_ind') . ' = TRUE, "%i:%s.%f", "%i:%s")))))' .
+						' WHEN 0 THEN TRIM(TRAILING "00000" FROM(TIME_FORMAT(' . $db->qn('r.time') . ', IF(' . $db->qn('e.hill_climb_ind') . ' = TRUE, "%i:%s.%f", "%i:%s"))))' .
 						' ELSE TIME_FORMAT(' . $db->qn('r.time') . ', "%k:%i:%s")' .
 						' END' .
 						' AS time'
@@ -333,12 +372,6 @@ class RankingsModelRides extends RankingsModelList
 
 				// Event details are applicable for rides displayed for a rider or rankings
 					->select($db->qn(array('event_date','event_name', 'duration_event_ind')))
-					->select('CASE TIME_FORMAT(' . $db->qn('time') . ', "%k")' .
-						' WHEN 0 THEN TRIM(TRAILING "00000" FROM(TRIM(LEADING "0" FROM TIME_FORMAT(' . $db->qn('time') . ', IF(' . $db->qn('e.hill_climb_ind') . ' = TRUE, "%i:%s.%f", "%i:%s")))))' .
-						' ELSE TIME_FORMAT(' . $db->qn('time') . ', "%k:%i:%s")' .
-						' END' .
-						' AS time'
-					)
 					->select('CASE ' . $db->qn('e.distance') .
 						' WHEN 0 THEN "Other"' .
 						' ELSE ' . $db->qn('e.distance') .
@@ -403,6 +436,15 @@ class RankingsModelRides extends RankingsModelList
 					->from('(' . $this->getSubqueryCountingRides() . ') as cr');
 				break;
 
+			case "rider.entries":
+			case "rider.resultspending":
+				$query
+					->from($db->qn('#__rides') . ' AS r')
+
+				// Join over the event
+					->join('LEFT', $db->qn('#__events', 'e') . ' ON (' . $db->qn('r.event_id') . ' = ' . $db->qn('e.event_id') . ')');
+				break;
+
 			case "rider.ttrides":
 			case "rider.hcrides":
 				$query
@@ -443,12 +485,38 @@ class RankingsModelRides extends RankingsModelList
 			case "event.results":
 				break;
 
+			case "rider.entries":
+				$query
+					->where($db->qn('r.rider_id') . ' = ' . (int) $this->riderId)
+					->where($db->qn('e.results_ind') . ' = FALSE')
+					->where($db->qn('e.event_date') . ' >= NOW()');
+				break;
+
+			case "rider.resultspending":
+				$query
+					->where($db->qn('r.rider_id') . ' = ' . (int) $this->riderId)
+					->where($db->qn('e.results_ind') . ' = FALSE')
+					->where($db->qn('e.event_date') . ' < NOW()');
+
+				if (!empty($this->year))
+				{
+					$query
+						->where('YEAR(' . $db->qn('event_date') . ') = ' . $this->year);
+				}
+				break;
+
 			case "rider.hcrides":
 				$query
 					->where($db->qn('r.rider_id') . ' = ' . (int) $this->riderId)
 					->where($db->qn('r.time') . ' > "00:00:00"')
 					->where($db->qn('rh.effective_date') . ' = (' . $this->getSubqueryNextHistory() . ')')
 					->where($db->qn('e.hill_climb_ind') . ' = TRUE');
+
+				if (!empty($this->year))
+				{
+					$query
+						->where('YEAR(' . $db->qn('event_date') . ') = ' . $this->year);
+				}
 				break;
 
 			case "rider.ttrides":
@@ -457,6 +525,12 @@ class RankingsModelRides extends RankingsModelList
 					->where($db->qn('r.time') . ' > "00:00:00"')
 					->where($db->qn('rh.effective_date') . ' = (' . $this->getSubqueryNextHistory() . ')')
 					->where($db->qn('e.hill_climb_ind') . ' = FALSE');
+
+				if (!empty($this->year))
+				{
+					$query
+						->where('YEAR(' . $db->qn('event_date') . ') = ' . $this->year);
+				}
 				break;
 
 			case "rankings.tt.rides":
@@ -508,10 +582,17 @@ class RankingsModelRides extends RankingsModelList
 					->order($db->qn('position') . ' ASC');
 				break;
 
+			case "rider.entries":
+			case "rider.resultspending":
+				$query
+					->order($db->qn('e.event_date') . ' ASC');
+				break;
+
 			case "rider.ttrides":
 			case "rider.hcrides":
 				$query
-					->order($db->qn('e.event_date') . ' DESC');
+					->order($db->qn('e.event_date') . ' DESC')
+					->order($db->qn('ranking_points') . ' DESC');
 				break;
 
 			case "rankings.tt.rides":

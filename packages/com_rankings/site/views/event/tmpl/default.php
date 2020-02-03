@@ -232,7 +232,7 @@ defined('_JEXEC') or die('Restricted access');
 											<th class="tt-col-event-ride-points hidden-tablet hidden-phone"><?php echo JText::_('COM_RANKINGS_RIDE_RANKING_POINTS'); ?></th>
 											<th class="tt-col-event-ride-points hidden-desktop"><?php echo JText::_('COM_RANKINGS_RIDE_RANKING_POINTS_SHORT'); ?></th>
 											<th class="tt-col-ride-vets-standard-time hidden-tablet hidden-phone"><?php echo JText::_('COM_RANKINGS_RIDE_VETS_STANDARD'); ?></th>
-											<th class="tt-col-ride-vets-standard-time hidden-desktop"><?php echo JText::_('COM_RANKINGS_RIDE_VETS_STANDARD_SHORT'); ?></th>
+											<th class="tt-col-ride-vets-standard-time hidden-desktop hidden-phone"><?php echo JText::_('COM_RANKINGS_RIDE_VETS_STANDARD_SHORT'); ?></th>
 											<th class="tt-col-ride-vets-standard-result"><?php echo JText::_('COM_RANKINGS_RIDE_VETS_STANDARD_RESULT'); ?></th>
 										</tr>
 									</thead>

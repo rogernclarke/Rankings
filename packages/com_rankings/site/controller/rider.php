@@ -30,12 +30,30 @@ class RankingsControllerRider extends RankingsControllerDefault
 	{
 		// Specify additional models required
 		$modelNames = array(
+			'entries',
+			'resultspending',
 			'ttrides',
 			'hcrides',
-			'awards',
-			'riderhistories'
+			'ttawards',
+			'hcawards',
+			'ttriderhistories',
+			'hcriderhistories'
 		);
 
-		return parent::display('rider', $modelNames);
+		// Set redirect if POST
+		if ($this->input->getMethod() == 'POST')
+		{
+			// Redirect post to get
+			$app 	= JFactory::getApplication('site');
+			$jform 	= $app->input->get('jform', array(), 'array');
+
+			$this->setRedirect(JRoute::_(RankingsHelperRoute::getRiderRoute($this->input->getInt('cid'), $jform['filter_year']), false));
+
+			return $this;
+		}
+		else
+		{
+			return parent::display('rider', $modelNames);
+		}
 	}
 }

@@ -38,7 +38,7 @@ defined('_JEXEC') or die('Restricted access');
 		</td>
 	<?php endif; ?>
 	<td class="tt-col-award-name"><?php echo $this->award->position . ' ' . $this->award->awardName; ?></td>
-	<td class="tt-col-award-result">
+	<td class="tt-col-award-result hidden-phone">
 		<?php switch ($this->award->award_basis) {
 			case "Standard": ?>
 				<?php echo $this->award->vets_standard_result; ?>

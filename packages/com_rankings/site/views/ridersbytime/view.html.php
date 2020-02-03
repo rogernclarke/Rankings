@@ -17,10 +17,10 @@ defined('_JEXEC') or die('Restricted access');
  *
  * @since 2.0
  */
-class RankingsViewRidersByDistance extends JViewLegacy
+class RankingsViewRidersByTime extends JViewLegacy
 {
 	/**
-	 * Display the Riders By Distance view
+	 * Display the Riders By Time view
 	 *
 	 * @param   string  $tpl  The name of the template file to parse; automatically searches through the template paths.
 	 *
@@ -69,7 +69,7 @@ class RankingsViewRidersByDistance extends JViewLegacy
 		$this->state = $this->get('State');
 
 		// Get some data from the model
-		$this->riders = $this->get('ridersbydistance');
+		$this->riders = $this->get('ridersbytime');
 	}
 
 	/**

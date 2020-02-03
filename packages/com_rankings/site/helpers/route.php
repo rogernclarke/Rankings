@@ -40,17 +40,29 @@ abstract class RankingsHelperRoute
 	/**
 	 * Get the rider route.
 	 *
-	 * @param   integer $id The id of the rider.
+	 * @param   integer $id 	The id of the rider.
+	 * @param 	integer $year 	The year for the url parameter
 	 *
-	 * @return  string 	The rider item route.
+	 * @return  string 	The rider route.
 	 */
-	public static function getRiderRoute($id)
+	public static function getRiderRoute($id, $year = null)
 	{
-		// Get the menu item id
-		$menuItemId = self::getMenuItem('riders');
+		// Rider id parameter
+		$riderIdParam = '&cid=' . $id;
+
+		// Year parameter
+		$yearParam = null;
+
+		if ($year)
+		{
+			$yearParam = '&year=' . (int) $year;
+		}
+
+		// Menu item id parameter
+		$menuItemIdParam = '&Itemid=' . self::getMenuItem('riders');
 
 		// Build the link
-		$link = 'index.php?option=com_rankings&&task=rider.display&cid=' . $id . '&Itemid=' . $menuItemId;
+		$link = 'index.php?option=com_rankings&&task=rider.display' . $riderIdParam . $yearParam . $menuItemIdParam;
 
 		return $link;
 	}

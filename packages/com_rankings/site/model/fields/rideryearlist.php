@@ -2,7 +2,7 @@
 /**
  * Rankings Component for Joomla 3.x
  *
- * @version    1.1
+ * @version    2.0
  * @package    Rankings
  * @subpackage Form
  * @copyright  Copyright (C) 2019 Spindata. All rights reserved.
@@ -16,16 +16,24 @@ JFormHelper::loadFieldClass('list');
 /**
  * Supports a custom SQL select list from an external database
  *
- * @since 1.1
+ * @since 2.0
  */
-class JFormFieldYearList extends JFormFieldList
+class JFormFieldRiderYearList extends JFormFieldList
 {
+	/**
+	 * Rider ID
+	 *
+	 * @var    string
+	 * @since  2.0
+	 */
+	protected $riderId = null;
+
 	/**
 	 * The form field type.
 	 *
 	 * @var    string
 	 */
-	public $type = 'YearList';
+	public $type = 'rideryearlist';
 
 	/**
 	 * Method to get the custom field options.
@@ -35,21 +43,45 @@ class JFormFieldYearList extends JFormFieldList
 	 */
 	protected function getOptions()
 	{
-		$options = array();
+		// Get the application input riderId
+		$jinput  = JFactory::getApplication()->input;
+		$riderId = $jinput->getInt('cid');
 
 		// Get the database object
 		$db = $this->loadDb();
 
 		// Build the query
-		$query = $db->getQuery(true);
+		$query3 = $db->getQuery(true);
 
-		$query
-			->select('DISTINCT YEAR (' . $db->qn('e.event_date') . ') AS year')
+		$query3
+			->select('DISTINCT YEAR(' . $db->qn('event_date') . ')')
 			->from($db->qn('#__events', 'e'))
-			->order($db->qn('year') . ' DESC');
+			->join('LEFT', $db->qn('#__rides', 'r') .
+						' ON (' . $db->qn('e.event_id') . ' = ' . $db->qn('r.event_id') . ')')
+			->where($db->qn('rider_id') . ' = ' . $riderId)
+			->where($db->qn('r.time') . ' > "00:00:00"');
 
-		// Set the query and get the result list.
-		$db->setQuery($query);
+		$query1 = $db->getQuery(true);
+
+		$query1
+			->select('DISTINCT YEAR(' . $db->qn('effective_date') . ') AS year')
+			->from($db->qn('#__rider_history'))
+			->where($db->qn('rider_id') . ' = ' . $riderId)
+			->where('YEAR(' . $db->qn('effective_date') . ') IN (' . $query3 . ')');
+
+		$query2 = $db->getQuery(true);
+
+		$query2
+			->select('DISTINCT YEAR(' . $db->qn('effective_date') . ') AS year')
+			->from($db->qn('#__hc_rider_history'))
+			->where($db->qn('rider_id') . ' = ' . $riderId)
+			->where('YEAR(' . $db->qn('effective_date') . ') IN (' . $query3 . ')');
+
+		$query1
+			->union($query2)
+			->order('year DESC');
+
+		$db->setQuery($query1);
 
 		try
 		{
@@ -61,6 +93,8 @@ class JFormFieldYearList extends JFormFieldList
 		}
 
 		// Build the field options.
+		$options = array();
+
 		if (!empty($items))
 		{
 			foreach ($items as $item)

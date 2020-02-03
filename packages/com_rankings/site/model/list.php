@@ -95,7 +95,7 @@ class RankingsModelList extends JModelList
 	 *
 	 * @since 2.0
 	 */
-	protected function getLastRunDate()
+	public function getLastRunDate()
 	{
 		// Create a new query object.
 		$db 	= $this->getDbo();
