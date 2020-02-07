@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<form>
+    <fieldset
+		name="rider_toolbar"
+		label="COM_RANKINGS_DETAILS"
+		addfieldpath="/components/com_rankings/model/fields"
+		>
+        <field
+            name="filter_year"
+            type="rideryearlist"
+            id="year_filter"
+            class="test"
+            extension="com_rankings"
+            label="COM_RANKINGS_YEAR"
+            onchange="this.form.submit();"
+            >
+        </field>
+        </fieldset>
+</form>

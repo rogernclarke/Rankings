@@ -1,8 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
-<extension type="module" version="1.0" client="site" method="upgrade">
+<extension type="module" version="2.0" client="site" method="upgrade">
     <name>Rankings Top Teams</name>
+    <!-- The following elements are optional and free of formatting constraints -->
+    <creationDate>February 2020</creationDate>
     <author>Spindata</author>
-    <version>1.4</version>
+    <authorEmail></authorEmail>
+    <authorUrl></authorUrl>
+    <copyright>Copyright Info</copyright>
+    <license>License Info</license>
+    <!--  The version string is recorded in the components table -->
+    <version>2.0</version>
+    <!-- The description is optional and defaults to the name -->
     <description>A module to display the top ranked teams.</description>
     <files>
         <filename>mod_rankings_top_teams.xml</filename>

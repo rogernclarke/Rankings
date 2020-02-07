@@ -1,8 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
-<extension type="module" version="1.0" client="site" method="upgrade">
+<extension type="module" version="2.0" client="site" method="upgrade">
     <name>Rankings Last Updated</name>
-    <author>Roger Clarke</author>
-    <version>1.0</version>
+    <!-- The following elements are optional and free of formatting constraints -->
+    <creationDate>February 2020</creationDate>
+    <author>Spindata</author>
+    <authorEmail></authorEmail>
+    <authorUrl></authorUrl>
+    <copyright>Copyright Info</copyright>
+    <license>License Info</license>
+    <!--  The version string is recorded in the components table -->
+    <version>2.0</version>
+    <!-- The description is optional and defaults to the name -->
     <description>A module to display the latest ranking calculation date.</description>
     <files>
         <filename>mod_rankings_last_updated.xml</filename>

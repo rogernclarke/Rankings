@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="utf-8"?>
+<form>
+    <fieldset
+		name="ranking_list_toolbar"
+		label="COM_RANKINGS_DETAILS"
+		addfieldpath="/components/com_rankings/model/fields"
+		>
+        <field
+            name="filter_year"
+            type="hcyearlist"
+            id="year_filter"
+            extension="com_rankings"
+            label="COM_RANKINGS_YEAR"
+            onchange="this.form.submit();"
+            >
+        </field>
+        <field
+            name="filter_gender"
+            type="list"
+            id="gender_filter"
+            extension="com_rankings"
+            label="COM_RANKINGS_GENDER"
+            onchange="this.form.submit();"
+            >
+            <option value="All">All</option>
+            <option value="Female">Female</option>
+            <option value="Male">Male</option>
+        </field>
+        <field
+            name="filter_age_category"
+            type="list"
+            id="age_category_filter"
+            extension="com_rankings"
+            label="COM_RANKINGS_RIDER_AGE_CATEGORY"
+            onchange="this.form.submit();"
+            >
+            <option value="All">All</option>
+            <option value="Espoir">Espoir</option>
+            <option value="Junior">Junior</option>
+            <option value="Juvenile">Juvenile</option>
+            <option value="Senior">Senior</option>
+            <option value="Veteran">Veteran</option>
+        </field>
+		<field
+            name="filter_district_code"
+            type="districtlist"
+            id="district_code_filter"
+            extension="com_rankings"
+            label="COM_RANKINGS_DISTRICT"
+            onchange="this.form.submit();"
+            >
+            <option value="All">All</option>
+        </field>
+        <field
+            name="filter_name"
+            type="text"
+            id="name_filter"
+            extension="com_rankings"
+            label="COM_RANKINGS_RIDER_NAME"
+            hint="COM_RANKINGS_SEARCH_IN_NAME"
+            onchange="this.form.submit();"
+            />
+        <field
+        	name="filter_club_name"
+        	type="text"
+        	id="club_name_filter"
+        	extension="com_rankings"
+        	label="COM_RANKINGS_CLUB_NAME"
+        	hint="COM_RANKINGS_SEARCH_IN_CLUB_NAME"
+        	onchange="this.form.submit();"
+        	/>
+        <field
+            name="check_status"
+            type="checkbox"
+            id="status_check"
+            extension="com_rankings"
+            label="COM_RANKINGS_DISPLAY_PROVISIONAL_RIDERS"
+            onchange="this.form.submit();"
+            >
+        </field>
+    </fieldset>
+</form>
