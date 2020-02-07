@@ -37,7 +37,7 @@ defined('_JEXEC') or die('Restricted access');
 			<tr>
 				<th class="tt-col-rider-name"><?php echo JText::_('COM_RANKINGS_RIDER_NAME'); ?></th>
 				<th class="tt-col-club-name"><?php echo JText::_('COM_RANKINGS_CLUB_NAME'); ?></th>
-				<th class="tt-col-ride-total"><?php echo JText::_('COM_RANKINGS_TIME'); ?></th>
+				<th class="tt-col-ride-total"><?php echo JText::_('COM_RANKINGS_RIDE_TIME'); ?></th>
 			</tr>
 		</thead>
 		<tbody>

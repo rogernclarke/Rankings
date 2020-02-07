@@ -87,6 +87,11 @@ defined('_JEXEC') or die('Restricted access');
 	<?php if ($this->state->get('filter.year') != $this->lastRunDate && (in_array($this->rider->status, array('Frequent','Qualified'), true ) | in_array($this->rider->hc_status, array('Frequent','Qualified'), true ))) : ; ?>
 		<?php echo $this->loadTemplate('current_ranking'); ?>
 	<?php endif; ?>
+	<?php if ($this->state->get('filter.year') != $this->lastRunDate && count($this->ttEntries) > 0) : ?>
+		<h3>Event Entries</h3>
+		<?php $this->entries = array_merge($this->ttEntries, $this->hcEntries); ?>
+		<?php echo $this->loadTemplate('entries'); ?>
+	<?php endif; ?>
 	<ul id="tt-accordion-rider" class="tt-accordion tt-level1">
 		<?php if (count($this->rider->entries + $this->rider->hcentries + $this->rider->pending + $this->rider->hcpending + $this->rider->rides + $this->rider->hcrides) > 0) : ?>
 			<li id="accordion-id1" class="tt-rider-season">

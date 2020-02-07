@@ -17,11 +17,11 @@ JLoader::registerPrefix('Rankings', JPATH_COMPONENT);
 
 // Include stylesheets
 $document = JFactory::getDocument();
-$document->addStyleSheet(JUri::base() . 'media/com_rankings/css/rankings_1.8.css');
+$document->addStyleSheet(JUri::base() . 'media/com_rankings/css/rankings_2.0.css');
 
 // Include javascript
 JHtml::_('jquery.framework', false);
-$document->addScript('media/com_rankings/js/rankings-script_1.7.js');
+$document->addScript('media/com_rankings/js/rankings-script_2.0.js');
 
 // Register the component helpers needed
 require_once JPATH_COMPONENT . '/helpers/route.php';

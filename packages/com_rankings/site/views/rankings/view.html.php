@@ -92,7 +92,7 @@ class RankingsViewRankings extends JViewLegacy
 
 			$ridesModel->set('riderId', $ranking->rider_id);
 			$ridesModel->set('rankingStatus', $ranking->status);
-			$ridesModel->set('year', $rankingsModel->year);
+			$ridesModel->set('year', $model->year);
 
 			// Get some data from the model
 			$ranking->rides = $this->get('items', 'rides');		

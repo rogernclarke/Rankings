@@ -7,7 +7,7 @@
 		>
         <field
             name="filter_year"
-            type="yearlist"
+            type="hcyearlist"
             id="year_filter"
             extension="com_rankings"
             label="COM_RANKINGS_YEAR"

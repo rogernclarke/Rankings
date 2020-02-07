@@ -96,7 +96,7 @@ defined('_JEXEC') or die('Restricted access');
 						<?php endif; ?>
 						<div class="tt-accordion-container">
 							<ul id="tt-accordion-season-timetrial" class="tt-accordion tt-level2">
-								<?php if (count($this->ttEntries) > 0) : ?>
+								<?php if ($this->state->get('filter.year') == $this->lastRunDate && count($this->ttEntries) > 0) : ?>
 									<li id="accordion-id1-tt1">
 										<div class="accordion-item-title">
 											<span class="indicator">
@@ -199,7 +199,7 @@ defined('_JEXEC') or die('Restricted access');
 						<?php endif; ?>
 						<div class="tt-accordion-container">
 							<ul id="tt-accordion-season-hillclimb" class="tt-accordion tt-level2">
-								<?php if (count($this->hcEntries) > 0) : ?>
+								<?php if ($this->state->get('filter.year') == $this->lastRunDate && count($this->hcEntries) > 0) : ?>
 									<li id="accordion-id1-hc1">
 										<div class="accordion-item-title">
 											<span class="indicator">

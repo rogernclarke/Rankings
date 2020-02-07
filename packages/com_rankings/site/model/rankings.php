@@ -114,6 +114,7 @@ class RankingsModelRankings extends RankingsModelList
 				}
 			}
 		}
+
 	}
 
 	/**

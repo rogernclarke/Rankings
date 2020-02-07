@@ -201,8 +201,9 @@ class ModRankingsLatestEventsHelper
 				}
 				break;
 			case 'future':
-				// Events taking place in the future - only applies to startsheets
+				// Events taking place in the future - only applies to startsheets. Exclude recent events already selected.
 				$query
+					->where($db->qn('processed_date') . '<= DATE_ADD(CURDATE(), INTERVAL -7 DAY)')
 					->where($db->qn('event_date') . '>= CURDATE()');
 				break;
 			case 'past':

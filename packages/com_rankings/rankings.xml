@@ -2,7 +2,7 @@
 <extension type="component" version="2.0" method="upgrade">
 	<name>Rankings</name>
 	<!-- The following elements are optional and free of formatting constraints -->
-	<creationDate>November 2019</creationDate>
+	<creationDate>February 2020</creationDate>
 	<author>Spindata</author>
 	<authorEmail></authorEmail>
 	<authorUrl></authorUrl>
@@ -22,7 +22,7 @@
 		<filename>controller.php</filename>
 		<filename>rankings.php</filename>
 		<filename>router.php</filename>
-		<folder>controllers</folder>
+		<folder>controller</folder>
 		<folder>helpers</folder>
 		<folder>language</folder>
 		<folder>model</folder>
@@ -61,5 +61,4 @@
     		<language tag="en-GB">en-GB/en-GB.com_rankings.sys.ini</language>
     	</languages>
 	</administration>
-
 </extension>
