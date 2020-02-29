@@ -2,7 +2,7 @@
 /**
  * Rankings Component for Joomla 3.x
  *
- * @version    2.0
+ * @version    2.0.1
  * @package    Rankings
  * @subpackage Component
  * @copyright  Copyright (C) 2019 Spindata. All rights reserved.
@@ -17,7 +17,7 @@ JLoader::registerPrefix('Rankings', JPATH_COMPONENT);
 
 // Include stylesheets
 $document = JFactory::getDocument();
-$document->addStyleSheet(JUri::base() . 'media/com_rankings/css/rankings_2.0.css');
+$document->addStyleSheet(JUri::base() . 'media/com_rankings/css/rankings_2.0.1.css');
 
 // Include javascript
 JHtml::_('jquery.framework', false);
