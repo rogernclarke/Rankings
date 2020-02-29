@@ -2,7 +2,7 @@
 /**
  * Rankings Latest Events Module for Joomla 3.x
  *
- * @version    2.0
+ * @version    2.0.1
  * @package    Rankings
  * @subpackage Modules
  * @copyright  Copyright (C) 2019 Spindata. All rights reserved.
@@ -45,14 +45,14 @@ class ModRankingsLatestEventsHelper
 		// Query 1 gets the events updated in the last week
 		$query1 = $db->getQuery(true);
 		$query1 = self::buildQuery($db, $query1, true);
-		$query1 = self::buildWhere($db, $query1, $eventStatus, 'recent');
+		$query1 = self::buildWhere($db, $query1, $eventStatus, 'new');
 
 		// Query 2 gets future events with startsheets (for startsheet requests only)
 		if ($eventStatus == 'Startsheets')
 		{
 			$query2 = $db->getQuery(true);
 			$query2 = self::buildQuery($db, $query2);
-			$query2 = self::buildWhere($db, $query2, $eventStatus, 'future');
+			$query2 = self::buildWhere($db, $query2, $eventStatus, 'old');
 		}
 
 		// Query 3 gets the most recent additional events to fill the last slider item
@@ -81,7 +81,7 @@ class ModRankingsLatestEventsHelper
 
 		$query
 			->union($query3)
-			->order($db->qn('event_date') . ' DESC,' . $db->qn('distance') . ' DESC');
+			->order($db->qn('event_date') . ' DESC,' . $db->qn('distance') . ' DESC,' . $db->qn('course_code'));
 
 		// Execute query - load the events
 		$events = $db->setQuery($query)->loadObjectList();
@@ -109,14 +109,29 @@ class ModRankingsLatestEventsHelper
 	 */
 	protected static function setQueryLimits($db, $eventStatus, $itemCount, $itemRowCount)
 	{
-		// Prepare the query to determine the number of events updated in the last week
+		// Prepare the query to determine the number of events that are either new or old
+		$query1 = $db->getQuery(true);
+
+		$query1
+			->select('COUNT(' . $db->qn('event_id') . ') AS total')
+			->from($db->qn('#__events'));
+
+		$query1 = self::buildWhere($db, $query1, $eventStatus, 'new');
+
+		$query2 = $db->getQuery(true);
+
+		$query2
+			->select('COUNT(' . $db->qn('event_id') . ') AS total')
+			->from($db->qn('#__events'));
+
+		$query2 = self::buildWhere($db, $query2, $eventStatus, 'old');
+
+		// Prepare the query
 		$query = $db->getQuery(true);
 
 		$query
-			->select('COUNT(' . $db->qn('event_id') . ')')
-			->from($db->qn('#__events'));
-
-		$query = self::buildWhere($db, $query, $eventStatus, 'recent');
+			->select('SUM(total)')
+			->from('((' . $query1 . ') UNION ALL (' . $query2 . ')) as EC');
 
 		// Execute the query
 		$lastWeekCount    = $db->setQuery($query)->loadResult();
@@ -188,10 +203,10 @@ class ModRankingsLatestEventsHelper
 
 		switch ($timeframe)
 		{
-			case 'recent':
-				// Events updated within The last 7 days
+			case 'new':
+				// Events updated within the last 6 days, which may include startsheets for events in the past
 				$query
-					->where($db->qn('processed_date') . '> DATE_ADD(CURDATE(), INTERVAL -7 DAY)');
+					->where($db->qn('processed_date') . '> DATE_ADD(CURDATE(), INTERVAL -6 DAY)');
 
 				if ($eventStatus == 'Startsheets')
 				{
@@ -200,26 +215,29 @@ class ModRankingsLatestEventsHelper
 						->where($db->qn('results_ind') . ' = FALSE');
 				}
 				break;
-			case 'future':
-				// Events taking place in the future - only applies to startsheets. Exclude recent events already selected.
+			case 'old':
+				// Events taking place in the future - only applies to startsheets
+				// Exclude events updated within the last 7 days
 				$query
-					->where($db->qn('processed_date') . '<= DATE_ADD(CURDATE(), INTERVAL -7 DAY)')
+					->where($db->qn('processed_date') . '<= DATE_ADD(CURDATE(), INTERVAL -6 DAY)')
 					->where($db->qn('event_date') . '>= CURDATE()');
 				break;
 			case 'past':
 			default:
 				if ($eventStatus == 'Startsheets')
 				{
-					// For startsheets remaining events are filled with the most recent past events which have results
+					// For startsheets remaining events are filled with the most recent past events which have a startsheet
+					// Exclude events updated within the last 7 days
 					$query
 						->where($db->qn('event_date') . '< CURDATE()')
-						->where($db->qn('results_ind') . ' = TRUE');
+						->where($db->qn('processed_date') . '<= DATE_ADD(CURDATE(), INTERVAL -6 DAY)')
+						->where($db->qn('startsheet_ind') . ' = TRUE');
 				}
 				else
 				{
 					// For results remaining events are filled with the most recent events with a result sheet which have not been updated in the last 7 days
 					$query
-						->where($db->qn('processed_date') . '<= DATE_ADD(CURDATE(), INTERVAL -7 DAY)');
+						->where($db->qn('processed_date') . '< DATE_ADD(CURDATE(), INTERVAL -6 DAY)');
 				}
 				break;
 		}
